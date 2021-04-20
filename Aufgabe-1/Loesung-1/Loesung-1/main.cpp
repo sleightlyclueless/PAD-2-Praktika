@@ -9,8 +9,6 @@ int main()
 	const Movie m = Movie("Filmtitel", 200, ratings, 11, "Hardcore");
 
 	Database::addMovie(m);
-	Database::playMovie(0);
-
-	
+	Database::playMovie(0);	
 	return 0;
 }
