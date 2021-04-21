@@ -118,7 +118,6 @@ int main()
 			break;
 		case 4:
 			Database::sortMovies();
-			Database::printMovies();
 			break;
 		case 5:
 			std::cout << "Average viewtime is: " << Database::returnAvgViewTime() << "min!" << std::endl;

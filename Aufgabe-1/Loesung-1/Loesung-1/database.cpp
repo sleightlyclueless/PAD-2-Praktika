@@ -34,7 +34,7 @@ void Database::printMovies(const std::string path)
 
 	for (Movie& m : movies_)
 	{
-		str << m.print(true).str();
+		str << m.print(false).str();
 	}
 
 	// Write to file
