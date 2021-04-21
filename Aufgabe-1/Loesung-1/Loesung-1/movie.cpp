@@ -1,55 +1,69 @@
 #include "movie.h"
 #include <sstream>
 
+// Static ID counter
 int Movie::global_id = 1;
 
+// Constructor
 Movie::Movie(const std::string title, const int length, const std::vector<int> ratings, const std::string genre): title_(title),length_(length), ratings_(ratings), genre_(genre)
 {
 	id_ = global_id++;
 	ratings_avg_ = calcRatingAvg();
 }
 
-std::stringstream Movie::print(const bool showid) const
+// Calculate the avg rating from ratings vector
+double Movie::calcRatingAvg() const
+{
+	int counter = 0;
+	double sum = 0;
+
+	for (int r : ratings_)
+	{
+		sum += r;
+		counter++;
+	}
+
+	// Return result rounded to 2 commas
+	sum = sum / counter * 100;	// 333,3333
+	sum = (int)sum;				// 333
+	return (double)sum / 100;	// 3,33
+}
+
+// Return a stringstream with all important information of a movie object (with or without id)
+std::stringstream Movie::print(const bool consolemode) const
 {
 	std::stringstream str;
-	std::string rating;
 
-	if (showid)
+	if (consolemode)
 		str << "ID: " << id_ << std::endl;
 	
-	str
-		<< "Title: " << title_ << std::endl
-		<< "Length: " << length_ << "min" << std::endl
-		<< "Ratings: " << ratings_avg_ << std::endl
-		<< "Genre: " << genre_ << std::endl
+	str << "Title: " << title_ << std::endl
+		<< "Length: " << length_ << "min" << std::endl;
+
+	if (consolemode)
+	{
+		str << "Ratings: " << ratings_avg_ << std::endl;
+	}
+	else
+	{
+		for (const int x: ratings_)
+		{
+			str << x << " ";
+		}
+		str << std::endl;
+	}
+
+	str << "Genre: " << genre_ << std::endl
 		<< "*****" << std::endl;
 
 	return str;
 }
 
-double Movie::calcRatingAvg() const
-{
-	int c = 0;
-	double sum = 0;
-	
-	for (int r : ratings_)
-	{
-		sum += r;
-		c++;
-	}
-
-	sum = sum / c * 100;		// 333,3333
-	sum = (int)sum;				// 333
-	return (double)sum / 100;	// 3,33
-}
-
+// Add a rating to movie rating-vector
 void Movie::addRating(const int r)
 {
 	if (r < 1 || r > 5)
-	{
-		std::cout << "Only ratings from 1-5 please!" << std::endl;
 		return;
-	}
 		
 	ratings_.push_back(r);
 	ratings_avg_ = calcRatingAvg();

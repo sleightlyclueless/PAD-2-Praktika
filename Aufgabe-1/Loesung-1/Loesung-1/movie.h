@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -15,10 +14,12 @@ class Movie
 		std::string genre_ = "Genre unspecified";
 	
 	public:
+		// Static ID counter
 		static int global_id;
+	
 		// Constructor
 		Movie() = default;
-		Movie(const std::string title, const int length, const std::vector<int> ratings, const std::string genre);
+		Movie(std::string title, int length, std::vector<int> ratings, std::string genre);
 
 		// Destructor
 		~Movie() = default;
@@ -33,8 +34,8 @@ class Movie
 		void setGenre(const std::string g) { genre_ = g; }
 	
 		// Custom Methods
-		std::stringstream print(const bool showid) const;
-		double calcRatingAvg() const;
-		void addRating(int r);
-		std::string play() const { return title_; }
+		double calcRatingAvg() const;	// Calculate the avg rating from ratings vector
+		std::stringstream print(bool consolemode) const;	// Return a stringstream with all important information of a movie object (with or without id)
+		void addRating(int r);	// Add a rating to movie rating-vector
+		std::string play() const { return title_; }	// Return title on play() call
 };

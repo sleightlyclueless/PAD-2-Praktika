@@ -49,14 +49,19 @@ int get_number() {
 
 int main()
 {
+	// Enable utf-8 and srandom seed
 	setlocale(LC_ALL, "");
 	srand(time(nullptr));
 
-	Database::init();
+	// Initialize Database beforehand
+	Database::init(false, "");
 
+	// Initialize end flag
 	bool endthis = false;
-	while (!endthis)
+	
+	while (!endthis && Database::getMovieSize() > 0)
 	{
+		// Print user interface
 		std::cout << "Welcome to your movie database. What do you want do do?"
 			<< "Please choose one of the following options:" << std::endl
 			<< "(1) Show all movies in vector" << std::endl
@@ -70,22 +75,27 @@ int main()
 			<< "(9) Save current sorted state into file" << std::endl
 			<< "(10) Quit programm" << std::endl;
 
-
+		// Get input
 		int input = get_number();
-		while (input < 1 || input > 9)
+		while (input < 1 || input > 10)
 		{
-			std::cout << "Please choose between the given options 1-9!" << std::endl;
+			std::cout << "Please choose between the given options 1-10!" << std::endl;
 			input = get_number();
 		}
+
+		// Initialize nessecary case vars
 		Movie m;
 		int x;
 		std::string filename;
+
+		// Process selection with given functions
 		switch (input)
 		{
 		case 1:
 			Database::printMovies();
 			break;
 		case 2:
+			// TODO MAKE OWN MOVIE
 			m = Movie("Paprika", 90, { 4, 4, 5, 3, 5 }, "Anime");
 			Database::addMovie(m);
 			break;
@@ -111,10 +121,10 @@ int main()
 			Database::printMovies();
 			break;
 		case 5:
-			std::cout << "Average viewtime is: " << Database::printAvgViewTime() << "min!" << std::endl;
+			std::cout << "Average viewtime is: " << Database::returnAvgViewTime() << "min!" << std::endl;
 			break;
 		case 6:
-			std::cout << "Total viewtime is: " << Database::printTotalViewTime() << "min!" << std::endl;
+			std::cout << "Total viewtime is: " << Database::returnTotalViewTime() << "min!" << std::endl;
 			break;
 		case 7:
 			if (Database::getMovieSize() > 0)
@@ -145,7 +155,7 @@ int main()
 			Database::simulateReviews(x);
 			break;
 		case 9:
-			std::cout << "Please enter filename: ";
+			std::cout << "Please enter text-filename for the save: ";
 			std::cin >> filename;
 			if (filename.find(".txt") == std::string::npos)
 				filename += ".txt";
@@ -158,6 +168,7 @@ int main()
 			std::cout << "Error: Option not available!" << std::endl;
 			break;
 		}
+		std::cout << std::endl << std::endl;
 	}
 	
 	return 0;
