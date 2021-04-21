@@ -4,7 +4,7 @@ int Movie::global_id = 1;
 Movie::Movie(const std::string title, const int length, const std::vector<int> ratings, const std::string genre): title_(title),length_(length), ratings_(ratings), genre_(genre)
 {
 	id_ = global_id++;
-	ratings_total_ = calcRatingAvg();
+	ratings_avg_ = calcRatingAvg();
 }
 
 void Movie::print() const
@@ -18,7 +18,7 @@ void Movie::print() const
 		std::cout << r << " ";
 	}
 
-	std::cout << "Rating average: " << ratings_total_ << std::endl
+	std::cout << "Rating average: " << ratings_avg_ << std::endl
 		<< "Movie genre: " << genre_ << std::endl;
 }
 
@@ -46,5 +46,5 @@ void Movie::addRating(const int r)
 	}
 		
 	ratings_.push_back(r);
-	ratings_total_ = calcRatingAvg();
+	ratings_avg_ = calcRatingAvg();
 }

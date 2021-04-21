@@ -12,28 +12,48 @@ void Database::addMovie(const Movie m)
 
 void Database::removeMovie(const int position)
 {
+	movies_.erase(movies_.begin() + position);
 }
 
 void Database::sortMovies()
 {
+	for (Movie m1: movies_)
+	{
+		for (Movie m2 : movies_)
+		{
+			if (m1.getRatingsAvg() < m2.getRatingsAvg())
+			{
+				const Movie temp = m1;
+				m1 = m2;
+				m2 = temp;
+			}
+		}
+	}
 }
 
-int Database::printAvgViewStats()
+double Database::printAvgViewTime()
 {
-	return 0;
+	double sum = 0;
+	int counter = 0;
+	for (const Movie& m : movies_)
+	{
+		sum += m.getLength();
+		counter++;
+	}
+	return sum / counter;
 }
 
-int Database::printTotalViewStats()
+int Database::printTotalViewTime()
 {
-	return 0;
+	int sum = 0;
+	for (const Movie& m : movies_)
+	{
+		sum += m.getLength();
+	}
+	return sum;
 }
 
 void Database::playMovie(const int position)
 {
-	int i = 0;
-	for (const Movie& m : movies_)
-	{
-		std::cout << "Porno läuft: " << m.play() << std::endl;
-		i++;
-	}
+	std::cout << "Film läuft: " << movies_.at(position).play() << std::endl;
 }

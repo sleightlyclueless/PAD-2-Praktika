@@ -15,7 +15,7 @@ class Database
 		static void addMovie(const Movie m);
 		static void removeMovie(const int position);
 		static void sortMovies();
-		static int printAvgViewStats();
-		static int printTotalViewStats();
+		static double printAvgViewTime();
+		static int printTotalViewTime();
 		static void playMovie(const int position);
 };

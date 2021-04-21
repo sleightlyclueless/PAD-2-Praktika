@@ -1,0 +1,52 @@
+Film-Datenbank
+Eintraege: 10
+*****
+Titel: Star Wars 
+Laenge: 125
+Bewertungen: 4 5 3 1 5 4 5
+Genre: Science-Fiction
+*****
+Titel: Die Verurteilten
+Laenge: 142
+Bewertungen: 5 4 3 4 3 5
+Genre: Drama
+*****
+Titel: Der Pate
+Laenge: 178
+Bewertungen: 3 2 5 4 2 4
+Genre: Krimi
+*****
+Titel: The Dark Knight
+Laenge: 152
+Bewertungen: 5
+Genre: Action
+*****
+Titel: Schindlers Liste
+Laenge: 197
+Bewertungen: 2 4 3 1 5 5
+Genre: Drama
+*****
+Titel: Der Herr der Ring
+Laenge: 228
+Bewertungen: 5 5 3 4 2 5 5 1 4 2 5
+Genre: Fantasy
+*****
+Titel: Pulp Fiction
+Laenge: 178
+Bewertungen: 2 4 3 1 4 3 5 3 2 3
+Genre: Krimi
+*****
+Titel: Inception
+Laenge: 262
+Bewertungen: 3 5 4 3 5 4 3 1
+Genre: Action
+*****
+Titel: Matrix
+Laenge: 136
+Bewertungen: 4 5 4 3 5 5 4 3
+Genre: Science-Fiction
+*****
+Titel: Avatar
+Laenge: 162
+Bewertungen: 4 5 3 3 5 2 5 5 4 5
+Genre: Science-Fiction

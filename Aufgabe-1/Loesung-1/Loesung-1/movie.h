@@ -11,7 +11,7 @@ class Movie
 		std::string title_ = "Title unspecified";
 		int length_ = 90;
 		std::vector<int> ratings_ = {};
-		double ratings_total_ = -1;
+		double ratings_avg_ = -1;
 		std::string genre_ = "Genre unspecified";
 	
 	public:
@@ -29,12 +29,12 @@ class Movie
 		int getLength() const { return length_; }
 		// std::vector<int>* getRatings() { return &ratings_; }
 		std::vector<int> getRatings() const { return ratings_; }
-		double getRatingsTotal() const { return ratings_total_; }
+		double getRatingsAvg() const { return ratings_avg_; }
 		std::string getGenre() const { return genre_; }
 
 		void setTitle(const std::string t) { title_ = t; }
 		void setLength(const int l) { length_ = l; }
-		void setRatingsTotal(const int r) { ratings_total_ = r; }
+		void setRatingsTotal(const int r) { ratings_avg_ = r; }
 		void setGenre(const std::string g) { genre_ = g; }
 	
 		// Custom Methods
