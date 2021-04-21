@@ -1,4 +1,6 @@
 #include "movie.h"
+#include <sstream>
+
 int Movie::global_id = 1;
 
 Movie::Movie(const std::string title, const int length, const std::vector<int> ratings, const std::string genre): title_(title),length_(length), ratings_(ratings), genre_(genre)
@@ -7,34 +9,38 @@ Movie::Movie(const std::string title, const int length, const std::vector<int> r
 	ratings_avg_ = calcRatingAvg();
 }
 
-void Movie::print() const
+std::stringstream Movie::print(const bool showid) const
 {
-	std::cout << "Movie ID: " << id_ << std::endl
-		<< "Movie title: " << title_ << std::endl
-		<< "Movie length: " << length_ << "min" << std::endl;
-		
-	for (int r : ratings_)
-	{
-		std::cout << r << " ";
-	}
+	std::stringstream str;
+	std::string rating;
 
-	std::cout << "Rating average: " << ratings_avg_ << std::endl
-		<< "Movie genre: " << genre_ << std::endl;
+	if (showid)
+		str << "ID: " << id_ << std::endl;
+	
+	str
+		<< "Title: " << title_ << std::endl
+		<< "Length: " << length_ << "min" << std::endl
+		<< "Ratings: " << ratings_avg_ << std::endl
+		<< "Genre: " << genre_ << std::endl
+		<< "*****" << std::endl;
+
+	return str;
 }
 
 double Movie::calcRatingAvg() const
 {
 	int c = 0;
-	int sum = 0;
+	double sum = 0;
 	
 	for (int r : ratings_)
 	{
 		sum += r;
 		c++;
 	}
-	
-	// sum = sum / c * 100;
-	return (double)sum / c;
+
+	sum = sum / c * 100;		// 333,3333
+	sum = (int)sum;				// 333
+	return (double)sum / 100;	// 3,33
 }
 
 void Movie::addRating(const int r)

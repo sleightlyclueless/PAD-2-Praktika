@@ -7,7 +7,7 @@ class Movie
 {
 	private:
 		// Attributes
-		int id_;
+		int id_ = -1;
 		std::string title_ = "Title unspecified";
 		int length_ = 90;
 		std::vector<int> ratings_ = {};
@@ -24,13 +24,8 @@ class Movie
 		~Movie() = default;
 
 		// Getters / Setters
-		int getId() const { return id_; }
-		std::string getTitle() const { return title_; }
 		int getLength() const { return length_; }
-		// std::vector<int>* getRatings() { return &ratings_; }
-		std::vector<int> getRatings() const { return ratings_; }
 		double getRatingsAvg() const { return ratings_avg_; }
-		std::string getGenre() const { return genre_; }
 
 		void setTitle(const std::string t) { title_ = t; }
 		void setLength(const int l) { length_ = l; }
@@ -38,7 +33,7 @@ class Movie
 		void setGenre(const std::string g) { genre_ = g; }
 	
 		// Custom Methods
-		void print() const;
+		std::stringstream print(const bool showid) const;
 		double calcRatingAvg() const;
 		void addRating(int r);
 		std::string play() const { return title_; }

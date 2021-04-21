@@ -145,7 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="database.h" />
-    <ClInclude Include="main.h" />
     <ClInclude Include="movie.h" />
   </ItemGroup>
   <ItemGroup>
