@@ -23,7 +23,7 @@ void Database::printMovies()
 }
 
 // Overloading print: Write to file
-void Database::printMovies(const std::string path)
+void Database::printMovies(const std::string &path)
 {
 	std::stringstream str;
 	std::ofstream source;
@@ -39,21 +39,28 @@ void Database::printMovies(const std::string path)
 
 	// Write to file
 	source.open(path);
-	if (!source.is_open()) { throw std::runtime_error("Database::printMovies(...): File could not be created!"); }
+	if (!source)
+		throw std::runtime_error("Database::printMovies(...): File could not be created!");
 	source << str.str();
 	source.close();
 }
 
 // Add movie to static vector
-void Database::addMovie(const Movie m)
+void Database::addMovie(const Movie &m)
 {
 	movies_.push_back(m);
+	std::cout << "Movie " << m.play() << " added!" << std::endl
+		<< "=================================" << std::endl;
 }
 
 // Remove movie from static vector
-void Database::removeMovie(const int position)
+void Database::removeMovie(const int &position)
 {
+	const std::string mname = movies_.at(position).play();
 	movies_.erase(movies_.begin() + position);
+	std::cout << "=================================" << std::endl
+		<< "Movie " << mname << " removed!" << std::endl
+		<< "=================================" << std::endl;
 }
 
 // Bubblesort movies in vector
@@ -76,12 +83,12 @@ void Database::sortMovies()
 	}
 
 	std::cout << "=================================" << std::endl
-		<< "Sorted!" << std::endl
+		<< "Database sorted!" << std::endl
 		<< "=================================" << std::endl;
 }
 
 // Return avg viewtime
-double Database::returnAvgViewTime()
+void Database::returnAvgViewTime()
 {
 	double sum = 0;
 	for (const Movie &m : movies_)
@@ -92,28 +99,30 @@ double Database::returnAvgViewTime()
 	// Return result rounded to 2 commas
 	sum = sum / movies_.size() * 100;	// 333,333
 	sum = (int)sum;						// 333
-	return (double)sum / 100;			// 3,33
+	sum = (double)sum / 100;			// 3,33
+
+	std::cout << "Average viewtime is: " << sum << "min!" << std::endl;
 }
 
 // Return total viewtime
-int Database::returnTotalViewTime()
+void Database::returnTotalViewTime()
 {
 	int sum = 0;
 	for (const Movie &m : movies_)
 	{
 		sum += m.getLength();
 	}
-	return sum;
+	std::cout << "Total viewtime is: " << sum << "min!" << std::endl;
 }
 
 // "Play" movie / return name
-void Database::playMovie(const int position)
+void Database::playMovie(const int &position)
 {
 	std::cout << "Movie running: " << movies_.at(position).play() << std::endl;
 }
 
 // Init database / movie vector from default file or own file
-void Database::init(const bool useownfile, const std::string filename)
+void Database::init(const bool &useownfile, const std::string &filename)
 {
 	// Ini read-file sources
 	std::ifstream source;
@@ -211,13 +220,13 @@ void Database::init(const bool useownfile, const std::string filename)
 }
 
 // Add rating to specific movie in vector with its position
-void Database::addMovieRating(const int rating, const int position)
+void Database::addMovieRating(const int &rating, const int &position)
 {
 	movies_.at(position).addRating(rating);
 }
 
 // Construct random reviews and add them to random movies in vector
-void Database::simulateReviews(int i)
+void Database::simulateReviews(int &i)
 {
 	while (i > 0)
 	{

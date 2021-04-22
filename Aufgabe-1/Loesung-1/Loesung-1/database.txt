@@ -1,7 +1,7 @@
 Movie-Database
 Entries: 10
 *****
-Title: Star Wars 
+Title: Star Wars
 Length: 125
 Ratings: 4 5 3 1 5 4 5
 Genre: Science-Fiction

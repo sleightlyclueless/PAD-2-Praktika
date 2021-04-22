@@ -10,7 +10,7 @@ int get_number() {
 
 	// Initialize necessary vars
 	std::string str;
-	int a;
+	int a = -1;
 	int firsttime = 0;
 
 	// Read whole input cin into string var first, because here it does not break after letters
@@ -84,88 +84,142 @@ int main()
 		}
 
 		// Initialize nessecary case vars
-		Movie m;
-		int x;
+		std::string mname;
+		int mlength;
+		int mrating;
+		std::vector<int> mratings;
+		std::string mgenre;
+		int x = 1;
 		std::string filename;
 
 		// Process selection with given functions
 		switch (input)
 		{
-		case 1:
-			Database::printMovies();
-			break;
-		case 2:
-			// TODO MAKE OWN MOVIE
-			m = Movie("Paprika", 90, { 4, 4, 5, 3, 5 }, "Anime");
-			Database::addMovie(m);
-			break;
-		case 3:
-			if (Database::getMovieSize() > 0)
-			{
-				std::cout << "Enter the position of the movie in the Database to remove (counting starts at 0!): ";
-				x = get_number();
-				while (x < 0 || x > Database::getMovieSize() - 1)
-				{
-					std::cout << "Please enter a valid position from 0 - " << Database::getMovieSize() - 1 << "!" << std::endl;
-					x = get_number();
-				}
-				Database::removeMovie(x);
-			}
-			else
-			{
-				std::cout << "No movies left!" << std::endl;
-			}
-			break;
-		case 4:
-			Database::sortMovies();
-			break;
-		case 5:
-			std::cout << "Average viewtime is: " << Database::returnAvgViewTime() << "min!" << std::endl;
-			break;
-		case 6:
-			std::cout << "Total viewtime is: " << Database::returnTotalViewTime() << "min!" << std::endl;
-			break;
-		case 7:
-			if (Database::getMovieSize() > 0)
-			{
-				std::cout << "Enter the position of the movie in the Database to play (counting starts at 0!): ";
-				x = get_number();
-				while (x < 0 || x > Database::getMovieSize() - 1)
-				{
-					std::cout << "Please enter a valid position from 0 - " << Database::getMovieSize() - 1 << "!" << std::endl;
-					x = get_number();
-				}
-				Database::playMovie(x);
-			}
-			else
-			{
-				std::cout << "No movies left!" << std::endl;
-			}
+			case 1:
+				Database::printMovies();
+				break;
+			
+			case 2:
+				std::cout << "Enter the name of the movie: ";
+				getline(std::cin, mname);
+				std::cout << std::endl;
 
-			break;
-		case 8:
-			std::cout << "Enter the amount of random reviews you want to enter into the database: ";
-			x = get_number();
-			while (x < 1)
-			{
-				std::cout << "Please enter a valid number above 0!" << std::endl;
+				std::cout << "Enter the length of the movie in minutes: ";
+				mlength = get_number();
+				std::cout << std::endl;
+
+				std::cout << "Enter ratings of the movie 1 - 5: ";
+				mrating = get_number();
+				while (mrating < 1 || mrating > 5) {
+					std::cout << "Please enter a valid number: 1 - 5!" << std::endl;
+					mrating = get_number();
+				}
+			
+				mratings.push_back(mrating);
+				while (x == 1)
+				{				
+					std::cout << "Do you want to add another rating? Please choose one of the following options:" << std::endl
+						<< "(1) Yes" << std::endl
+						<< "(2) No" << std::endl;
+					x = get_number();
+					while (x < 0 || x > 2)
+					{
+						std::cout << "Please enter a valid number: 1 or 2!" << std::endl;
+						x = get_number();
+					}
+					if (x == 1) {
+						std::cout << "Enter ratings of the movie 1 - 5: ";
+						mrating = get_number();
+						while (mrating < 1 || mrating > 5) {
+							std::cout << "Please enter a valid number: 1 - 5!" << std::endl;
+							mrating = get_number();
+						}
+						mratings.push_back(mrating);
+					}
+				}
+				std::cout << std::endl;
+
+				std::cout << "Enter the genre of the movie: ";
+				getline(std::cin, mgenre);
+				std::cout << std::endl;
+				
+				Database::addMovie(Movie(mname, mlength, mratings, mgenre));
+				break;
+			
+			case 3:
+				if (Database::getMovieSize() > 0)
+				{
+					std::cout << "Enter the position of the movie in the Database to remove (counting starts at 0!): ";
+					x = get_number();
+					while (x < 0 || x > Database::getMovieSize() - 1)
+					{
+						std::cout << "Please enter a valid position from 0 - " << Database::getMovieSize() - 1 << "!" << std::endl;
+						x = get_number();
+					}
+					Database::removeMovie(x);
+				}
+				else
+				{
+					std::cout << "No movies left!" << std::endl;
+				}
+				break;
+			
+			case 4:
+				Database::sortMovies();
+				break;
+			
+			case 5:
+				Database::returnAvgViewTime();
+				break;
+			
+			case 6:
+				Database::returnTotalViewTime();
+				break;
+			
+			case 7:
+				if (Database::getMovieSize() > 0)
+				{
+					std::cout << "Enter the position of the movie in the Database to play (counting starts at 0!): ";
+					x = get_number();
+					while (x < 0 || x > Database::getMovieSize() - 1)
+					{
+						std::cout << "Please enter a valid position from 0 - " << Database::getMovieSize() - 1 << "!" << std::endl;
+						x = get_number();
+					}
+					Database::playMovie(x);
+				}
+				else
+				{
+					std::cout << "No movies left!" << std::endl;
+				}
+				break;
+			
+			case 8:
+				std::cout << "Enter the amount of random reviews you want to enter into the database: ";
 				x = get_number();
-			}
-			Database::simulateReviews(x);
-			break;
-		case 9:
-			std::cout << "Please enter text-filename for the save: ";
-			std::cin >> filename;
-			if (filename.find(".txt") == std::string::npos)
-				filename += ".txt";
-			Database::printMovies(filename);
-			break;
-		case 10:
-			endthis = true;
-			break;
-		default:
-			std::cout << "Error: Option not available!" << std::endl;
-			break;
+				while (x < 1)
+				{
+					std::cout << "Please enter a valid number above 0!" << std::endl;
+					x = get_number();
+				}
+				Database::simulateReviews(x);
+				break;
+			
+			case 9:
+				std::cout << "Please enter text-filename for the save: ";
+				getline(std::cin, filename);
+				if (filename.find(".txt") == std::string::npos)
+					filename += ".txt";
+				Database::printMovies(filename);
+				break;
+			
+			case 10:
+				endthis = true;
+				break;
+			
+			default:
+				std::cout << "Error: Option not available!" << std::endl;
+				break;
 		}
 		std::cout << std::endl << std::endl;
 	}
