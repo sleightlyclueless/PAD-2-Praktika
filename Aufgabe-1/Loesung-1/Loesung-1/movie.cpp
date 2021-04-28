@@ -46,6 +46,7 @@ std::stringstream Movie::print(const bool consolemode) const
 	}
 	else
 	{
+		str << "Ratings: ";
 		for (const int x: ratings_)
 		{
 			str << x << " ";

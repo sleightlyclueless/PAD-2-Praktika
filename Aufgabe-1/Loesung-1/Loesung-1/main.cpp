@@ -11,7 +11,6 @@ int get_number() {
 	// Initialize necessary vars
 	std::string str;
 	int a = -1;
-	int firsttime = 0;
 
 	// Read whole input cin into string var first, because here it does not break after letters
 	while (getline(std::cin, str))
@@ -19,10 +18,7 @@ int get_number() {
 		// Exception if empty - request valid entry
 		if (str.empty())
 		{
-			if (firsttime != 0)
-			{
-				std::cout << "Error, you have to enter something. Please do so!" << std::endl;
-			}
+			std::cout << "Error, you have to enter something. Please do so!" << std::endl;
 			continue;
 		}
 
@@ -40,7 +36,6 @@ int get_number() {
 		}
 
 		std::cout << "Error, enter only valid int numbers. Please try again!" << std::endl;
-		firsttime++;
 	}
 
 	// When we exited the while loop we found an int var. Go ahead and return that to the function call.
@@ -89,6 +84,7 @@ int main()
 		int mrating;
 		std::vector<int> mratings;
 		std::string mgenre;
+		
 		int x = 1;
 		std::string filename;
 

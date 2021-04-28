@@ -38,11 +38,19 @@ void Database::printMovies(const std::string &path)
 	}
 
 	// Write to file
-	source.open(path);
-	if (!source)
-		throw std::runtime_error("Database::printMovies(...): File could not be created!");
-	source << str.str();
-	source.close();
+	try
+	{
+		source.open(path);
+		if (!source)
+			throw std::runtime_error("Database::printMovies(...): File could not be opened!");
+		source << str.str();
+		source.close();
+	}
+	catch (std::runtime_error& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	
 }
 
 // Add movie to static vector
@@ -63,23 +71,22 @@ void Database::removeMovie(const int &position)
 		<< "=================================" << std::endl;
 }
 
-// Bubblesort movies in vector
+// Selectionsort movies in vector
 void Database::sortMovies()
 {
-	// Selectionsort
 	for (int i = 0; i < movies_.size() - 1; i++) {
-		int minpos = i;
+		int maxpos = i;
 
 		// Search smallest element
 		for (int j = i + 1; j < movies_.size(); j++) {
-			if (movies_.at(j).getRatingsAvg() < movies_.at(minpos).getRatingsAvg()) {
-				minpos = j;
+			if (movies_.at(j).getRatingsAvg() > movies_.at(maxpos).getRatingsAvg()) {
+				maxpos = j;
 			}
 		}
 		// Switch places
 		const Movie temp = movies_.at(i);
-		movies_.at(i) = movies_.at(minpos);
-		movies_.at(minpos) = temp;
+		movies_.at(i) = movies_.at(maxpos);
+		movies_.at(maxpos) = temp;
 	}
 
 	std::cout << "=================================" << std::endl
@@ -149,23 +156,19 @@ void Database::init(const bool &useownfile, const std::string &filename)
 				throw std::runtime_error("Database::init(...): File could not be opened!");
 		}
 
-		// Check if file access successful
-		if (!source.is_open())
-			throw std::runtime_error("Database::init(...): File could not be opened!");
-
 		// Check each line from file for relevant information for the vectors
 		while (std::getline(source, line))
 		{
-			if (line.find("Title") != std::string::npos)
+			if (line.find("Title: ") != std::string::npos)
 				titles.push_back(line.substr(line.find("Title: ") + 7));
 
-			if (line.find("Length") != std::string::npos)
+			if (line.find("Length: ") != std::string::npos)
 				lens.push_back(std::stoi(line.substr(line.find("Length: ") + 8)));
 
-			if (line.find("Ratings") != std::string::npos)
+			if (line.find("Ratings: ") != std::string::npos)
 				ratings.push_back(line.substr(line.find("Ratings: ") + 9));
 
-			if (line.find("Genre") != std::string::npos)
+			if (line.find("Genre: ") != std::string::npos)
 				genres.push_back(line.substr(line.find("Genre: ") + 7));
 		}
 
@@ -191,21 +194,18 @@ void Database::init(const bool &useownfile, const std::string &filename)
 		// Read all the extracted information from filled file - vectors and process
 		for (int i = 0; i < titles.size(); i++)
 		{
-			std::string title = titles.at(i);
-			int length = lens.at(i);
 			std::string ratingstr = ratings.at(i);
-			std::string genre = genres.at(i);
-
+			std::vector<int> ratingints;
+			
 			// Process rating string into vector for each line
 			std::stringstream ss(ratingstr);
 			std::string tmp;
-			std::vector<int> ratingints;
 			while (getline(ss, tmp, ' ')) {
 				ratingints.push_back(stoi(tmp));
 			}
 
 			// Add movie made with its class constructor to vector string
-			addMovie(Movie(title, length, ratingints, genre));
+			addMovie(Movie(titles.at(i), lens.at(i), ratingints, genres.at(i)));
 		}
 	} else
 	{

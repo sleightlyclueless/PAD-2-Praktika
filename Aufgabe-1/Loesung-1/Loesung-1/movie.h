@@ -27,11 +27,6 @@ class Movie
 		// Getters / Setters
 		int getLength() const { return length_; }
 		double getRatingsAvg() const { return ratings_avg_; }
-
-		void setTitle(const std::string t) { title_ = t; }
-		void setLength(const int l) { length_ = l; }
-		void setRatingsTotal(const int r) { ratings_avg_ = r; }
-		void setGenre(const std::string g) { genre_ = g; }
 	
 		// Custom Methods
 		double calcRatingAvg() const;	// Calculate the avg rating from ratings vector
