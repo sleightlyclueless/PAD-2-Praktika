@@ -24,7 +24,7 @@ int get_number() {
 
 		// Search if there is an unwanted char in string.
 		// size_t can store up to max size of an object - if we do not find an unaccepted char it becomes -1 or npos (18446744073709551615 == -1)
-		auto const flag = str.find_first_not_of("-0123456789");
+		size_t const flag = str.find_first_not_of("-0123456789");
 
 		// npos is type size_t and cant be negative therefore it takes on the value of the highest possible number. If that is the case we have an accepted integer input
 		if (flag == std::string::npos)
@@ -77,14 +77,7 @@ int main()
 			std::cout << "Please choose between the given options 1-10!" << std::endl;
 			input = get_number();
 		}
-
-		// Initialize nessecary case vars
-		std::string mname;
-		int mlength;
-		int mrating;
-		std::vector<int> mratings;
-		std::string mgenre;
-		
+			
 		int x = 1;
 		std::string filename;
 
@@ -95,7 +88,14 @@ int main()
 				Database::printMovies();
 				break;
 			
-			case 2:
+			case 2:{
+				// Initialize nessecary case vars
+				std::string mname;
+				int mlength;
+				int mrating;
+				std::vector<int> mratings;
+				std::string mgenre;
+
 				std::cout << "Enter the name of the movie: ";
 				getline(std::cin, mname);
 				std::cout << std::endl;
@@ -110,13 +110,13 @@ int main()
 					std::cout << "Please enter a valid number: 1 - 5!" << std::endl;
 					mrating = get_number();
 				}
-			
 				mratings.push_back(mrating);
+					
 				while (x == 1)
-				{				
+				{
 					std::cout << "Do you want to add another rating? Please choose one of the following options:" << std::endl
-						<< "(1) Yes" << std::endl
-						<< "(2) No" << std::endl;
+					<< "(1) Yes" << std::endl
+					<< "(2) No" << std::endl;
 					x = get_number();
 					while (x < 0 || x > 2)
 					{
@@ -138,9 +138,10 @@ int main()
 				std::cout << "Enter the genre of the movie: ";
 				getline(std::cin, mgenre);
 				std::cout << std::endl;
-				
-				Database::addMovie(Movie(mname, mlength, mratings, mgenre));
-				break;
+
+				Movie *m = new Movie(mname, mlength, mratings, mgenre);
+				Database::addMovie(m);
+				} break;
 			
 			case 3:
 				if (Database::getMovieSize() > 0)

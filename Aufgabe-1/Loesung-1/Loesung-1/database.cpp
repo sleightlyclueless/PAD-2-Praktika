@@ -1,7 +1,7 @@
 #include "database.h"
 
 // Initialize static vector
-std::vector<Movie> Database::movies_;
+std::vector<Movie*> Database::movies_;
 
 // Overloading print: Write to console
 void Database::printMovies()
@@ -12,9 +12,9 @@ void Database::printMovies()
 		<< "Entries: " << movies_.size() << std::endl
 		<< "*****" << std::endl;
 	
-	for (Movie &m : movies_)
+	for (Movie* &m : movies_)
 	{
-		str << m.print(true).str();
+		str << m->print(true).str();
 	}
 	str << "==================================" << std::endl;
 
@@ -32,9 +32,9 @@ void Database::printMovies(const std::string &path)
 		<< "Entries: " << movies_.size() << std::endl
 		<< "*****" << std::endl;
 
-	for (Movie& m : movies_)
+	for (Movie* &m : movies_)
 	{
-		str << m.print(false).str();
+		str << m->print(false).str();
 	}
 
 	// Write to file
@@ -54,17 +54,17 @@ void Database::printMovies(const std::string &path)
 }
 
 // Add movie to static vector
-void Database::addMovie(const Movie &m)
+void Database::addMovie(Movie *m)
 {
 	movies_.push_back(m);
-	std::cout << "Movie " << m.play() << " added!" << std::endl
+	std::cout << "Movie " << m->play() << " added!" << std::endl
 		<< "=================================" << std::endl;
 }
 
 // Remove movie from static vector
 void Database::removeMovie(const int &position)
 {
-	const std::string mname = movies_.at(position).play();
+	const std::string mname = movies_.at(position)->play();
 	movies_.erase(movies_.begin() + position);
 	std::cout << "=================================" << std::endl
 		<< "Movie " << mname << " removed!" << std::endl
@@ -79,14 +79,13 @@ void Database::sortMovies()
 
 		// Search smallest element
 		for (int j = i + 1; j < movies_.size(); j++) {
-			if (movies_.at(j).getRatingsAvg() > movies_.at(maxpos).getRatingsAvg()) {
+			if (movies_.at(j)->getRatingsAvg() > movies_.at(maxpos)->getRatingsAvg()) {
 				maxpos = j;
 			}
 		}
+		
 		// Switch places
-		const Movie temp = movies_.at(i);
-		movies_.at(i) = movies_.at(maxpos);
-		movies_.at(maxpos) = temp;
+		std::swap(movies_.at(maxpos), movies_.at(i));
 	}
 
 	std::cout << "=================================" << std::endl
@@ -98,9 +97,9 @@ void Database::sortMovies()
 void Database::returnAvgViewTime()
 {
 	double sum = 0;
-	for (const Movie &m : movies_)
+	for (Movie* &m : movies_)
 	{
-		sum += m.getLength();
+		sum += m->getLength();
 	}
 
 	// Return result rounded to 2 commas
@@ -115,9 +114,9 @@ void Database::returnAvgViewTime()
 void Database::returnTotalViewTime()
 {
 	int sum = 0;
-	for (const Movie &m : movies_)
+	for (Movie* &m : movies_)
 	{
-		sum += m.getLength();
+		sum += m->getLength();
 	}
 	std::cout << "Total viewtime is: " << sum << "min!" << std::endl;
 }
@@ -125,7 +124,7 @@ void Database::returnTotalViewTime()
 // "Play" movie / return name
 void Database::playMovie(const int &position)
 {
-	std::cout << "Movie running: " << movies_.at(position).play() << std::endl;
+	std::cout << "Movie running: " << movies_.at(position)->play() << std::endl;
 }
 
 // Init database / movie vector from default file or own file
@@ -177,7 +176,7 @@ void Database::init(const bool &useownfile, const std::string &filename)
 		if (source.is_open())
 			throw std::runtime_error("Database::init(...): File could not be closed!");
 	}
-	catch (std::ifstream::failure& e)
+	catch (std::ifstream::failure &e)
 	{
 		std::cout << e.what() << std::endl;
 		return;
@@ -204,25 +203,19 @@ void Database::init(const bool &useownfile, const std::string &filename)
 				ratingints.push_back(stoi(tmp));
 			}
 
-			// Add movie made with its class constructor to vector string
-			addMovie(Movie(titles.at(i), lens.at(i), ratingints, genres.at(i)));
+			// Add movie made to HEAP with its class constructor to vector string
+			Movie *m = new Movie(titles.at(i), lens.at(i), ratingints, genres.at(i));
+			addMovie(m);
 		}
 	} else
 	{
 		std::cout << "Something seems to be wrong with the file, please try again or check it!" << std::endl;
 	}
-	
 
 	// When all movies entered sort them
 	std::cout << "=================================" << std::endl
 		<< "Database initialized!" << std::endl;
 	sortMovies();
-}
-
-// Add rating to specific movie in vector with its position
-void Database::addMovieRating(const int &rating, const int &position)
-{
-	movies_.at(position).addRating(rating);
 }
 
 // Construct random reviews and add them to random movies in vector
@@ -232,8 +225,8 @@ void Database::simulateReviews(int &i)
 	{
 		const int rating = rand() % 5 + 1;
 		const int position = rand() % movies_.size();
+		movies_.at(position)->addRating(rating);
 
-		addMovieRating(rating, position);
 		i--;
 	}
 

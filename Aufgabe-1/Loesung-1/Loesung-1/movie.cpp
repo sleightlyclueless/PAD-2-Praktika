@@ -5,7 +5,7 @@
 int Movie::global_id = 1;
 
 // Constructor
-Movie::Movie(const std::string title, const int length, const std::vector<int> ratings, const std::string genre): title_(title),length_(length), ratings_(ratings), genre_(genre)
+Movie::Movie(std::string &title, int &length, std::vector<int> &ratings, std::string &genre): title_(title),length_(length), ratings_(ratings), genre_(genre)
 {
 	id_ = global_id++;
 	ratings_avg_ = calcRatingAvg();
@@ -14,19 +14,17 @@ Movie::Movie(const std::string title, const int length, const std::vector<int> r
 // Calculate the avg rating from ratings vector
 double Movie::calcRatingAvg() const
 {
-	int counter = 0;
 	double sum = 0;
 
 	for (int r : ratings_)
 	{
 		sum += r;
-		counter++;
 	}
 
 	// Return result rounded to 2 commas
-	sum = sum / counter * 100;	// 333,3333
-	sum = (int)sum;				// 333
-	return (double)sum / 100;	// 3,33
+	sum = sum / ratings_.size() * 100;	// 333,3333
+	sum = (int)sum;						// 333
+	return (double)sum / 100;			// 3,33
 }
 
 // Return a stringstream with all important information of a movie object (with or without id)

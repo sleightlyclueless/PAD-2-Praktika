@@ -8,7 +8,7 @@ class Movie
 		// Attributes
 		int id_ = -1;
 		std::string title_ = "Title unspecified";
-		int length_ = 90;
+		int length_ = -1;
 		std::vector<int> ratings_ = {};
 		double ratings_avg_ = -1;
 		std::string genre_ = "Genre unspecified";
@@ -16,10 +16,9 @@ class Movie
 	public:
 		// Static ID counter
 		static int global_id;
-	
+
 		// Constructor
-		Movie() = default;
-		Movie(std::string title, int length, std::vector<int> ratings, std::string genre);
+		Movie(std::string &title, int &length, std::vector<int> &ratings, std::string &genre);
 
 		// Destructor
 		~Movie() = default;
