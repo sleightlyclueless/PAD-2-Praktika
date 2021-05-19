@@ -5,6 +5,7 @@
 #include <chrono>
 
 #include "movie.h"
+#include "series.h"
 using namespace std::chrono_literals;
 
 // Function to get only digits on cin inputs
@@ -61,22 +62,27 @@ int main()
 	while (!endthis && Database::getMovieSize() > 0)
 	{
 		// Print user interface
-		std::cout << "Welcome to your movie database. What do you want do do?" << std::endl
+		std::cout << std::endl
+			<< "Welcome to your movie database. What do you want do do?" << std::endl
 			<< "Please choose one of the following options:" << std::endl
 			<< "(1) Show all movies in vector - sorted by avg rating" << std::endl
 			<< "(2) Play specific movie from its id" << std::endl
-			<< "(3) Add review(s) to movie" << std::endl
+			<< "(3) Add review(s) to mediafile" << std::endl
 			<< "(4) Load Database from file" << std::endl
 			<< "(5) Save Database to file" << std::endl
-			<< "(6) Add movie" << std::endl
-			<< "(7) Compare movies for older" << std::endl
-			<< "(8) Quit programm" << std::endl;
+			<< "(6) Add mediafile" << std::endl
+			<< "(7) Remove mediafile" << std::endl
+			<< "(8) Compare movies for older" << std::endl
+			<< "(9) Show average viewtime" << std::endl
+			<< "(10) Show total viewtime" << std::endl
+			<< "(11) Simulate n amount of ratings" << std::endl
+			<< "(12) Quit programm" << std::endl;
 
 		// Get input
 		int input = get_number();
-		while (input < 1 || input > 10)
+		while (input < 1 || input > 12)
 		{
-			std::cout << "Please choose between the given options 1-7!" << std::endl;
+			std::cout << "Please choose between the given options 1-12!" << std::endl;
 			input = get_number();
 		}
 
@@ -137,7 +143,7 @@ int main()
 									<< "(1) Yes" << std::endl
 									<< "(2) No" << std::endl;
 								int x = get_number();
-								while (x < 0 || x > 2)
+								while (x < 1 || x > 2)
 								{
 									std::cout << "Please enter a valid number: 1 or 2!" << std::endl;
 									x = get_number();
@@ -203,15 +209,15 @@ int main()
 					std::string mname;
 					std::string mgenre;
 
-					std::cout << "Enter the name of the movie: ";
+					std::cout << "Enter the name of the media: ";
 					getline(std::cin, mname);
 					std::cout << std::endl;
 
-					std::cout << "Enter the length of the movie in minutes: ";
+					std::cout << "Enter the total length of the media in minutes: ";
 					int mlength = get_number();
 					std::cout << std::endl;
 
-					std::cout << "Enter ratings of the movie 1 - 5: ";
+					std::cout << "Enter ratings of the media 1 - 5: ";
 					std::vector<int> mratings;
 					int mrating = get_number();
 					while (mrating < 1 || mrating > 5) {
@@ -226,7 +232,7 @@ int main()
 							<< "(1) Yes" << std::endl
 							<< "(2) No" << std::endl;
 						x = get_number();
-						while (x < 0 || x > 2)
+						while (x < 1 || x > 2)
 						{
 							std::cout << "Please enter a valid number: 1 or 2!" << std::endl;
 							x = get_number();
@@ -243,33 +249,91 @@ int main()
 					}
 					std::cout << std::endl;
 
-					std::cout << "Enter the genre of the movie: ";
+					std::cout << "Enter the genre of the media: ";
 					getline(std::cin, mgenre);
 					std::cout << std::endl;
 
-					std::cout << "Enter the release year of the movie: ";
-					int mrelease = get_number();
-					std::cout << std::endl;
+					Mediatype type;
+					MediaFile* m;
+					int n;
+					std::cout << "Enter the type of the media: " << std::endl
+						<< "(0) - Other media" << std::endl
+						<< "(1) - Movie" << std::endl
+						<< "(2) - Series" << std::endl;
+					x = get_number();
+					while (x < 0 || x > 2)
+					{
+						std::cout << "Please enter a valid number: 1 or 2!" << std::endl;
+						x = get_number();
+					}
+					
+					switch(x)
+					{
+						case 0:
+							type = Mediatype::mediafile;
+							m = new MediaFile(mname, mlength, mratings, mgenre, type);
+							Database::addMediafile(m);
+							break;
+						case 1:
+							type = Mediatype::movie;
+						
+							std::cout << "Enter the release year of the movie: ";
+							n = get_number();
+							std::cout << std::endl;
 
-					Mediatype type = Mediatype::movie;
+							m = new Movie(mname, mlength, mratings, mgenre, type, n);
+							Database::addMediafile(m);
+							break;
+						case 2:
+							type = Mediatype::series;
 
-					MediaFile* m = new Movie(mname, mlength, mratings, mgenre, type, mrelease);
-					Database::addMediafile(m);
+							std::cout << "Enter the amount of episodes for the series: ";
+							n = get_number();
+							std::cout << std::endl;
+
+							m = new Series(mname, mlength, mratings, mgenre, type, n);
+							Database::addMediafile(m);
+							
+							break;
+						default:
+							std::cout << "Something went wrong." << std::endl;
+							break;
+					}
 				} break;
 
 			case 7: {
 					
 				if (Database::getMovieSize() > 0)
 				{
+					std::cout << "Enter the id of the mediafile you wish to remove from the database." << std::endl;
+					int x = get_number();
+					while (x < 0 || x > Database::getMovieSize() - 1)
+					{
+						std::cout << "Please enter a valid position from 0 - " << Database::getMovieSize() - 1 << "!" << std::endl;
+						x = get_number();
+					}
+
+					Database::removeMediafile(x);
+				}
+				else
+				{
+					std::cout << "No movies left!" << std::endl;
+				}
+			} break;
+
+			case 8: {
+
+				if (Database::getMovieSize() > 0)
+				{
 					MediaFile* m1 = nullptr;
 					MediaFile* m2 = nullptr;
 					bool found1 = false;
 					bool found2 = false;
-					
+
 					std::cout << "Enter the id of the first movie to compare: ";
 					const int id1 = get_number();
-					
-					for (MediaFile* &m : Database::getMovies())
+
+					for (MediaFile*& m : Database::getMovies())
 					{
 						if (m->getId() == id1 && m->getMediaType() == Mediatype::movie)
 						{
@@ -296,19 +360,40 @@ int main()
 						Movie mov1 = dynamic_cast<const Movie&>(*m1);
 						Movie mov2 = dynamic_cast<const Movie&>(*m2);
 						std::cout << Movie::checkOlder(mov1, mov2).str();
-					} else
+					}
+					else
 					{
 						std::cout << "Something went wrong with this comparison! Please try again!" << std::endl;
 					}
-					
+
 				}
 				else
 				{
 					std::cout << "No movies left!" << std::endl;
 				}
 			} break;
+
+			case 9:
+				Database::returnAvgViewTime();
+				break;
+
+			case 10:
+				Database::returnTotalViewTime();
+				break;
+
+			case 11:
+				{
+					std::cout << "Enter the amount of random reviews you want to enter into the database: ";
+					int x = get_number();
+					while (x < 1)
+					{
+						std::cout << "Please enter a valid number above 0!" << std::endl;
+						x = get_number();
+					}
+					Database::simulateReviews(x);
+				} break;
 			
-			case 8:
+			case 12:
 				endthis = true;
 				break;
 			

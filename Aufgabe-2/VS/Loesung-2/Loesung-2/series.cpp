@@ -13,11 +13,10 @@ Series::Series(std::string &title, int &length, std::vector<int> &ratings, std::
 std::stringstream Series::print(const bool consolemode) const
 {
 	std::stringstream str;
-	str << "=================================" << std::endl
-		<< "Printing series: " << std::endl;
 	str << MediaFile::print(consolemode).str();
-	str << "Episodes: " << episodes_ << std::endl
-		<< "Esitmated length per Episode: " << lengthavg_  << "min" << std::endl;
+	str << "Episodes: " << episodes_ << std::endl;
+	if (consolemode)
+		str << "Esitmated length per Episode: " << lengthavg_  << "min" << std::endl;
 	
 	return str;
 }
@@ -25,7 +24,7 @@ std::stringstream Series::print(const bool consolemode) const
 std::string Series::play()
 {
 	std::stringstream str;
-	if (nextepisode_++ > episodes_)
+	if (nextepisode_+1 > episodes_)
 		nextepisode_ = 0;
 	
 	str << "Now playing " << title_ << std::endl

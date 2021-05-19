@@ -10,8 +10,11 @@ class Series : public MediaFile
 		std::stringstream print(bool consolemode) const override;
 		std::string play() override;
 
+		int getLength() const override { return lengthavg_; }
+		int getTotalLength() const override { return length_; }
+
 	private:
 		int episodes_ = -1;
-		int nextepisode_ = -1;
+		int nextepisode_ = 1;
 		int lengthavg_ = -1;
 };

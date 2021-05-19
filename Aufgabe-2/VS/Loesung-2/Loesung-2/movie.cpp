@@ -10,10 +10,8 @@ Movie::Movie(std::string &title, int &length, std::vector<int> &ratings, std::st
 std::stringstream Movie::print(const bool consolemode) const
 {
     std::stringstream str;
-	str << "=================================" << std::endl
-		<< "Printing movie: " << std::endl;
     str << MediaFile::print(consolemode).str();
-    str << "Year: " << released_ << std::endl;
+    str << "Released: " << released_ << std::endl;
     return str;
 }
 
@@ -26,7 +24,7 @@ std::stringstream Movie::checkOlder(Movie &m1, Movie &m2)
 		str << "=================================" << std::endl
 			<< "Older movie: " << std::endl;
 		str << m2.print(true).str();
-		str << "Year: " << m2.released_ << std::endl;
+		str << "Released: " << m2.released_ << std::endl;
 	}
 
 	if (m2.released_ > m1.released_)

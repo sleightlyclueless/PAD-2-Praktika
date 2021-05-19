@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <ostream>
 
 enum class Mediatype
 {
@@ -8,6 +9,26 @@ enum class Mediatype
 	movie,
 	series
 };
+inline std::ostream& operator << (std::ostream& os, const Mediatype& m)
+{
+	const int x = (int)m;
+	switch (x)
+	{
+		case 0:
+			os << "Other media";
+			break;
+		case 1:
+			os << "Movie";
+			break;
+		case 2:
+			os << "Series";
+			break;
+		default:
+			os << "Enum value does not exist";
+			break;
+	}
+	return os;
+}
 
 class MediaFile
 {
@@ -23,7 +44,9 @@ class MediaFile
 
 		// Getters / Setters
 		int getId() const { return id_; }
-		int getLength() const { return length_; }
+		std::string getTitle() const { return title_; }
+		virtual int getLength() const { return length_; }
+		virtual int getTotalLength() const { return length_; }
 		double getRatingsAvg() const { return ratings_avg_; }
 		Mediatype getMediaType() const { return type_; }
 	

@@ -40,6 +40,7 @@ void Database::printMovies(const std::string &path)
 	for (MediaFile* &m : mediafiles_)
 	{
 		str << m->print(false).str();
+		str << "*****" << std::endl;
 	}
 
 	// Write to file
@@ -62,17 +63,29 @@ void Database::printMovies(const std::string &path)
 void Database::addMediafile(MediaFile *m)
 {
 	mediafiles_.push_back(m);
-	std::cout << "MediaFile " << m->play() << " added!" << std::endl
+	std::cout << "MediaFile " << m->getTitle() << " added!" << std::endl
 		<< "=================================" << std::endl;
 }
 
 // Remove movie from static vector
-void Database::removeMovie(const int &position)
+void Database::removeMediafile(const int &id)
 {
-	const std::string mname = mediafiles_.at(position)->play();
-	mediafiles_.erase(mediafiles_.begin() + position);
+	bool found = false;
+	int pos = 0;
+	for (MediaFile* &m : mediafiles_)
+	{
+		if (m->getId() == id)
+		{
+			found = true;
+			break;
+		}
+		pos++;
+	}
+	
+	const std::string mname = mediafiles_.at(pos)->getTitle();
+	mediafiles_.erase(mediafiles_.begin() + pos);
 	std::cout << "=================================" << std::endl
-		<< "MediaFile " << mname << " removed!" << std::endl
+		<< "Mediafile " << mname << " removed!" << std::endl
 		<< "=================================" << std::endl;
 }
 
@@ -121,7 +134,7 @@ void Database::returnTotalViewTime()
 	int sum = 0;
 	for (MediaFile* &m : mediafiles_)
 	{
-		sum += m->getLength();
+		sum += m->getTotalLength();
 	}
 	std::cout << "Total viewtime is: " << sum << "min!" << std::endl;
 }
@@ -143,13 +156,27 @@ void Database::playMedium(const int &id)
 
 	if (found)
 	{
-		std::cout << "MediaFile running: " << mediafiles_.at(pos)->play() << std::endl;
+		std::cout << mediafiles_.at(pos)->getMediaType() << " running: " << mediafiles_.at(pos)->play() << std::endl;
 	}
 		
-
 	if (!found)
 		std::cout << "MediaFile did not exist in our database! Please try again!" << std::endl;
 	
+}
+
+// Construct random reviews and add them to random movies in vector
+void Database::simulateReviews(int& i)
+{
+	while (i > 0)
+	{
+		const int rating = rand() % 5 + 1;
+		const int position = rand() % mediafiles_.size();
+		mediafiles_.at(position)->addRating(rating);
+
+		i--;
+	}
+
+	sortMovies();
 }
 
 // Init database / movie vector from default file or own file
@@ -192,32 +219,51 @@ bool Database::init(const std::string &filename)
 		}
 
 		// Check each line from file for relevant information for the vectors
+		int linecount = 0;
+		bool specialmedia = false;
 		while (std::getline(source, line))
 		{
+			
 			if (line.find("Title: ") != std::string::npos)
+			{
+				linecount = 0;
+				specialmedia = false;
 				titles.push_back(line.substr(line.find("Title: ") + 7));
+			}
 
 			if (line.find("Length: ") != std::string::npos)
 				lens.push_back(std::stoi(line.substr(line.find("Length: ") + 8)));
 
 			if (line.find("Ratings: ") != std::string::npos)
 				ratings.push_back(line.substr(line.find("Ratings: ") + 9));
-
 			
 			if (line.find("Genre: ") != std::string::npos)
 				genres.push_back(line.substr(line.find("Genre: ") + 7));
 
 			if (line.find("Released: ") != std::string::npos)
 			{
+				specialmedia = true;
 				releases.push_back(stoi(line.substr(line.find("Released: ") + 10)));
 				episodes.push_back(0);
 				mediaflags.push_back(Mediatype::movie);
-			} else if (line.find("Episodes: ") != std::string::npos)
+			}
+			else if (line.find("Episodes: ") != std::string::npos)
 			{
+				specialmedia = true;
 				episodes.push_back(stoi(line.substr(line.find("Episodes: ") + 10)));
 				releases.push_back(0);
 				mediaflags.push_back(Mediatype::series);
 			}
+			linecount++;
+
+			if (linecount > 4 && !specialmedia)
+			{
+				releases.push_back(0);
+				episodes.push_back(0);
+				mediaflags.push_back(Mediatype::mediafile);
+				linecount = 0;
+			}
+			
 		}
 
 		// We are done with the file - close it again
@@ -281,19 +327,4 @@ bool Database::init(const std::string &filename)
 		<< "Database initialized!" << std::endl;
 	sortMovies();
 	return true;
-}
-
-// Construct random reviews and add them to random movies in vector
-void Database::simulateReviews(int &i)
-{
-	while (i > 0)
-	{
-		const int rating = rand() % 5 + 1;
-		const int position = rand() % mediafiles_.size();
-		mediafiles_.at(position)->addRating(rating);
-
-		i--;
-	}
-
-	sortMovies();
 }

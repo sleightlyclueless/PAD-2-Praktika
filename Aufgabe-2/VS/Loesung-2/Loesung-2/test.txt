@@ -1,0 +1,80 @@
+MediaFile-Database
+Entries: 13
+*****
+Title: Kaenguru Chroniken
+Length: 125min
+Ratings: 5 5 4 5 4 5 5 3 4 3 1 4 1 4 5 1 5 5 4 1 5 1 5 3 5 3 2 3 2 1 3 4 1 5 
+Genre: Hoerbuch
+*****
+Title: Schindlers Liste
+Length: 197min
+Ratings: 2 4 3 1 5 5 5 4 4 2 2 1 3 4 4 1 2 1 5 3 5 5 4 4 5 3 3 1 4 
+Genre: Drama
+Released: 1993
+*****
+Title: Avatar
+Length: 162min
+Ratings: 4 5 3 3 5 2 5 5 4 5 1 2 4 5 1 1 1 1 4 2 4 4 5 2 3 5 5 5 1 1 
+Genre: Science-Fiction
+Released: 2009
+*****
+Title: Die Verurteilten
+Length: 142min
+Ratings: 5 4 3 4 3 5 1 1 2 4 5 2 4 5 5 1 5 4 2 2 1 2 2 5 3 5 3 
+Genre: Drama
+Released: 1994
+*****
+Title: Matrix
+Length: 136min
+Ratings: 4 5 4 3 5 5 4 3 5 2 2 2 2 1 2 3 5 5 1 3 5 5 2 2 1 1 4 5 3 2 5 2 5 4 1 
+Genre: Science-Fiction
+Released: 1999
+*****
+Title: HIMYM
+Length: 16000min
+Ratings: 4 5 3 3 5 2 5 5 4 5 5 4 1 3 1 2 2 2 3 3 1 1 1 5 3 4 3 3 5 2 3 2 5 4 4 1 
+Genre: Sitcom
+Episodes: 90
+*****
+Title: Der Herr der Ringe
+Length: 228min
+Ratings: 5 5 3 4 2 5 5 1 4 2 5 3 4 1 3 5 4 1 4 4 2 1 2 2 2 3 4 3 3 5 1 1 4 3 1 5 
+Genre: Fantasy
+Released: 1978
+*****
+Title: Inception
+Length: 262min
+Ratings: 3 5 4 3 5 4 3 1 4 1 4 5 2 1 4 5 3 2 3 1 3 3 5 4 4 3 1 1 
+Genre: Action
+Released: 2010
+*****
+Title: Supernatural
+Length: 12000min
+Ratings: 2 3 5 2 4 3 1 5 4 2 4 5 4 4 5 2 5 5 1 5 2 5 3 2 5 2 3 2 2 1 5 3 1 5 2 2 2 2 4 1 1 3 
+Genre: Fantasy
+Episodes: 80
+*****
+Title: Baby Driver
+Length: 120min
+Ratings: 5 5 1 3 1 2 3 3 1 1 5 1 4 1 5 5 3 5 5 2 2 3 4 3 3 
+Genre: Auto/Action
+Released: 2018
+*****
+Title: The Dark Knight
+Length: 152min
+Ratings: 5 1 2 5 3 4 5 2 2 2 3 3 5 1 2 5 1 3 4 2 3 3 4 
+Genre: Action
+Released: 2008
+*****
+Title: Der Pate
+Length: 178min
+Ratings: 3 2 5 4 2 4 4 4 1 3 2 3 2 2 1 5 2 3 4 1 5 1 4 3 5 4 
+Genre: Krimi
+Released: 1974
+*****
+Title: Star Wars
+Length: 125min
+Ratings: 4 5 3 1 5 4 5 2 3 4 2 4 2 4 4 2 2 5 2 1 3 4 3 3 1 2 1 3 4 
+Genre: Science-Fiction
+Released: 1978
+*****

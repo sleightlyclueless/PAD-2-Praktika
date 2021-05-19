@@ -72,3 +72,9 @@ Length: 12000
 Ratings: 2 3 5 2 4 3 1 5 4 2 4 5 4
 Genre: Fantasy
 Episodes: 80
+*****
+Title: Kaenguru Chroniken
+Length: 125
+Ratings: 5 5 4 5 4 5 5 3
+Genre: Hoerbuch
+*****

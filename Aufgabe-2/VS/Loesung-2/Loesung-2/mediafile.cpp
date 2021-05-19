@@ -43,7 +43,11 @@ std::stringstream MediaFile::print(const bool consolemode) const
 	std::stringstream str;
 
 	if (consolemode)
-		str << "ID: " << id_ << std::endl;
+	{
+		str << "=================================" << std::endl
+			<< "Typ: " << type_ << std::endl
+			<< "ID: " << id_ << std::endl;
+	}
 	
 	str << "Title: " << title_ << std::endl
 		<< "Length: " << length_ << "min" << std::endl;
