@@ -1,0 +1,74 @@
+Mediafile-Database
+Entries: 10
+*****
+Title: Star Wars
+Length: 125
+Ratings: 4 5 3 1 5 4 5
+Genre: Science-Fiction
+Released: 1978
+*****
+Title: Die Verurteilten
+Length: 142
+Ratings: 5 4 3 4 3 5
+Genre: Drama
+Released: 1994
+*****
+Title: Der Pate
+Length: 178
+Ratings: 3 2 5 4 2 4
+Genre: Krimi
+Released: 1974
+*****
+Title: The Dark Knight
+Length: 152
+Ratings: 5
+Genre: Action
+Released: 2008
+*****
+Title: Schindlers Liste
+Length: 197
+Ratings: 2 4 3 1 5 5
+Genre: Drama
+Released: 1993
+*****
+Title: Der Herr der Ringe
+Length: 228
+Ratings: 5 5 3 4 2 5 5 1 4 2 5
+Genre: Fantasy
+Released: 1978
+*****
+Title: Pulp Fiction
+Length: 178
+Ratings: 2 4 3 1 4 3 5 3 2 3
+Genre: Krimi
+Released: 1994
+*****
+Title: Inception
+Length: 262
+Ratings: 3 5 4 3 5 4 3 1
+Genre: Action
+Released: 2010
+*****
+Title: Matrix
+Length: 136
+Ratings: 4 5 4 3 5 5 4 3
+Genre: Science-Fiction
+Released: 1999
+*****
+Title: HIMYM
+Length: 16000
+Ratings: 4 5 3 3 5 2 5 5 4 5
+Genre: Sitcom
+Episodes: 90
+*****
+Title: Avatar
+Length: 162
+Ratings: 4 5 3 3 5 2 5 5 4 5
+Genre: Science-Fiction
+Released: 2009
+*****
+Title: Supernatural
+Length: 12000
+Ratings: 2 3 5 2 4 3 1 5 4 2 4 5 4
+Genre: Fantasy
+Episodes: 80

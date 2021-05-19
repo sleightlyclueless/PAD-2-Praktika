@@ -1,0 +1,53 @@
+Movie-Database
+Entries: 10
+*****
+Title: The Dark Knight
+Length: 152min
+Ratings: 5 
+Genre: Action
+*****
+Title: Matrix
+Length: 136min
+Ratings: 4 5 4 3 5 5 4 3 
+Genre: Science-Fiction
+*****
+Title: Avatar
+Length: 162min
+Ratings: 4 5 3 3 5 2 5 5 4 5 
+Genre: Science-Fiction
+*****
+Title: Die Verurteilten
+Length: 142min
+Ratings: 5 4 3 4 3 5 
+Genre: Drama
+*****
+Title: Star Wars
+Length: 125min
+Ratings: 4 5 3 1 5 4 5 
+Genre: Science-Fiction
+*****
+Title: Der Herr der Ringe
+Length: 228min
+Ratings: 5 5 3 4 2 5 5 1 4 2 5 
+Genre: Fantasy
+*****
+Title: Inception
+Length: 262min
+Ratings: 3 5 4 3 5 4 3 1 
+Genre: Action
+*****
+Title: Schindlers Liste
+Length: 197min
+Ratings: 2 4 3 1 5 5 
+Genre: Drama
+*****
+Title: Der Pate
+Length: 178min
+Ratings: 3 2 5 4 2 4 
+Genre: Krimi
+*****
+Title: Pulp Fiction
+Length: 178min
+Ratings: 2 4 3 1 4 3 5 3 2 3 
+Genre: Krimi
+*****
