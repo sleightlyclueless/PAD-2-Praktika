@@ -8,6 +8,7 @@ class Series : public MediaFile
 		Series(std::string &title, int &length, std::vector<int> &ratings, std::string &genre, Mediatype &type, int &episodes);
 
 		std::stringstream print(bool consolemode) const override;
+	// TODO OVERRIDE IST NUR EINE PRÜFUNG OB OBERKLASSE FUNKTION HAT
 		std::string play() override;
 
 		int getLength() const override { return lengthavg_; }

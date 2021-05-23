@@ -281,6 +281,10 @@ bool Database::init(const std::string &filename)
 		std::cout << e.what() << std::endl;
 		return false;
 	}
+	catch (...)
+	{
+		std::cout << "Default catch (throw string, int, whatever)" << std::endl;
+	}
 
 	// Check if all vectors are the same length - if not something is wrong with the file or data
 	if (titles.size() == lens.size() && lens.size() == ratings.size() && ratings.size() == genres.size() && genres.size() == releases.size() && releases.size() == episodes.size())
@@ -298,6 +302,7 @@ bool Database::init(const std::string &filename)
 				ratingints.push_back(stoi(tmp));
 			}
 
+			// TODO use main constructor
 			if (mediaflags.at(i) == Mediatype::mediafile)
 			{
 				Mediatype type = Mediatype::mediafile;
