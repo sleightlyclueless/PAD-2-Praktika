@@ -2,9 +2,9 @@
 #include <iostream>
 #include <string>
 
+// Problem: Before cin int input like 10f3r5 resulted in 10 - break after the letter. Could lead to unwanted results.
+// Therefore check and only accept digit entries.
 inline int get_number() {
-    // Problem: Before cin int input like 10f3r5 resulted in 10 - break after the letter. Could lead to unwanted results.
-    // Therefore check and only accept digit entries.
 
     // Initialize necessary vars
     std::string str;

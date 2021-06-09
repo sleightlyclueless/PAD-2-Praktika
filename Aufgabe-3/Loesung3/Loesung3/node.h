@@ -1,31 +1,33 @@
 #pragma once
 #include <string>
 
-// template T: Node kann T value (jeder mögliche Typ (int, string, etc.) enthalten kann)
+// template (generic) T: Node can consist of generic value T (int, string, ...)
 template<typename T>
 class Node
 {
 	public:
-	    T value;        // Node
-	    Node<T>* next;  // Node nächstes Adresse
-	    Node<T>* prev;  // Node vorherige Adresse
+	    T value;        // node
+	    Node<T>* next;  // node next pointer
+	    Node<T>* prev;  // node previous pointer
 
-		// Konstruktor
-	    Node()
+		// constructor
+	    Node<T>()
 	    {
-	        next = nullptr;
+			next = nullptr;
 	        prev = nullptr;
 	    }
 
-		// Print Funktion mit string Ausgabe
-	    std::string print()
+		// print function to return value
+	    std::string print() const
 	    {
 	        return std::to_string(value);
 	    }
 };
 
 
-// Item Rückgabe für überladene Vergleichsoperatoren
+
+// =================== Task 4 =====================
+// overload comparisons between typename T of Nodes
 template<typename T>
 bool operator==(Node<T> a, Node<T> b)
 {

@@ -1,208 +1,251 @@
 #pragma once
 #include "node.h"
-#include <iostream>
+#include <sstream>
 
 template<typename T>
 class List_sorted
 {
-private:
-    Node<T>* begin;
-    Node<T>* current;
-    Node<T>* end;
+	Node<T>* first;
+	Node<T>* current;
+	Node<T>* last;
+	int length;
 
-    void push_back(Node<T>* I)
-    {
-        I->next = nullptr;        //Element nächstes ist nullptr
-        I->prev = end;            //Element davor ist Element[-1] vorherig
-        end = I;                  //Element[-1] neu ist Element neu
+	public:
+		List_sorted()
+		{
+			first = nullptr;
+			current = nullptr;
+			last = nullptr;
+			length = 0;
+		}
 
-        if (I->prev != nullptr)    //wenn Element vorheriges existiert bzw. nicht nullptr:
-            I->prev->next = I;    //von Element vorheriges Element nächstes ist dieses Element
-        else                    //wenn Element vorheriges nicht existiert bzw. nullptr:
-            begin = I;            //Element[0] ist Element aktuell
-        if (current == nullptr)    //wenn Element aktuell nullptr bzw Liste vorher leer:
-            current = I;          //Element aktuell ist Element neu
-    }
+		~List_sorted()
+		{
+			current = first;
+			Node<T>* next = current;
+			
+			while (next != nullptr)
+			{
+				next = current->next;
+				delete current;
+				current = next;
+			}
+		}
 
-public:
-    List_sorted()
-    {
-        begin = nullptr;
-        current = nullptr;
-        end = nullptr;
-    }
-    ~List_sorted()
-    {
-        current = begin;  //Element aktuell zu löschen, startet bei [0]
-        Node<T>* next;  //Element nächstes
-
-        if (current == nullptr)    //wenn keine Elemente vorhanden: nix tun
-            return;
-
-        do
-        {
-            next = current->next; //Element nächstes
-            delete current;     //Element aktuell löschen
-            current = next;       //Element aktuell ist Element nächstes
-        } while (next != nullptr);  //wenn Element nächstes existiert: weitermachen
-    }
-
-    bool adv()
-    {
-        if (current != nullptr && current->next != nullptr)
-        {
-            current = current->next;
-            return true;
-        }
-        else return false;
-    }
-
-    void del()
-    {
-        Node<T>* I = current;         //Element zu löschen
-
-        if (I == nullptr)
-            throw std::out_of_range("Error in List<T>::del(): Can not delete element from empty list.\n");
-
-        if (I->next != nullptr)        //wenn Element nächstes existiert bzw. nicht nullptr:
-        {
-            I->next->prev = I->prev;  //Element nächstes vorheriges ist von Element aktuell vorheriges
-        }
-        if (I->prev != nullptr)        //wenn Element vorheriges existiert bzw. nicht nullptr:
-        {
-            I->prev->next = I->next;  //Element vorheriges nächstes ist von Element aktuell nächstes
-        }
-
-        if (I->prev != nullptr && I->next != nullptr)        //lösche zwischen Elementen
-        {
-            current = I->next;
-        }
-        else if (I->prev == nullptr && I->next != nullptr)   //lösche Element[0]
-        {
-            begin = I->next;
-            current = I->next;
-        }
-        else if (I->prev != nullptr && I->next == nullptr)   //lösche Element[-1]
-        {
-            current = I->prev;
-            end = I->prev;
-        }
-        else if (I->prev == nullptr && I->next == nullptr)   //lösche Element einziges
-        {
-            begin = nullptr;
-            current = nullptr;
-            end = nullptr;
-        }
-
-        delete I;   //Speicher freigeben
-    }
-
-    bool empty()
-    {
-        return current == nullptr;    //wenn Zeiger aktuell nullptr: ja, leer
-    }
-
-    T& get()
-    {
-        if (current != nullptr)
-            return current->value;
-        else throw std::out_of_range("Error in List<T>::get(): Can not get element from emtpy list.\n");
-    }
-
-    void ins(const T& I_new)
-    {
-        Node<T>* current_before = current;    //Element aktuell merken, später wiederherstellen
-        Node<T>* I = new Node<T>;             //Speicher beantragen
-        I->value = I_new;                     //Daten kopieren
-
-
-        //Einfügeposition suchen
-        current = begin;
-        if (current != nullptr)    //wenn Element aktuell existiert bzw. Liste nicht leer:
-        {
-            do                  //nach Einfügeposition suchen
-            {
-                if (*I <= *current)
-                    break;
-
-                if (*current < *I && current->next == nullptr) //wenn Element größer als Element letztes:
-                {
-                    push_back(I);               //anhängen
-                    if (current_before != nullptr) //nach Einfügen wenn Element aktuell alt kein nullptr:
-                        current = current_before; //Element aktuell wiederherstellen
-                    return;
-                }
-            } while (adv() == true);
-        }
-
-
-        //einfügen
-        I->next = current;            //Element nächstes ist Element aktuell alt
-        if (I->next != nullptr)        //wenn Element nächstes existiert bzw. nicht nullptr:
-        {
-            I->prev = I->next->prev;  //Element vorheriges ist von Element nächstes Element vorheriges
-            I->next->prev = I;        //von Element nächstes Element vorheriges ist Element neu
-        }
-        else                        //wenn Element nächstes nicht existiert bzw. nullptr:
-        {
-            end = I;                  //Element aktuell ist Element[-1]
-            I->prev = nullptr;        //Element nächstes existiert nur nicht wenn Element aktuell alleiniges Element
-            current = I;              //daher Element vorher nullptr und Element aktuell I
-        }
-
-
-        if (I->prev != nullptr)        //wenn Element vorheriges existiert bzw. nicht nullptr:
-        {
-            I->prev->next = I;        //von Element vorheriges Element nächstes ist dieses Element
-        }
-        else                        //wenn Element vorheriges nicht existiert bzw. nullptr:
-        {
-            begin = I;                //Element aktuell ist Element[0]
-        }
-
-        if (current_before != nullptr) //nach Einfügen wenn Element aktuell alt kein nullptr:
-            current = current_before; //Element aktuell wiederherstellen
-    }
-
-    std::string print()
-    {
-        std::string display;                //Ausgabe
-        Node<T>* current_before = current;    //Element aktuell vorher merken
-
-        current = begin;                      //Element aktuell auf Element[0] setzen
-        if (current == nullptr)                //wenn Liste leer:
-            return "-\n";
-
-        int i = 0;
-        do                                                      //Elemente alle durch
-        {
-            display += std::to_string(i) + ": " + current->print();   //drucken
-
-            if (current == current_before)                         //wenn Element aktuell:
-            {
-                display += " <-";                                 //markieren
-            }
-
-            display += "\n";
-            ++i;
-        } while (adv() == true);
-
-        current = current_before;     //Element aktuell wiederherstellen
-        return display;
-    }
-
-    void reset()
-    {
-        current = begin;
-    }
-
-    bool ret()
-    {
-        if (current != nullptr && current->prev != nullptr)
-        {
-            current = current->prev;
-            return true;
-        }
-        else return false;
-    }
+		Node<T>* getFirst() const { return first; }
+		Node<T>* getCurrent() const { return current; }
+		Node<T>* getLast() const { return last; }
+		int getLength() const { return length; }
+	
+		Node<T> get();					// get node from current pointer
+		bool empty();					// return if list is empty
+		bool beginning();				// return if your at start of list
+		bool end();						// return if your at end of list
+		bool adv();						// advance list pointer
+		bool rec();						// New for sorted list: recede list pointer
+		void reset();					// set list pointer to beginning
+		void ins(const T& I_new);		// insert new element at pointer position
+		void del();						// delete element at pointer position
+		std::stringstream print();
 };
+
+template<typename T>
+Node<T> List_sorted<T>::get()
+{
+	if (current != nullptr)
+		return *current;
+	throw std::out_of_range("Error in List<T>::get(): Can not get() on empty pointer.");
+}
+
+template<typename T>
+bool List_sorted<T>::empty()
+{
+	return current == nullptr && first == nullptr && last == nullptr;
+}
+
+template<typename T>
+bool List_sorted<T>::beginning()
+{
+	return current == first;
+}
+
+template<typename T>
+bool List_sorted<T>::end()
+{
+	return current == last;
+}
+
+template<typename T>
+bool List_sorted<T>::adv()
+{
+	if (current != nullptr && current->next != nullptr)
+	{
+		current = current->next;
+		return true;
+	}
+	return false;
+}
+
+template<typename T>
+bool List_sorted<T>::rec()		// New for sorted list: Recede by one
+{
+	if (current != nullptr && current->prev != nullptr)
+	{
+		current = current->prev;
+		return true;
+	}
+	return false;
+}
+
+template<typename T>
+void List_sorted<T>::reset()
+{
+	current = first;
+}
+
+template<typename T>
+void List_sorted<T>::ins(const T& I_new)
+{
+	Node<T>* I = new Node<T>;
+	I->value = I_new;
+
+	// NEW == Move current to position where it can be inserted in a sorted manner
+	// Find insert position (first larger than I cause I gets pushed back)
+	if (current != nullptr)
+	{
+		if (I->value < current->value)	// If inserted value is smaller recede
+		{
+			while (I->value < current->value && current->prev != nullptr) {
+				rec();
+			}
+			if (current != first)
+				adv();
+		}
+
+		if (I->value > current->value)	// If inserted value is bigger advance
+		{
+			while (I->value > current->value && current->next != nullptr) {
+				adv();
+			}
+		}
+
+
+		// Edge case new biggest element
+		if (I->value > current->value)
+		{
+			// Adjust pointers of I
+			I->next = nullptr;
+			I->prev = last;
+			last = I;
+
+			// Adjust pointers of previous last (and edge cases if list was empty in the first place)
+			if (I->prev != nullptr)	
+				I->prev->next = I;
+			else
+				first = I;
+			if (current == nullptr)
+				current = I;
+			return;
+		}
+	}
+	// Pointer is now on Element equal or bigger than new element (except edge case new biggest element)
+	// ============================================================================
+
+	
+	// If not edge case our current pointer is at the right position for an sorted insert
+	I->next = current;
+	current = I;
+
+	if (I->next != nullptr)				// adjust prev pointers of new current and next element
+	{
+		I->prev = I->next->prev;
+		I->next->prev = I;
+	}
+	else								// edge case: no next -> I is inserted last element
+	{
+		last = I;
+		I->next = nullptr;
+	}
+	// 1 - 2 - [4] - 3
+	// 1 - 2 - 3 - [4]
+
+
+	if (I->prev != nullptr)				// adjust next pointers of new current and next element
+		I->prev->next = I;
+	else								// edge case: no prev -> I is inserted first element
+	{
+		first = I;
+		I->prev = nullptr;
+	}
+	// 1 - [4] - 2 - 3
+	// [4] - 1 - 2 - 3
+
+	current = I;
+	length++;
+}
+
+
+template<typename T>
+void List_sorted<T>::del()
+{
+	Node<T>* I = current;
+
+	if (I == nullptr)
+		throw std::out_of_range("Error in List<T>::del(): Can not delete element from empty list.");
+
+	if (I->next != nullptr)
+		I->next->prev = I->prev;
+	if (I->prev != nullptr)
+		I->prev->next = I->next;
+
+	if (I->prev != nullptr && I->next != nullptr)
+		current = I->next;
+	else if (I->prev == nullptr && I->next != nullptr)
+	{
+		first = I->next;
+		current = I->next;
+	}
+	else if (I->prev != nullptr && I->next == nullptr)
+	{
+		current = I->prev;
+		last = I->prev;
+	}
+	else if (I->prev == nullptr && I->next == nullptr)
+	{
+		first = nullptr;
+		current = nullptr;
+		last = nullptr;
+	}
+
+	delete I;
+	length--;
+}
+
+template<typename T>
+std::stringstream List_sorted<T>::print()
+{
+	std::stringstream str;
+	Node<T>* current_before = current;
+	current = first;
+
+	if (current == nullptr) {
+		str << "List empty!" << std::endl;
+		return str;
+	}
+
+	int i = 0;
+	do
+	{
+		if (current == current_before)
+			str << "+ ";
+		else
+			str << "- ";
+
+		str << std::to_string(i) << ": " << current->print() << std::endl;
+
+		i++;
+	} while (adv() == true);
+
+	current = current_before;
+	return str;
+}

@@ -6,73 +6,86 @@ template<typename T>
 class List
 {
 	private:
-	    Node<T>* first;						// Zeiger auf Startelement
-	    Node<T>* current;					// Zeiger auf Current Element
-	    Node<T>* last;						// Zeiger auf Letztes Element
+	    Node<T>* first;						// pointer first element
+	    Node<T>* current;					// pointer current element
+	    Node<T>* last;						// pointer last element
+		int length;
 
 	public:
-		// Konstruktor
+		// Constructor
 	    List()
 	    {
 	        first = nullptr;
 	        current = nullptr;
 	        last = nullptr;
+			length = 0;
 	    }
 
-		// Spezifischer Destruktor, um Pointer zu löschen und Speicher freizugeben
+		// specific destructor to delete pointers and objects in heap
 	    ~List()
 	    {
-	        current = first;				// Beginn ganz vorne
-			Node<T>* next = current;
+	        current = first;				// start at beginning
+			Node<T>* tmp = current;
 
-	    	while (next != nullptr)
+	    	while (tmp != nullptr)			// while there is a next element delete current and advance
 	    	{
-				next = current->next;		// Nächstes Element
-				delete current;				// Aktuelles Element löschen
-				current = next;				// Aktuelles = nächstes Element
+				tmp = current->next;
+				delete current;
+				current = tmp;
 	    	}
 	    }
 
-		// Linked List - Funktionen
-		Node<T> get();						// liefert aktuelles Element von Positionszeiger
-		bool empty();					// liefert, ob Liste leer ist (ob alles = nullptr)
-		bool end();						// liefert, ob Listenende erreicht ist
-		bool adv();						// Positionszeiger vorrücken
-		void reset() { current = first; } // Positionszeiger auf Anfang setzen
-		void ins(const T& I_new);		// Am Positionszeiger neues Element hinzufügen
-		void del();						// Positionszeiger Element löschen
+		// Getters and Setters for unittests
+		Node<T>* getFirst() const { return first; }
+		Node<T>* getCurrent() const { return current; }
+		Node<T>* getLast() const	{ return last; }
+		int getLength() const { return length; }
+	
+		// Linked List - Functions
+		Node<T> get();					// get node from current pointer
+		bool empty();					// return if list is empty
+		bool beginning();				// return if your at start of list
+		bool end();						// return if your at end of list
+		bool adv();						// advance list pointer
+		bool rec();						// New for sorted list: recede list pointer
+		void reset();					// set list pointer to beginning
+		void ins(const T &I_new);		// insert new element at pointer position
+		void del();						// delete element at pointer position
 
 
 		// General Functions
-	    std::stringstream print();			// Ausgabe gesamter Liste
+	    std::stringstream print();		// print all nodes values from element
 };
 
 
 template<typename T>
-Node<T> List<T>::get()						// liefert aktuelles Element von Positionszeiger
+Node<T> List<T>::get()					// get node from current pointer
 {
-	{
-		if (current != nullptr)
-			return *current;
-
-		// TODO return nullptr;					// nullptr Rückgabe falls kein Element vorhanden
-	}
+	if (current != nullptr)
+		return *current;
+	throw std::out_of_range("Error in List<T>::get(): Can not get() on empty pointer.");
 }
 
 template<typename T>
-bool List<T>::empty()					// liefert, ob Liste leer ist (ob alles = nullptr)
+bool List<T>::empty()					// return if list is empty
 {
 	return current == nullptr && first == nullptr && last == nullptr;			
 }
 
 template<typename T>
-bool List<T>::end()						// liefert, ob Listenende erreicht ist
+bool List<T>::beginning()				// return if your at start of list
+{
+	return current == first;
+}
+
+template<typename T>
+bool List<T>::end()						// return if your at end of list
 {
 	return current == last;
 }
 
 template<typename T>
-bool List<T>::adv()						// Positionszeiger vorrücken
+bool List<T>::adv()						// advance list pointer
 {
 	if (current != nullptr && current->next != nullptr)
 	{
@@ -82,109 +95,146 @@ bool List<T>::adv()						// Positionszeiger vorrücken
 	return false;
 }
 
+template<typename T>
+bool List<T>::rec()						// New for sorted list: recede list pointer
+{
+	if (current != nullptr && current->prev != nullptr)
+	{
+		current = current->prev;
+		return true;
+	}
+	return false;
+}
 
 template<typename T>
-void List<T>::ins(const T& I_new)	// Am Positionszeiger neues Element hinzufügen
+void List<T>::reset()					// set list pointer to beginning
 {
-	Node<T>* I = new Node<T>;		// Am Heap neue Node erstellen
-	I->value = I_new;				// Daten in Node kopieren
-
-	I->next = current;				// Aktuelles Element 1 weiter schieben
-	current = I;					// Node neu auf freien Zeigerplatz hinzufügen
-
-	
-	if (I->next != nullptr)			// Nächstes Element+ bearneiten
-	{
-		I->prev = I->next->prev;	// Zeiger auf vorheriges Element übernehmen
-		I->next->prev = I;			// Von nächstem Element ist dieses der Vorgänger
-	}
-	else
-	{
-		last = I;					// Kein Next = last element
-		I->prev = nullptr;			// Nach weiterschieben kein next Element = prev nullptr
-	}
-
-
-	if (I->prev != nullptr)			// Vorheriges Element bearbeiten
-	{
-		I->prev->next = I;			// Von Vorherigem Element ist dieses der Nachfolger
-	}
-	else
-	{
-		first = I;					// Nach weiterschieben kein vorheriges Element = first
-	}
+	current = first;
 }
 
 
+// Runtime: Best case -> O(1)
+//			Average case -> O(1)
+//			Worst case -> O(1)
 template<typename T>
-void List<T>::del()					// Positionszeiger Element löschen
+void List<T>::ins(const T &I_new)		// insert new element at pointer position
 {
-	Node<T>* I = current;			// Zu löschende Node laden
+	Node<T>* I = new Node<T>;			// create new node in heap
+	I->value = I_new;					// insert node in current and advance current to next
+	I->next = current;
+	current = I;
 
-	if (I == nullptr)
-		throw std::out_of_range("Error in List<T>::del(): Can not delete element from empty list.\n");
-
-	// Zeiger anpassen
-	if (I->next != nullptr)			// Nächstes Element anpassen
+	
+	if (I->next != nullptr)				// adjust prev pointers of new current and next element
 	{
-		I->next->prev = I->prev;	// Nächstes Element Vorgänger = Vorgänger von current
+		I->prev = I->next->prev;
+		I->next->prev = I;
 	}
-	if (I->prev != nullptr)			// Vorheriges Element anpassen
+	else								// edge case: no next -> I is inserted last element
 	{
-		I->prev->next = I->next;	// Vorheriges Element Nächster = Nächster von current
+		last = I;
+		I->next = nullptr;
 	}
+	// 1 - 2 - [4] - 3
+	// 1 - 2 - 3 - [4]
+	
 
-	if (I->prev != nullptr && I->next != nullptr)        // Lösche zwischen Elementen
+	if (I->prev != nullptr)				// adjust next pointers of new current and next element
+		I->prev->next = I;
+	else								// edge case: no prev -> I is inserted first element
+	{
+		first = I;
+		I->prev = nullptr;
+	}
+	// 1 - [4] - 2 - 3
+	// [4] - 1 - 2 - 3
+
+	length++;
+}
+
+
+// Runtime: Best case -> O(1)
+//			Average case -> O(1)
+//			Worst case -> O(1)
+template<typename T>
+void List<T>::del()						// delete element at pointer position
+{
+	Node<T>* I = current;				// load current node pointer to be deleted
+
+	// catch empty node to be deleted
+	if (I == nullptr || empty())
+		return;
+		
+
+	// pointer of next and prev element
+	if (I->next != nullptr)
+		I->next->prev = I->prev;	// next element prev = prev of current
+	
+	if (I->prev != nullptr)
+		I->prev->next = I->next;	// prev element next = next of current
+
+
+	// pointer of list
+	if (I->prev != nullptr && I->next != nullptr)		// delete between elements (mostly)
 	{
 		current = I->next;
 	}
-	else if (I->prev == nullptr && I->next != nullptr)   // Lösche erstes Element
+	else if (I->prev == nullptr && I->next != nullptr)	// delete first element
 	{
 		first = I->next;
 		current = I->next;
 	}
-	else if (I->prev != nullptr && I->next == nullptr)   // Lösche letztes Element
+	else if (I->prev != nullptr && I->next == nullptr)	// delete last element
 	{
 		current = I->prev;
 		last = I->prev;
 	}
-	else if (I->prev == nullptr && I->next == nullptr)   // Sonderfall: Lösche einziges
+	else if (I->prev == nullptr && I->next == nullptr)	// edge case: delete single element
 	{
 		first = nullptr;
 		current = nullptr;
 		last = nullptr;
 	}
 
-	delete I;   // Element löschen
+	delete I;											// lastly when evetythings set up delete node
+	length--;
 }
 
 
 
 template<typename T>
-std::stringstream List<T>::print() // TODO: Gibt current element noch nicht aus?
+std::stringstream List<T>::print()						// print all nodes values from element
 {
-	std::stringstream str;						// Ausgabestringstream
-	Node<T>* current_before = current;			// Element aktuell merken für Ende
-
-	current = first;							// Zeiger auf Element[0] setzen
-	if (current == nullptr) {					// Wenn Liste leer:
+	std::stringstream str;								// stringstream
+	Node<T>* current_before = current;					// save current pointer
+	
+	current = first;									// start from beginning
+	
+	if (current == nullptr) {							// if list empty
 		str << "List empty!" << std::endl;
 		return str;
 	}
 
+	str << "Your list consists of " << std::to_string(length) << " nodes:" << std::endl;
 	int i = 0;
-	while (adv() == true)
+	do													// do while, so first element is printed as well
 	{
 		if (current == current_before)
 			str << "+ ";
 		else
-			str << "-";
-		
-		str << std::to_string(i) << ": " << current->print() << std::endl;
+			str << "- ";
+
+		// Be dynamic for datatype int and string of list
+		T value = current->print();
+		if (typeid(value) == typeid(int))
+			str << std::to_string(i) << ": " << std::to_string(value) << std::endl;
+
+		if (typeid(value) == typeid(std::string))
+			str << std::to_string(i) << ": " << value << std::endl;
 
 		i++;
-	}
+	} while (adv() == true);
 
-	current = current_before;					// Element aktuell wiederherstellen
+	current = current_before;					// reset saved pointer
 	return str;
 }
