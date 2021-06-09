@@ -11,10 +11,11 @@ class Node
 	    Node<T>* prev;  // node previous pointer
 
 		// constructor
-	    Node<T>()
+	    Node()
 	    {
 			next = nullptr;
 	        prev = nullptr;
+			value = {};
 	    }
 
 		// print function to return value
