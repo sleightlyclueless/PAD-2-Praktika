@@ -4,8 +4,20 @@
 
 int main()
 {
-    // List<int> a;             // linked List with ints
-    List_sorted<int> a;         // sorted linked List aus ints
+
+    // List<int> a;                 // linked List with ints
+    List_sorted<int> a;             // sorted linked List aus ints
+    
+    // List<double> a;              // linked List with ints
+    // List_sorted<double> a;       // sorted linked List aus ints
+
+    // List<char> a;                // linked List with ints
+    // List_sorted<char> a;         // sorted linked List aus ints
+
+    // List<std::string> a;         // linked List with ints
+    // List_sorted<std::string> a;  // sorted linked List aus ints
+
+    
     bool endthis = false;       // end flag
 
 
@@ -96,11 +108,31 @@ int main()
 
             case 8: {
                 std::cout << "Enter number to insert: ";
-                int x = get_number();
+                const int x = get_number();
+
+                /*double x;
+                std::cin >> x;*/
+
+                /*char x;
+                std::cin >> x;*/
+            	
+            	/*std::string x;
+            	std::getline(std::cin, x);*/
+            	
                 try
                 {
                     a.ins(x);
-                    std::cout << "Node with value " << std::to_string(x) << " inserted successfully." << std::endl;
+                    std::cout << "Node with value ";
+                	
+                    if (typeid(x) != typeid(std::string))
+                        std::cout << std::to_string(x);
+                    else
+                        std::cout << x;
+                	
+                    if (typeid(x) == typeid(char))
+                        std::cout << "(" << x << ")";
+                	
+                	std::cout << " inserted successfully." << std::endl;
                 }
                 catch (...)
                 {

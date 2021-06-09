@@ -26,7 +26,6 @@ class List_sorted_test : public ::testing::Test
 	
 };*/
 
-
 // insert Tests =============================================
 TEST(List_sorted_test, InsertToEmptyList) {
 

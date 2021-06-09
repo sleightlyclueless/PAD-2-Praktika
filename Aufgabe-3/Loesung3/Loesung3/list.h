@@ -226,12 +226,14 @@ std::stringstream List<T>::print()						// print all nodes values from element
 
 		// Be dynamic for datatype int and string of list
 		T value = current->print();
-		if (typeid(value) == typeid(int))
-			str << std::to_string(i) << ": " << std::to_string(value) << std::endl;
-
 		if (typeid(value) == typeid(std::string))
-			str << std::to_string(i) << ": " << value << std::endl;
+			str << std::to_string(i) << ": " << value;
+		else
+			str << std::to_string(i) << ": " << std::to_string(value);
 
+		if (typeid(value) == typeid(char))
+			str << " (" << value << ")";
+		
 		i++;
 	} while (adv() == true);
 

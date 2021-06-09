@@ -19,9 +19,9 @@ class Node
 	    }
 
 		// print function to return value
-	    std::string print() const
+	    T print() const
 	    {
-	        return std::to_string(value);
+	        return value;
 	    }
 };
 

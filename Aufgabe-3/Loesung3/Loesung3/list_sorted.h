@@ -143,8 +143,10 @@ void List_sorted<T>::ins(const T& I_new)
 				I->prev->next = I;
 			else
 				first = I;
-			if (current == nullptr)
+			if (current != nullptr)
 				current = I;
+
+			length++;
 			return;
 		}
 	}
@@ -233,6 +235,7 @@ std::stringstream List_sorted<T>::print()
 		return str;
 	}
 
+	str << "Your list consists of " << std::to_string(length) << " nodes:" << std::endl;
 	int i = 0;
 	do
 	{
@@ -241,7 +244,16 @@ std::stringstream List_sorted<T>::print()
 		else
 			str << "- ";
 
-		str << std::to_string(i) << ": " << current->print() << std::endl;
+		T value = current->print();
+		if (typeid(value) == typeid(std::string))
+			str << std::to_string(i) << ": " << value;
+		else
+			str << std::to_string(i) << ": " << std::to_string(value);
+		
+		if (typeid(value) == typeid(char))
+			str << " (" << value << ")";
+		
+		str << std::endl;
 
 		i++;
 	} while (adv() == true);
