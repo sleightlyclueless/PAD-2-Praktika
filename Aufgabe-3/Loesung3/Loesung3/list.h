@@ -24,10 +24,10 @@ class List
 		// specific destructor to delete pointers and objects in heap
 	    ~List()
 	    {
-	        current = first;				// start at beginning
+	        current = first;			// start at beginning
 			Node<T>* tmp = current;
 
-	    	while (tmp != nullptr)			// while there is a next element delete current and advance
+	    	while (tmp != nullptr)		// while there is a next element delete current and advance
 	    	{
 				tmp = current->next;
 				delete current;
@@ -168,10 +168,10 @@ void List<T>::del()						// delete element at pointer position
 
 	// pointer of next and prev element
 	if (I->next != nullptr)
-		I->next->prev = I->prev;	// next element prev = prev of current
+		I->next->prev = I->prev;		// next element prev = prev of current
 	
 	if (I->prev != nullptr)
-		I->prev->next = I->next;	// prev element next = next of current
+		I->prev->next = I->next;		// prev element next = next of current
 
 
 	// pointer of list
@@ -196,28 +196,28 @@ void List<T>::del()						// delete element at pointer position
 		last = nullptr;
 	}
 
-	delete I;											// lastly when evetythings set up delete node
+	delete I;								// lastly when evetythings set up delete node
 	length--;
 }
 
 
 
 template<typename T>
-std::stringstream List<T>::print()						// print all nodes values from element
+std::stringstream List<T>::print()			// print all nodes values from element
 {
-	std::stringstream str;								// stringstream
-	Node<T>* current_before = current;					// save current pointer
+	std::stringstream str;					// stringstream
+	Node<T>* current_before = current;		// save current pointer
 	
-	current = first;									// start from beginning
+	current = first;						// start from beginning
 	
-	if (current == nullptr) {							// if list empty
+	if (current == nullptr) {				// if list empty
 		str << "List empty!" << std::endl;
 		return str;
 	}
 
 	str << "Your list consists of " << std::to_string(length) << " nodes:" << std::endl;
 	int i = 0;
-	do													// do while, so first element is printed as well
+	do										// do while, so first element is printed as well
 	{
 		if (current == current_before)
 			str << "+ ";
@@ -237,6 +237,6 @@ std::stringstream List<T>::print()						// print all nodes values from element
 		i++;
 	} while (adv() == true);
 
-	current = current_before;					// reset saved pointer
+	current = current_before;				// reset saved pointer
 	return str;
 }

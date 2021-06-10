@@ -154,33 +154,28 @@ void List_sorted<T>::ins(const T& I_new)
 	// ============================================================================
 
 	
-	// If not edge case our current pointer is at the right position for an sorted insert
+	// If not edge case current pointer at right position for sorted insert - normal ins call
 	I->next = current;
 	current = I;
 
-	if (I->next != nullptr)				// adjust prev pointers of new current and next element
+	if (I->next != nullptr)
 	{
 		I->prev = I->next->prev;
 		I->next->prev = I;
 	}
-	else								// edge case: no next -> I is inserted last element
+	else
 	{
 		last = I;
 		I->next = nullptr;
 	}
-	// 1 - 2 - [4] - 3
-	// 1 - 2 - 3 - [4]
 
-
-	if (I->prev != nullptr)				// adjust next pointers of new current and next element
+	if (I->prev != nullptr)
 		I->prev->next = I;
-	else								// edge case: no prev -> I is inserted first element
+	else
 	{
 		first = I;
 		I->prev = nullptr;
 	}
-	// 1 - [4] - 2 - 3
-	// [4] - 1 - 2 - 3
 
 	current = I;
 	length++;

@@ -31,10 +31,10 @@ TEST(List_sorted_test, InsertToEmptyList) {
 
 	List_sorted<int>* a = new List_sorted<int>;
 	
-	const int t = 10;
-	a->ins(t);
+	const int n = 10;
+	a->ins(n);
 	
-	EXPECT_TRUE(a->getCurrent() != nullptr && a->getFirst() != nullptr && a->getLast() != nullptr && a->getCurrent()->value == t && a->getFirst()->value == t && a->getLast()->value == t);
+	EXPECT_TRUE(a->getCurrent() != nullptr && a->getFirst() != nullptr && a->getLast() != nullptr && a->getCurrent()->value == n && a->getFirst()->value == n && a->getLast()->value == n);
 	
 	delete a;
 

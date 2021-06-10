@@ -169,6 +169,8 @@ int main()
                 break;
     	}
 
+        std::cout << std::endl << "==============================================" << std::endl;
+
     }
 
     return 0;
