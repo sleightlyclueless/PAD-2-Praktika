@@ -25,15 +25,26 @@ class List
 		}
 
 		// Getters and setters
+		int getLength() const { return length; }
 		Node<T>* getFirst() const { return first; }
 		Node<T>* getCurrent() const { return current; }
 		Node<T>* getLast() const { return last; }
-		Node<T>* getPrev() const { if (current->prev != nullptr) { return current->prev; } return nullptr; }
-		Node<T>* getNext() const { if (current->next != nullptr) { return current->next; } return nullptr; }
-		int getLength() const { return length; }
+
+		Node<T> get() const;
+		Node<T>* getAdr() const;
+		int getPositon(Node<T>& n);
+		Node<T>* getAtPosition(int pos);
+	
+		Node<T>* getPrev() const;
+		Node<T>* getNext() const;
+		Node<T>* getParent(Node<T> &child);
+		Node<T>* getLeftChild(Node<T> &root, int index = -1);
+		Node<T>* getRightChild(Node<T> &root, int index = -1);
+
+	
+		
 
 		// Functions
-		Node<T> get() const;				// get node from current pointer
 		bool empty() const;					// return if list is empty
 		bool beginning() const;				// return if your at start of list
 		bool end() const;					// return if your at end of list
@@ -47,15 +58,18 @@ class List
 		void clear();
 
 		std::stringstream print();			// Print list contents
-		std::stringstream print_tree();
+		std::stringstream print_tree();		// Print list binary tree view
 		void ini(int n);					// Fill list with n random elements
 
 
-		static void mergeSort(List<T>& list);
+		static void mergeSort(List<T> &list);
 		static void splitList(List<T> &list, List<T> &a, List<T> &b);
 		static List<T> mergeLists(List<T> &a, List<T> &b);		// Zwei vorsortierte Listen als Referenz erhalten und zusammen sortieren
 
-		static void heapyfi();
+		static void heapSort(List<T> &list);					// Heap: Ordered binary tree -> Hier linksvollständig
+		static List<T> heapyfi(List<T> &list);					// Linksvollständig maxheap herstellen
+		static void swap(Node<T> *a, Node<T> *b);				// zwei Elemente / Pointervalues in Heap vertauschen
+		static void checkChilds(List<T>& list, Node<T>* parent, int &indexLastNotSorted); // Oberstes Element mit Kindern vergleichen und nach unten durchsieben
 };
 
 
@@ -66,6 +80,90 @@ Node<T> List<T>::get() const
 		return *current;
 	throw std::out_of_range("Error in List<T>::get(): Can not get() on empty pointer.");
 }
+
+template<typename T>
+Node<T>* List<T>::getAdr() const
+{
+	if (current != nullptr)
+		return current;
+	throw std::out_of_range("Error in List<T>::get(): Can not getAdr() on empty pointer.");
+}
+
+
+template <typename T>
+int List<T>::getPositon(Node<T> &n)
+{
+	int counter = 0;
+	reset();
+
+	do
+	{
+		if (current == &n)
+			return counter;
+		counter++;
+	} while (adv());
+
+	return -1;
+}
+
+template<typename T>
+Node<T>* List<T>::getAtPosition(int pos) {
+	if (pos <= length || pos == -1)
+	{
+		reset();
+		while (pos > 0) {
+			adv();
+			pos--;
+		}
+		return getAdr();
+	}
+	return nullptr;
+}
+
+template <typename T>
+Node<T>* List<T>::getPrev() const
+{
+	if (current->prev != nullptr)
+		return current->prev;
+	return nullptr;
+}
+
+template <typename T>
+Node<T>* List<T>::getNext() const
+{
+	if (current->next != nullptr)
+		return current->next;
+	return nullptr;
+}
+
+template <typename T>
+Node<T>* List<T>::getParent(Node<T> &child)
+{
+	return getAtPosition(static_cast<int>((getPositon(child) + 1) / 2) - 1);
+}
+
+template <typename T>
+Node<T>* List<T>::getLeftChild(Node<T> &root, int index)
+{
+	const int adr = (getPositon(root) + 1) * 2 - 1;
+	if (index == -1)
+		index = length;
+	if (adr > index)
+		return nullptr;
+	return getAtPosition(adr);
+}
+
+template <typename T>
+Node<T>* List<T>::getRightChild(Node<T> &root, int index)
+{
+	const int adr = (getPositon(root) + 1) * 2;
+	if (index == -1)
+		index = length;
+	if (adr > index)
+		return nullptr;
+	return getAtPosition(adr);
+}
+
 
 template<typename T>
 bool List<T>::empty() const
@@ -117,7 +215,7 @@ void List<T>::reset()
 }
 
 template<typename T>
-void List<T>::ins(const T& I_new)		// insert new element at pointer position
+void List<T>::ins(const T &I_new)		// insert new element at pointer position
 {
 	Node<T>* I = new Node<T>;			// create new node in heap
 	I->value = I_new;					// insert node in current and advance current to next
@@ -153,7 +251,7 @@ void List<T>::ins(const T& I_new)		// insert new element at pointer position
 }
 
 template<typename T>
-void List<T>::insSorted(const T& I_new)
+void List<T>::insSorted(const T &I_new)
 {
 	Node<T>* I = new Node<T>;
 	I->value = I_new;
@@ -347,7 +445,7 @@ std::stringstream List<T>::print_tree()
 		
 	str << "Your list consists of " << std::to_string(length) << " nodes:" << std::endl;
 	int i = 0;
-	while (!end() && i <= 15) {
+	while (i <= 15) {
 
 		std::string c = std::to_string(current->print());
 		if (c.length() == 1)
@@ -411,9 +509,13 @@ std::stringstream List<T>::print_tree()
 			default: 
 				break;
 		}
+
+		if (end())
+			break;
 		
 		i++;
 		adv();
+		
 	}
 	str << std::endl << std::endl;
 	
@@ -435,9 +537,9 @@ void List<T>::ini(const int n)
 }
 
 
-// ============================== Static sorting functions ==============================
+// ======================================== Mergesort ========================================
 template <typename T>
-void List<T>::mergeSort(List<T>& list)
+void List<T>::mergeSort(List<T> &list)
 {
 	List<T> a, b;
 
@@ -532,8 +634,114 @@ List<T> List<T>::mergeLists(List<T> &a, List<T> &b)
 	return sortedList;
 }
 
-template <typename T>
-void List<T>::heapyfi()
+
+
+// ======================================== Heapsort ========================================
+template<typename T>
+void List<T>::heapSort(List<T> &list)
 {
-	
+	std::cout << list.print_tree().str() << std::endl;
+	list = heapyfi(list);									// build max heap (heap = binary tree -> root bigger)
+	std::cout << list.print_tree().str() << std::endl;
+
+	/*int indexLastNotSorted = list.length - 1;
+
+	while (indexLastNotSorted > 0)
+	{
+		Node<T>* parent = list.getAtPosition(indexLastNotSorted);
+		checkChilds(list, list.first, indexLastNotSorted);
+
+		swap(list.first, list.getAtPosition(indexLastNotSorted));
+		--indexLastNotSorted;
+	}
+
+	std::cout << list.print_tree().str() << std::endl;
+	std::cout << list.print().str() << std::endl;*/
 }
+
+
+template<typename T>
+List<T> List<T>::heapyfi(List<T> &list)
+{
+	int index = list.length - 1;
+
+	while (index >= 0)
+	{
+		Node<T> *parent = list.getAtPosition(index);
+		Node<T> *leftChild = list.getLeftChild(*parent);
+		Node<T> *rightChild = list.getRightChild(*parent);
+
+		if (leftChild == nullptr) {
+			--index;
+			continue;
+		}
+
+		
+		if (rightChild != nullptr)
+		{
+			if (leftChild->value > parent->value || rightChild->value > parent->value) {
+				if (leftChild->value > rightChild->value) {																	/*		 5					6			*/
+					swap(leftChild, parent);																				/*		/ \		------>	   / \			*/
+					index = list.getPositon(*leftChild);																	/*	   6   2			  5   2			*/
+				}
+				else {																										/*		 5					6			*/
+					swap(rightChild, parent);																				/*		/ \		------>	   / \			*/
+					index = list.getPositon(*rightChild);																	/*	   2   6			  2   5			*/
+				}
+			}
+		}
+		else {
+			if (leftChild->value > parent->value) {																			/*		 5					2			*/
+				swap(leftChild, parent);																					/*		/		------>	   /			*/
+				index = list.getPositon(*leftChild);																		/*	   2				  5				*/
+			}
+		}
+		
+		--index;
+	}
+
+	return list;
+}
+
+
+template<typename T>
+void List<T>::checkChilds(List<T> &list, Node<T> *parent, int &indexLastNotSorted)
+{	
+	Node<T>* leftChild = list.getLeftChild(*parent, indexLastNotSorted);
+	Node<T>* rightChild = list.getRightChild(*parent, indexLastNotSorted);
+
+
+	if (leftChild == nullptr) {
+		return;
+	}
+
+	if (rightChild != nullptr)
+	{
+		if (leftChild->value > parent->value || rightChild->value > parent->value) {
+			if (leftChild->value > rightChild->value) {																	/*		 5					6			*/
+				swap(leftChild, parent);																				/*		/ \		------>	   / \			*/
+				checkChilds(list, leftChild, indexLastNotSorted);														/*	   6   2			  5   2			*/
+			}
+			else {																										/*		 5					6			*/
+				swap(rightChild, parent);																				/*		/ \		------>	   / \			*/
+				checkChilds(list, rightChild, indexLastNotSorted);														/*	   2   6			  2   5			*/
+			}
+		}
+	}
+	else {
+		if (leftChild->value > parent->value) {																			/*		 5					2			*/
+			swap(leftChild, parent);																					/*		/		------>	   /			*/
+			checkChilds(list, leftChild, indexLastNotSorted);															/*	   2				  5				*/
+		}
+	}
+}
+
+
+template<typename T>
+void List<T>::swap(Node<T>* a, Node<T>* b)
+{
+	T tmp = a->value;
+	a->value = b->value;
+	b->value = tmp;
+}
+
