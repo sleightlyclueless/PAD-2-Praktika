@@ -13,11 +13,9 @@ int main()
 
     List<int> a;
     a.ini(15);
-    // std::cout << a.print().str() << std::endl;
+
     // List<int>::mergeSort(a);
-    // std::cout << a.print().str() << std::endl;
-    List<int>::heapSort(a);
-    // std::cout << a.print_tree().str();
+    // List<int>::heapSort(a);
 	
     bool endthis = false;       // end flag
 
