@@ -84,6 +84,9 @@ class List
 		static void heapify(List<T> &list, Node<T> *parent, int &indexLastNotSorted);		// Make root and every knot the biggest in its cluster
 		static void checkChilds(List<T> &list, Node<T> *parent, int &indexLastNotSorted);	// Fall / Swap through every cluster with the smallest element, leaving smallest el at end and biggest at root
 		static void swap(Node<T> *a, Node<T> *b);											// zwei swap two node elements / their values
+
+		static void quickSort(List<T>& list);
+		static void quickSortList(List<T>& list, int a, int b);
 };
 
 
@@ -744,3 +747,61 @@ void List<T>::swap(Node<T>* a, Node<T>* b)
 	b->value = tmp;
 }
 
+
+// ======================================== Quicksort ========================================
+
+template<typename T>
+void List<T>::quickSort(List<T> &list)
+{
+	quickSortList(list, 0, list.length - 1);
+}
+
+template<typename T>
+void List<T>::quickSortList(List<T> &list, const int a, const int b)	// sort from a to b
+{
+	if (list.empty() || b <= a)											// if list is empty or we met at or passed the pivotelement we are done
+		return;
+
+	int pivotpos = a + rand() % (b - a);								// calculate pivot position between a and b
+	
+	Node<T> *pivot = list.getAtPosition(pivotpos);						// initialize first nodes (pivot, start and end of sorting range)
+	Node<T> *i = list.getAtPosition(a);
+	Node<T> *j = list.getAtPosition(b);
+	
+	while (i != pivot || j != pivot)									// move both nodes towards i-->pivot<--j and sort them by swapping to the correct side (bigger or smaller than pivot)
+	{
+		
+		if (i->value > pivot->value && j->value < pivot->value)         // if i bigger and j smaller than pivot: swap and move both towards pivot
+		{
+			swap(i, j);
+			i = i->next;
+			j = j->prev;
+		}
+
+		else if (i->value > pivot->value) {								// if i bigger than pivot: move i to the left of pivot
+			swap(i, pivot->prev);
+			swap(pivot->prev, pivot);
+			pivot = pivot->prev;
+			--pivotpos;													// pivot element moved one to the right due to asymetrical swap -> equalize
+		}
+			
+		else if (j->value < pivot->value) {								// if j smaller than pivot: move i to the left of pivot
+			swap(j, pivot->next);
+			swap(pivot, pivot->next);
+			pivot = pivot->next;
+			++pivotpos;													// pivot element moved one to the left due to asymetrical swap -> equalize
+		}
+		
+		else															// if all elements on their right side just move and move on
+		{
+			if (i != pivot)
+				i = i->next;
+			if (j != pivot)
+				j = j->prev;
+		}
+	}
+
+	quickSortList(list, a, pivotpos - 1);								// Recursive call with new partial list pivot elements for left and right side
+	quickSortList(list, pivotpos + 1, b);
+
+}

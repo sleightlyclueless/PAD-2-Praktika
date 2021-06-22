@@ -16,6 +16,9 @@ int main()
 
     // List<int>::mergeSort(a);
     // List<int>::heapSort(a);
+    std::cout << a.print().str() << std::endl;
+    List<int>::quickSort(a);
+    std::cout << a.print().str() << std::endl;
 	
     bool endthis = false;       // end flag
 
