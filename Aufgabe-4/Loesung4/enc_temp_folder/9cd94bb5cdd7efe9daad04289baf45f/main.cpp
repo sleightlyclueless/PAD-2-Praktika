@@ -12,6 +12,8 @@ int main()
     // List<char> a;         // sorted linked List aus ints
     // List<std::string> a;  // sorted linked List aus ints
 
+    a.ini(100);
+    List<int>::heapSort(a);
 	
     bool endthis = false;       // end flag
 

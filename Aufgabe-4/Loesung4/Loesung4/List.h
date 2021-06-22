@@ -24,19 +24,7 @@ class List
 			length = 0;
 		}
 
-		// Destructor
-		/*~List()
-		{
-			current = first;
-			Node<T>* next = current;
-
-			while (next != nullptr)
-			{
-				next = current->next;
-				delete current;
-				current = next;
-			}
-		}*/
+		~List() = default;
 
 		// Getters and setters
 		int getLength() const { return length; }
@@ -52,10 +40,8 @@ class List
 		Node<T>* getPrev() const;								// Return previous to current node
 		Node<T>* getNext() const;								// Return next to current node
 		Node<T>* getParent(Node<T> &child);						// Return binary tree parent of node
-		Node<T>* getLeftChild(Node<T> &root);	// Return tree left child of node
-		Node<T>* getRightChild(Node<T> &root);	// Return tree right child of node
-
-		
+		Node<T>* getLeftChild(Node<T> &root);					// Return tree left child of node
+		Node<T>* getRightChild(Node<T> &root);					// Return tree right child of node
 
 		// Functions
 		bool empty() const;										// return if list is empty
@@ -74,6 +60,8 @@ class List
 		std::stringstream print_tree();							// Print list contents with binary tree view
 		void ini(int n);										// Fill list with n random elements
 
+		bool checkSortedAsc();
+
 	
 		// ========================================Sorting========================================
 		static void mergeSort(List<T> &list);							// Mergesort with list
@@ -87,6 +75,7 @@ class List
 
 		static void quickSort(List<T>& list);
 		static void quickSortList(List<T>& list, int a, int b);
+
 };
 
 
@@ -540,9 +529,36 @@ void List<T>::ini(const int n)
 	
 	while(i < n)
 	{
-		ins(rand()%15);
+		ins(rand()%50);
 		i++;
 	}
+}
+
+
+template<typename T>
+bool List<T>::checkSortedAsc()
+{
+	bool sorted = true;
+	current = first;
+
+	if (current != nullptr)
+	{
+		while (current->next != nullptr)
+		{
+			if (current->value <= current->next->value)
+			{
+				current = current->next;
+			}
+			else
+			{
+				sorted = false;
+				break;
+			}
+				
+		}
+	}
+
+	return sorted;
 }
 
 
