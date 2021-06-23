@@ -11,7 +11,6 @@ int main()
     // List<double> a;       // sorted linked List aus ints
     // List<char> a;         // sorted linked List aus ints
     // List<std::string> a;  // sorted linked List aus ints
-
 	
     bool endthis = false;       // end flag
 
@@ -205,7 +204,7 @@ int main()
 
         case 15:
             t0 = std::chrono::system_clock::now();
-            List<int>::quickSort(a);
+            List<int>::quickSortStable(a);
             t1 = std::chrono::system_clock::now();
             T = t1 - t0;
             std::cout << "Quicksort stable took " << T.count() << "s to complete." << std::endl;
