@@ -24,7 +24,8 @@ class Node
 		}
 
 		
-		// overload comparisons between typename T of Nodes
+		// overload comparisons between typename T values of Nodes
+		// friend: defined outside of class scope and access to all private and protected
 		friend bool operator==(Node<T> a, Node<T> b)
 		{
 			return a.value == b.value;

@@ -12,7 +12,7 @@ int main()
     // List<char> a;         // sorted linked List aus ints
     // List<std::string> a;  // sorted linked List aus ints
 	
-    bool endthis = false;       // end flag
+    bool endthis = false;       // checkEnd flag
 
     while (!endthis)
     {
@@ -20,15 +20,15 @@ int main()
         std::cout
             << "Welcome to your linked list (type int). You can execute the following operations:" << std::endl
             << "(1) get - get current Node" << std::endl
-            << "(2) empty - check if list is empty" << std::endl
-            << "(3) beginning - check if we reached lists start" << std::endl
-            << "(4) end - check if we reached lists end" << std::endl
+            << "(2) checkEmpty - check if list is checkEmpty" << std::endl
+            << "(3) checkBeginning - check if we reached lists start" << std::endl
+            << "(4) checkEnd - check if we reached lists checkEnd" << std::endl
             << "(5) adv - advance pointer forward once" << std::endl
             << "(6) rec - recede pointer backwards once" << std::endl
             << "(7) reset - pointer to first" << std::endl
             << "(8) ins - insert element at current position" << std::endl
             << "(9) del - delete element at current position" << std::endl
-            << "(10) ini - fill list with n random elements" << std::endl
+            << "(10) fill - fill list with n random elements" << std::endl
             << "(11) clear - clear list" << std::endl
             << "(12) mergesort - run mergesort on list" << std::endl
             << "(13) heapsort - run heapsort on list" << std::endl
@@ -67,19 +67,19 @@ int main()
 
         case 2:
             std::cout << std::boolalpha;  // return bool as strings
-            std::cout << a.empty() << std::endl;
+            std::cout << a.checkEmpty() << std::endl;
             std::cout << std::noboolalpha;
             break;
 
         case 3:
             std::cout << std::boolalpha;  // return bool as strings
-            std::cout << a.beginning() << std::endl;
+            std::cout << a.checkBeginning() << std::endl;
             std::cout << std::noboolalpha;
             break;
 
         case 4:
             std::cout << std::boolalpha;  // return bool as strings
-            std::cout << a.end() << std::endl;
+            std::cout << a.checkEnd() << std::endl;
             std::cout << std::noboolalpha;
             break;
 
@@ -89,7 +89,7 @@ int main()
                 std::cout << "Pointer advanced successfully" << std::endl;
             else
             {
-                std::cout << "Error in List<T>::adv(): Pointer can not advance - You reached the lists end." << std::endl;
+                std::cout << "Error in List<T>::adv(): Pointer can not advance - You reached the lists checkEnd." << std::endl;
                 system("pause");
             }
         }   break;
@@ -134,8 +134,8 @@ int main()
 
             try
             {
-                //a.insSorted(x);
-                a.ins(x);
+                //a.insNodeSorted(x);
+                a.insNode(x);
                 std::cout << "Node with value ";
 
                 if (typeid(x) != typeid(std::string))
@@ -156,7 +156,7 @@ int main()
         } break;
 
         case 9:
-            if (!a.empty()) {
+            if (!a.checkEmpty()) {
                 a.del();
                 std::cout << "Current node deleted successfully." << std::endl;
             }
@@ -170,7 +170,9 @@ int main()
         case 10: {
             std::cout << "How many elements would you like to enter into your list?" << std::endl;
             const int x = get_number();
-            a.ini(x);
+            std::cout << "Elements in my list should be values between 0 and ";
+            const int y = get_number();
+            a.fill(x, y);
         } break;
 
         case 11:
@@ -179,35 +181,67 @@ int main()
             break;
 
         case 12:
-            t0 = std::chrono::system_clock::now();
-            List<int>::mergeSort(a);
-            t1 = std::chrono::system_clock::now();
-            T = t1 - t0;
-            std::cout << "Mergesort took " << T.count() << "s to complete." << std::endl;
+            try
+            {
+                t0 = std::chrono::system_clock::now();
+                std::cout << List<int>::mergeSort(a).str() << std::endl;
+                t1 = std::chrono::system_clock::now();
+                T = t1 - t0;
+                std::cout << "Mergesort took " << T.count() << "s to complete." << std::endl;
+            }
+            catch (std::out_of_range& e)
+            {
+                std::cout << e.what() << std::endl;
+                system("pause");
+            }
+            break;
+
+        case 13:
+            try
+            {
+                t0 = std::chrono::system_clock::now();
+                std::cout << List<int>::heapSort(a).str() << std::endl;
+                t1 = std::chrono::system_clock::now();
+                T = t1 - t0;
+                std::cout << "Heapsort took " << T.count() << "s to complete." << std::endl;
+            }
+            catch (std::out_of_range& e)
+            {
+                std::cout << e.what() << std::endl;
+                system("pause");
+            }
 			break;
 
-        case 13: {
-            t0 = std::chrono::system_clock::now();
-            List<int>::heapSort(a);
-            t1 = std::chrono::system_clock::now();
-            T = t1 - t0;
-            std::cout << "Heapsort took " << T.count() << "s to complete." << std::endl;
-        }break;
-
         case 14:
-            t0 = std::chrono::system_clock::now();
-            List<int>::quickSort(a);
-            t1 = std::chrono::system_clock::now();
-            T = t1 - t0;
-            std::cout << "Quicksort took " << T.count() << "s to complete." << std::endl;
+            try
+            {
+                t0 = std::chrono::system_clock::now();
+                std::cout << List<int>::quickSort(a).str() << std::endl;
+                t1 = std::chrono::system_clock::now();
+                T = t1 - t0;
+                std::cout << "Quicksort took " << T.count() << "s to complete." << std::endl;
+            }
+            catch (std::out_of_range& e)
+            {
+                std::cout << e.what() << std::endl;
+                system("pause");
+            }
             break;
 
         case 15:
-            t0 = std::chrono::system_clock::now();
-            List<int>::quickSortStable(a);
-            t1 = std::chrono::system_clock::now();
-            T = t1 - t0;
-            std::cout << "Quicksort stable took " << T.count() << "s to complete." << std::endl;
+            try
+            {
+                t0 = std::chrono::system_clock::now();
+                std::cout << List<int>::quickSortStable(a).str() << std::endl;
+                t1 = std::chrono::system_clock::now();
+                T = t1 - t0;
+                std::cout << "Quicksort stable took " << T.count() << "s to complete." << std::endl;
+            }
+            catch (std::out_of_range& e)
+            {
+                std::cout << e.what() << std::endl;
+                system("pause");
+            }
             break;
         	
         case 16:

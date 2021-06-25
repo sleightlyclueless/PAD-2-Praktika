@@ -11,13 +11,13 @@
 TEST(List_test, CheckMergeSort) {
 
 	List<int>* a = new List<int>;
-	int i = 25;
-	a->ini(1);
+	int i = 10;
+	a->fill(1, rand() % 50 + 10);
 
 	while (i >= 0)
 	{
 		a->clear();
-		a->ini(rand() % 500 + 5);
+		a->fill(rand() % 1000 + 5, rand()%50 + 10);
 		List<int>::mergeSort(*a);
 
 		if (!a->checkSortedAsc())
@@ -38,13 +38,13 @@ TEST(List_test, CheckMergeSort) {
 TEST(List_test, CheckHeapSort) {
 
 	List<int>* a = new List<int>;
-	int i = 25;
-	a->ini(1);
+	int i = 10;
+	a->fill(1, rand() % 50 + 10);
 
 	while (i >= 0)
 	{
 		a->clear();
-		a->ini(rand() % 500 + 5);
+		a->fill(rand() % 1000 + 5, rand() % 50 + 10);
 		List<int>::heapSort(*a);
 
 		if (!a->checkSortedAsc())
@@ -55,20 +55,20 @@ TEST(List_test, CheckHeapSort) {
 	EXPECT_TRUE(a->checkSortedAsc());
 
 	delete a;
-	
+
 }
 
 // Quicksort Test
 TEST(List_test, CheckQuickSort) {
 
 	List<int>* a = new List<int>;
-	int i = 25;
-	a->ini(1);
+	int i = 10;
+	a->fill(1, rand() % 50 + 10);
 
 	while (i >= 0)
 	{
 		a->clear();
-		a->ini(rand() % 500 + 5);
+		a->fill(rand() % 1000 + 5, rand() % 50 + 10);
 		List<int>::quickSort(*a);
 
 		if (!a->checkSortedAsc())
@@ -86,13 +86,13 @@ TEST(List_test, CheckQuickSort) {
 TEST(List_test, CheckQuickSortStable) {
 
 	List<int>* a = new List<int>;
-	int i = 25;
-	a->ini(1);
+	int i = 10;
+	a->fill(1, rand() % 50 + 10);
 
 	while (i >= 0)
 	{
 		a->clear();
-		a->ini(rand() % 500 + 5);
+		a->fill(rand() % 1000 + 5, rand() % 50 + 10);
 		List<int>::quickSortStable(*a);
 
 		if (!a->checkSortedAsc())
