@@ -17,6 +17,9 @@ class Node
 			value = {};
 		}
 
+		// destructor
+		~Node() = default;
+
 		// print function to return value
 		T print() const
 		{
@@ -29,6 +32,11 @@ class Node
 		friend bool operator==(Node<T> a, Node<T> b)
 		{
 			return a.value == b.value;
+		}
+
+		friend bool operator!=(Node<T> a, Node<T> b)
+		{
+			return a.value != b.value;
 		}
 
 		friend bool operator<(Node<T> a, Node<T> b)

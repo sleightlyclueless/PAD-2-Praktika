@@ -6,13 +6,13 @@
 template<typename T>
 class List
 {
-	Node<T> *first;													// Pointer to first element
-	Node<T> *current;												// Pointer to current element
-	Node<T> *last;													// Pointer to last element
-	int length;														// Length of list (elements)
+	Node<T> *first;										// Pointer to first element
+	Node<T> *current;									// Pointer to current element
+	Node<T> *last;										// Pointer to last element
+	int length;											// Length of list (elements)
 
 	public:
-		List()														// constructor with defaults
+		List()											// constructor with defaults
 		{
 			length = 0;
 			first = nullptr;
@@ -20,62 +20,71 @@ class List
 			last = nullptr;
 		}
 
-		// TODO: clear function into destructor
-		~List() = default;											// destructor
-		
-		int getLength() const { return length; }					// getters and setters for private vars
+		// TODO: Destructor shit...
+		// ~List() { clear(); }							// destructor
+		~List() = default;
+
+	
+		int getLength() const { return length; }		// getters and setters for private vars
 		Node<T> *getFirst() const { return first; }
 		Node<T> *getCurrent() const { return current; }
 		Node<T> *getLast() const { return last; }
 
-																	// get functions for nodes
-		Node<T> get() const;										// return current Node
-		Node<T> *getPoint() const;									// return pointer to current node
-		int getPositon(Node<T> &n);									// return node position in list (linear search)
-		Node<T> *getPointAtPosition(int pos);						// return pointer to node at spec position
+														// get functions for nodes
+		Node<T> get() const;							// return current Node
+		Node<T> *getPoint() const;						// return pointer to current node
+		int getPositon(Node<T> &n);						// return node position in list (linear search)
+		Node<T> *getPointAtPosition(int pos);			// return pointer to node at spec position
 	
-		Node<T> *getPrev() const;									// return previous to current node
-		Node<T> *getNext() const;									// return next to current node
-		Node<T> *getParent(Node<T> &child);							// return heap parent of node
-		Node<T> *getLeftChild(Node<T> &root);						// return heap left child of node
-		Node<T> *getRightChild(Node<T> &root);						// return heap right child of node
+		Node<T> *getPrev() const;						// return previous to current node
+		Node<T> *getNext() const;						// return next to current node
+		Node<T> *getParent(Node<T> &child);				// return heap parent of node
+		Node<T> *getLeftChild(Node<T> &root);			// return heap left child of node
+		Node<T> *getRightChild(Node<T> &root);			// return heap right child of node
 
-																	// functions
-		bool checkEmpty() const;									// return if list is empty
-		bool checkBeginning() const;								// return if your at start of list
-		bool checkEnd() const;										// return if your at end of list
-		bool adv();													// advance list pointer and return if succeeded
-		bool rec();													// recede list pointer and return if succeeded
-		void reset();												// set list pointer to checkBeginning
+														// functions
+		bool checkEmpty() const;						// return if list is empty
+		bool checkBeginning() const;					// return if your at start of list
+		bool checkEnd() const;							// return if your at end of list
+		bool adv();										// advance list pointer and return if succeeded
+		bool rec();										// recede list pointer and return if succeeded
+		void reset();									// set list pointer to beginning
 	
-		void ins(Node<T> *I);										// insert new element at current pointer
-		void insNode(const T &I_new);								// insert new element at pointer position
-		void insNodeSorted(const T &I_new);							// insert new element at sorted position (requires sorted list)
-		void push_back(const T &I_new);								// insert element at end of list
-		void del();													// delete element at pointer position and adv pointer
-		void clear();												// linear clear heap elements from entire list
+		void ins(Node<T> *I);							// insert new element at current pointer
+		void insNode(const T &I_new);					// insert new element at pointer position
+		void insNodeSorted(const T &I_new);				// insert new element at sorted position (requires sorted list)
+		void push_back(const T &I_new);					// insert element at end of list
+		void del();										// delete element at pointer position and adv pointer
+		void clear();									// linear clear heap elements from entire list
 
-		std::stringstream print();									// print list contents
-		std::stringstream print_tree();								// print (first 15) list contents with binary tree view
-		void fill(const int &amount, const int &range);				// fill list with n random elements
-		bool checkSortedAsc();										// unit tests: Linear check of list is sorted (1<=1<=2<=3<=5...)
+		std::stringstream print();						// print list contents
+		std::stringstream print_tree();					// print (first 15) list contents with binary tree view
+		void fill(const int &amount, const int &range);	// fill list with n random elements
+		bool checkSortedAsc();							// unit tests: Linear check of list is sorted (1<=1<=2<=3<=5...)
 
 
 		// ========================================Sorting========================================
-		static std::stringstream mergeSort(List<T> &list);									// mergesort with list
-		static void splitList(List<T> &list, List<T> &a, List<T> &b);						// split list into two lists a and b alternatingly
-		static List<T> mergeLists(List<T> &a, List<T> &b);									// merge two (sorted) lists into single sorted list
+		static void swap(Node<T>* a, Node<T>* b);									// swap two node pointers values
+	
+		static std::stringstream selectionSort(List<T> &list);						// selectionsort with list
 
-		static std::stringstream heapSort(List<T> &list);									// heapsort with list (Heap: Ordered binary tree [here: left completed])
-		static void heapify(List<T> &list, Node<T> *parent, int &indexLastNotSorted);		// make root and every knot the biggest in its cluster (biggest el at top, smallest at bottom)
-		static void swap(Node<T> *a, Node<T> *b);											// swap two node pointers values
+		static std::stringstream insertionSort(List<T> &list);						// insertionsort with list
 
-		static std::stringstream quickSort(List<T> &list);									// call quicksort with default vars
-		static void quickSortList(List<T> &list, int a, int b);								// quicksort with list
+		static std::stringstream bubbleSort(List<T> &list);							// insertionsort with list
+		
+		static std::stringstream mergeSort(List<T> &list);							// mergesort with list
+		static void splitList(List<T> &list, List<T> &a, List<T> &b);				// split list into two lists a and b alternatingly
+		static List<T> mergeLists(List<T> &list, List<T> &a, List<T> &b);			// merge two (sorted) lists into single sorted list
 
-		static std::stringstream quickSortStable(List<T> &list);							// call quicksortstable with default vars
-		static void quickSortStableList(List<T> &list);										// quicksortstable with list
-		static bool equal(List<T> &list);													// check if all elements in list have same value
+		static std::stringstream heapSort(List<T> &list);							// heapsort with list (Heap: Ordered binary tree [here: left completed])
+		static void heapify(List<T> &list, Node<T> *parent, int &indexLastNotSort); // make root and every knot the biggest in its cluster (biggest el at top, smallest at bottom)
+
+		static std::stringstream quickSort(List<T> &list);							// call quicksort with default vars
+		static void quickSortList(List<T> &list, int a, int b);						// quicksort with list
+
+		static std::stringstream quickSortStable(List<T> &list);					// call quicksortstable with default vars
+		static void quickSortStableList(List<T> &list);								// quicksortstable with list
+		static bool equal(List<T> &list);											// check if all elements in list have same value
 
 };
 
@@ -188,11 +197,11 @@ Node<T> *List<T>::getRightChild(Node<T> &root)
 }
 
 
-// return if list is checkEmpty
+// return if list is empty
 template<typename T>
 bool List<T>::checkEmpty() const
 {
-	return current == nullptr && first == nullptr && last == nullptr;
+	return current == nullptr && first == nullptr && last == nullptr && length == 0;
 }
 
 // return if your at start of list
@@ -202,7 +211,7 @@ bool List<T>::checkBeginning() const
 	return current == first;
 }
 
-// return if your at checkEnd of list
+// return if your at end of list
 template<typename T>
 bool List<T>::checkEnd() const
 {
@@ -233,7 +242,7 @@ bool List<T>::rec()
 	return false;
 }
 
-// set list pointer to checkBeginning
+// set list pointer to beginning
 template<typename T>
 void List<T>::reset()
 {
@@ -295,6 +304,9 @@ void List<T>::insNodeSorted(const T &I_new)
 	I->value = I_new;
 	bool flag = true;
 
+	// move pointer on Element equal or bigger than new element -
+	// we can then just insert it as usual (except edge case new biggest element)
+	// =========================================================================================
 	if (current != nullptr)
 	{
 		if (I->value < current->value)	// if inserted value is smaller recede pointer
@@ -320,13 +332,10 @@ void List<T>::insNodeSorted(const T &I_new)
 		}
 	}
 	
-	// pointer is now on Element equal or bigger than new element -
-	// we can now just insert it as usual (except edge case new biggest element)
-	// =========================================================================================
 	ins(I);
 }
 
-// insert element at checkEnd of list
+// insert element at end of list
 template <typename T>
 void List<T>::push_back(const T &I_new)
 {
@@ -384,6 +393,7 @@ void List<T>::del()
 	}
 
 	delete I;											// lastly when evetythings set up delete node
+	I = nullptr;
 	length--;
 }
 
@@ -391,19 +401,15 @@ void List<T>::del()
 template <typename T>
 void List<T>::clear()
 {
-	current = first;
-	Node<T> *next = current;
+	if (checkEmpty())
+		throw std::out_of_range("Error in List<T>::clear(): List already empty.");
 
-	if (current != nullptr)
+	reset();
+	while (length > 0)
 	{
-		while (current != nullptr && next != nullptr)
-		{
-			next = current->next;
-			delete current;
-			current = next;
-			--length;
-		}
+		del();
 	}
+		
 }
 
 
@@ -413,24 +419,24 @@ std::stringstream List<T>::print()
 {
 	std::stringstream str;
 	Node<T> *current_before = current;
-	reset();
 
-	if (current == nullptr) {
-		str << "List checkEmpty!" << std::endl;
+	if (checkEmpty()) {
+		str << "List empty!" << std::endl;
 		return str;
 	}
 
+	reset();
 	str << "Your list consists of " << std::to_string(length) << " nodes:" << std::endl;
 	int i = 0;
-	do																	// linear move and print through list
+	do														// linear move and print through list
 	{
-		if (current == current_before)									// show if our list pointer is set to curr el or not
+		if (current == current_before)						// show if our list pointer is set to curr el or not
 			str << "+ ";
 		else
 			str << "- ";
 
-		T value = current->print();										// get node value
-		if (typeid(value) == typeid(std::string))						// depending on type T print it differently
+		T value = current->print();							// get node value
+		if (typeid(value) == typeid(std::string))			// depending on type T print it differently
 			str << std::to_string(i) << ": " << value;
 		else
 			str << std::to_string(i) << ": " << std::to_string(value);
@@ -452,14 +458,14 @@ std::stringstream List<T>::print_tree()
 {
 	std::stringstream str;
 	Node<T> *current_before = current;
-	reset();
 
-	if (current == nullptr)
+	if (checkEmpty())
 	{
-		str << "List checkEmpty!" << std::endl;
+		str << "List empty!" << std::endl;
 		return str;
 	}
-		
+	
+	reset();
 	str << "Your list consists of " << std::to_string(length) << " nodes:" << std::endl;
 	int i = 0;
 
@@ -534,7 +540,7 @@ std::stringstream List<T>::print_tree()
 				break;
 		}
 
-		if (checkEnd())												// if we reached checkEnd of list checkEnd while and switch
+		if (checkEnd())											// if we reached end of list end while and switch
 			break;
 		
 		i++;
@@ -591,16 +597,125 @@ bool List<T>::checkSortedAsc()
 }
 
 
+// ========================================Sorting========================================
+// swap two node pointers values
+template<typename T>
+void List<T>::swap(Node<T>* a, Node<T>* b)
+{
+	T tmp = a->value;
+	a->value = b->value;
+	b->value = tmp;
+}
+
+// selectionsort with list
+// WC O(n²); AC O(n²); BC O(n²); Not stable; In-Place;
+template<typename T>
+std::stringstream List<T>::selectionSort(List<T> &list)
+{
+	if (list.checkEmpty())
+		throw std::out_of_range("Error in List<T>::selectionSort(): Can not sort on empty list.");
+
+	std::stringstream str;
+	str << "Start:" << std::endl;
+	str << list.print().str() << std::endl;
+	
+	for (int i = 0; i <= list.length - 1; i++)										// For each position
+	{
+		int minpos = i;
+
+		for (int j = 0; j <= list.length; j++)										// Find smallest remaining element
+		{
+			if (list.getPointAtPosition(j)->value > list.getPointAtPosition(minpos)->value)
+				minpos = j;
+
+			swap(list.getPointAtPosition(minpos), list.getPointAtPosition(i));		// Write it to smallest remaining pos
+		}
+	}
+
+	str << "End:" << std::endl;
+	str << list.print().str() << std::endl;
+
+	return str;
+}
+
+
+// insertionsort with list
+// WC O(n²); AC O(n²); BC O(n); Stable; In-Place;
+template<typename T>
+std::stringstream List<T>::insertionSort(List<T> &list)
+{
+	if (list.checkEmpty())
+		throw std::out_of_range("Error in List<T>::insertionSort(): Can not sort on empty list.");
+
+	std::stringstream str;
+	str << "Start:" << std::endl;
+	str << list.print().str() << std::endl;
+
+	for (int i = 1; i < list.length; i++)											// Get element at each asc position
+	{
+		int val = list.getPointAtPosition(i)->value;
+		list.del();
+		
+		do																			// Sort it into sorted partial list before element
+		{
+			if (list.current->prev == nullptr) {
+				list.insNode(val);
+				break;
+			}
+			if (list.current->prev->value < val)
+			{
+				list.insNode(val);
+				break;
+			}
+				
+		} while (list.rec());
+	}
+
+	str << "End:" << std::endl;
+	str << list.print().str() << std::endl;
+
+	return str;
+}
+
+
+// bubble with list
+// WC O(n²); AC O(n²); BC O(n); Stable; In-Place
+template<typename T>
+std::stringstream List<T>::bubbleSort(List<T>& list)
+{
+	if (list.checkEmpty())
+		throw std::out_of_range("Error in List<T>::bubbleSort(): Can not sort on empty list.");
+
+	std::stringstream str;
+	str << "Start:" << std::endl;
+	str << list.print().str() << std::endl;
+
+	for (int i = 0; i <= list.length - 1; i++)										// Compare for each element all elements behind and swap if smaller
+	{
+		for (int j = 0; j <= list.length; j++)
+		{
+			if (list.getPointAtPosition(j)->value > list.getPointAtPosition(i)->value)
+				swap(list.getPointAtPosition(j), list.getPointAtPosition(i));
+		}
+	}
+
+	str << "End:" << std::endl;
+	str << list.print().str() << std::endl;
+
+	return str;
+}
+
 // ======================================== Mergesort ========================================
 // Master Theorem: Aufteilen, Zusammenfügen   (zweiter Fall)
 //					2T(n/2)	+		n		= O(n*log(n))
 // Mergesort: 5000 -> 3.22821s
 // mergesort with list
+// WC O(n * log(n)); AC O(n * log(n)); BC O(n * log(n)); Stable; Not In-Place;
 template <typename T>
 std::stringstream List<T>::mergeSort(List<T> &list)
 {
 	if (list.checkEmpty())
-		throw std::out_of_range("Error in List<T>::mergeSort(): Can not sort on checkEmpty list.");
+		throw std::out_of_range("Error in List<T>::mergeSort(): Can not sort on empty list.");
 	
 	List<T> a, b;
 	std::stringstream str;
@@ -614,7 +729,7 @@ std::stringstream List<T>::mergeSort(List<T> &list)
 		mergeSort(a);
 		mergeSort(b);
 
-		list = mergeLists(a, b);						// recursive branches: merge (first single) lists back together into sorted bigger lists
+		mergeLists(list, a, b);							// recursive branches: merge (first single, then sorted) lists back together into sorted bigger lists
 	}
 
 	str << "End:" << std::endl;
@@ -627,21 +742,20 @@ template<typename T>
 void List<T>::splitList(List<T> &list, List<T> &a, List<T> &b)
 {
 	list.reset();
-	bool notend = true;
 	bool switcher = true;
 
-	while (notend)										// from the start alternate list a and b and switch into two halves
+	while (list.current != nullptr)										// from the start alternate list a and b and switch into two halves
 	{
 		if (switcher)
 		{
 			a.push_back(list.current->value);
-			notend = list.adv();
+			list.del();
 			switcher = false;
 		}
 		else
 		{
 			b.push_back(list.current->value);
-			notend = list.adv();
+			list.del();
 			switcher = true;
 		}
 	}
@@ -649,36 +763,48 @@ void List<T>::splitList(List<T> &list, List<T> &a, List<T> &b)
 
 // merge two (sorted) lists into single sorted list
 template<typename T>
-List<T> List<T>::mergeLists(List<T> &a, List<T> &b)
+List<T> List<T>::mergeLists(List<T> &list, List<T> &a, List<T> &b)
 {
-	if (a.checkEmpty())										// if a is checkEmpty just return the sorted list b
+	if (a.checkEmpty())										// if a is empty just return the sorted list b
 		return b;
-	if (b.checkEmpty())										// if b is checkEmpty just return the sorted list a
+	if (b.checkEmpty())										// if b is empty just return the sorted list a
 		return a;
 
-	List<T> sortedList;										// initialize new List to save sorted pointer to deep copy elements to
-	a.reset();												// reset pointers of both referenced lists to checkBeginning - hence smallest nums
+	a.reset();												// reset pointers of both referenced lists to beginning - hence smallest nums
 	b.reset();
 	
-	bool anotempty = true;									// flags to check if we can still advance in lists
-	bool bnotempty = true;
-	while (anotempty || bnotempty)
+
+	while (a.current != nullptr || b.current != nullptr)
 	{
 		// add a to sorted: (either element a is smaller than b and not already sorted) or (a is not empty but b is (hence only a elements that are bigger remaining))
-		if ((a.current->value <= b.current->value && anotempty) || (anotempty && !bnotempty))	
+		if (a.current != nullptr && b.current != nullptr)
 		{
-			sortedList.push_back(a.current->value);			// NOTE: PUSH BACK ALREADY CREATES DEEP COPY IN HEAP
-			anotempty = a.adv();
+			if (a.current->value <= b.current->value)
+			{
+				list.push_back(a.current->value);			// NOTE: PUSH BACK ALREADY CREATES DEEP COPY IN HEAP
+				a.del();
+			}
+			else												// otherwise only bigger elements in b remaining
+			{
+				list.push_back(b.current->value);
+				b.del();
+			}
 		}
-		else												// otherwise only bigger elements in b remaining
+		else if (a.current == nullptr)
 		{
-			sortedList.push_back(b.current->value);
-			bnotempty = b.adv();
+			list.push_back(b.current->value);
+			b.del();
 		}
+		else if (b.current == nullptr)
+		{
+			list.push_back(a.current->value);
+			a.del();
+		}
+		
 	}
 
-	sortedList.reset();										// reset pointer of new list to the start and return it
-	return sortedList;
+	list.reset();										// reset pointer of new list to the start and return it
+	return list;
 }
 
 
@@ -688,11 +814,12 @@ List<T> List<T>::mergeLists(List<T> &a, List<T> &b)
 //					n	  +		log(n)				= O(n*log(n))
 // Heapsort: 5000 -> 58.2264s
 // heapsort with list (Heap: Ordered binary tree [here: left completed])
+// WC O(n * log(n)); AC O(n * log(n)); BC O(n * log(n)); Not stable; In-Place;
 template<typename T>
 std::stringstream List<T>::heapSort(List<T> &list)
 {
-	if (list.checkEmpty())
-		throw std::out_of_range("Error in List<T>::heapSort(): Can not sort on checkEmpty list.");
+	if (list.checkEmpty() || list.length < 2)
+		throw std::out_of_range("Error in List<T>::heapSort(): Can not sort on empty / single list.");
 
 	std::stringstream str;
 	str << "Start:" << std::endl;
@@ -728,54 +855,44 @@ std::stringstream List<T>::heapSort(List<T> &list)
 
 // make root and every knot the biggest in its cluster (biggest el at top, smallest at bottom)
 template<typename T>
-void List<T>::heapify(List<T> &list, Node<T> *parent, int &indexLastNotSorted)
+void List<T>::heapify(List<T> &list, Node<T> *parent, int &indexLastNotSort)
 {
 	Node<T> *leftChild = list.getLeftChild(*parent);		// get left and right child of cluster
 	Node<T> *rightChild = list.getRightChild(*parent);
 
-	if (leftChild == nullptr) {								// if left child is checkEmpty on left complete heap - cluster checkEmpty - return
+	if (leftChild == nullptr) {								// if left child is empty on left complete heap - cluster empty - return
 		return;
 	}
 
 	// both exist and one of them is bigger than parent
-	if (rightChild != nullptr && (list.getPositon(*rightChild) < indexLastNotSorted || indexLastNotSorted == -1))	
+	if (rightChild != nullptr && (list.getPositon(*rightChild) < indexLastNotSort || indexLastNotSort == -1))
 	{
 		if (leftChild->value > parent->value || rightChild->value > parent->value) {	
 			if (leftChild->value > rightChild->value)
 			{															// if left child bigger right child - swap left child and parent and recurse
 				swap(leftChild, parent);								/*		 2					6			*/
 																		/*		/ \		------>	   / \			*/
-				heapify(list, leftChild, indexLastNotSorted);			/*	   6   5			 [2]  5			*/
+				heapify(list, leftChild, indexLastNotSort);				/*	   6   5			 [2]  5			*/
 			}
-			else 
+			else
 			{
 				swap(rightChild, leftChild);							// if left child smaller right child move bigger element to left and switch with parent
 				swap(leftChild, parent);								/*		 2					6			*/
 																		/*		/ \		------>	   / \			*/
-				heapify(list, rightChild, indexLastNotSorted);			/*	   5   6			 [2] [5]		*/
-				heapify(list, leftChild, indexLastNotSorted);			// and recurse for both because both their positions changed
+				heapify(list, rightChild, indexLastNotSort);			/*	   5   6			 [2] [5]		*/
+				heapify(list, leftChild, indexLastNotSort);				// and recurse for both because both their positions changed
 			}
 		}
 	}
 	else																// only left child exists - compare with parent, maybe switch and recurse if so
 	{													
-		if (leftChild->value > parent->value && (list.getPositon(*leftChild) < indexLastNotSorted || indexLastNotSorted == -1))
+		if (leftChild->value > parent->value && (list.getPositon(*leftChild) < indexLastNotSort || indexLastNotSort == -1))
 		{
 																		/*		 2					5			*/
 			swap(leftChild, parent);									/*		/		------>	   /			*/
-			heapify(list, leftChild, indexLastNotSorted);				/*	   5				 [2]			*/
+			heapify(list, leftChild, indexLastNotSort);					/*	   5				 [2]			*/
 		}
 	}
-}
-
-
-// swap two node pointers values
-template<typename T>
-void List<T>::swap(Node<T> *a, Node<T> *b)
-{
-	T tmp = a->value;
-	a->value = b->value;
-	b->value = tmp;
 }
 
 
@@ -784,12 +901,13 @@ void List<T>::swap(Node<T> *a, Node<T> *b)
 //					2T(n/2)	+	 n		 = O(n*log(n))
 // Quicksort: 5000 -> 0.509088s
 // call quicksort with default vars
+// WC O(n²); AC O(n * log(n)); BC O(n * log(n)); Not stable; In-Place;
 template<typename T>
 std::stringstream List<T>::quickSort(List<T> &list)
 {
 	std::stringstream str;
 	if (list.checkEmpty())
-		throw std::out_of_range("Error in List<T>::quickSort(): Can not sort on checkEmpty list.");
+		throw std::out_of_range("Error in List<T>::quickSort(): Can not sort on empty list.");
 	
 	str << "Start:" << std::endl;
 	str << list.print().str() << std::endl;
@@ -804,12 +922,12 @@ std::stringstream List<T>::quickSort(List<T> &list)
 template<typename T>																			//    a	->		       <- b
 void List<T>::quickSortList(List<T> &list, const int a, const int b)	// sort from a to b           3 3 9 3 [7] 9 8 2 6 4
 {
-	if (list.checkEmpty() || b <= a)											// if given list is checkEmpty or we met at or passed the pivotelement we are done
+	if (list.checkEmpty() || b <= a)									// if given list is empty or we met at or passed the pivotelement we are done
 		return;
 
 	int pivotpos = a + rand() % (b - a);								// calculate random new pivot position between a and b
 	
-	Node<T> *pivot = list.getPointAtPosition(pivotpos);					// initialize first nodes (pivot, start and checkEnd of sorting range)
+	Node<T> *pivot = list.getPointAtPosition(pivotpos);					// initialize first nodes (pivot, start and end of sorting range)
 	Node<T> *i = list.getPointAtPosition(a);
 	Node<T> *j = list.getPointAtPosition(b);
 	
@@ -856,12 +974,13 @@ void List<T>::quickSortList(List<T> &list, const int a, const int b)	// sort fro
 //					2T(n/2)	+	 n		 = O(n*log(n))
 // Quicksort: 5000 -> 0.509088s
 // call quicksortstable with default vars
+// WC O(n²); AC O(n * log(n)); BC O(n * log(n)); Stable; Not In-Place;
 template<typename T>
 std::stringstream List<T>::quickSortStable(List<T> &list)
 {
 	std::stringstream str;
 	if (list.checkEmpty())
-		throw std::out_of_range("Error in List<T>::quickSortStable(): Can not sort on checkEmpty list.");
+		throw std::out_of_range("Error in List<T>::quickSortStable(): Can not sort on empty list.");
 	
 	str << "Start:" << std::endl;
 	str << list.print().str() << std::endl;
@@ -879,7 +998,7 @@ void List<T>::quickSortStableList(List<T> &list)
 	if (list.length <= 1 || list.equal(list))								// if list is single element or contains only equal values nothing to sort - return
 		return;
 	
-	Node<T> *pivot = list.getPointAtPosition(rand() % (list.length));		// initialize first nodes (pivot, start and checkEnd of sorting range)
+	Node<T> *pivot = list.getPointAtPosition(rand() % (list.length));		// initialize first nodes (pivot, start and end of sorting range)
 	// for stability (elements with same value dont change their sequence) use O(n) lists to push values into
 	List<T> listLeft;
 	List<T> listRight;
@@ -925,7 +1044,7 @@ bool List<T>::equal(List<T> &list)
 {
 	if (list.checkEmpty())
 		return false;
-
+	
 	bool equal = true;
 	list.current = list.first;
 

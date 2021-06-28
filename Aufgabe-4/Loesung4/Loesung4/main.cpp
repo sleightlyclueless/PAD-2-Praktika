@@ -5,14 +5,14 @@
 
 int main()
 {
-    srand(time(NULL));
+    srand(time(nullptr));
 	
 	List<int> a;             // sorted linked List aus ints
     // List<double> a;       // sorted linked List aus ints
     // List<char> a;         // sorted linked List aus ints
     // List<std::string> a;  // sorted linked List aus ints
 	
-    bool endthis = false;       // checkEnd flag
+    bool endthis = false;    // checkEnd flag
 
     while (!endthis)
     {
@@ -20,9 +20,9 @@ int main()
         std::cout
             << "Welcome to your linked list (type int). You can execute the following operations:" << std::endl
             << "(1) get - get current Node" << std::endl
-            << "(2) checkEmpty - check if list is checkEmpty" << std::endl
+            << "(2) checkEmpty - check if list is empty" << std::endl
             << "(3) checkBeginning - check if we reached lists start" << std::endl
-            << "(4) checkEnd - check if we reached lists checkEnd" << std::endl
+            << "(4) checkEnd - check if we reached lists end" << std::endl
             << "(5) adv - advance pointer forward once" << std::endl
             << "(6) rec - recede pointer backwards once" << std::endl
             << "(7) reset - pointer to first" << std::endl
@@ -30,20 +30,23 @@ int main()
             << "(9) del - delete element at current position" << std::endl
             << "(10) fill - fill list with n random elements" << std::endl
             << "(11) clear - clear list" << std::endl
-            << "(12) mergesort - run mergesort on list" << std::endl
-            << "(13) heapsort - run heapsort on list" << std::endl
-            << "(14) quickort - run quicksort on list" << std::endl
-            << "(15) quickort stable - run quicksort stable on list" << std::endl
-            << "(16) print - print full list" << std::endl
-            << "(17) print tree - print full list with tree view" << std::endl
-            << "(18) Quit programm" << std::endl << std::endl
+            << "(12) selectionsort - run selectionsort on list" << std::endl
+            << "(13) insertionsort - run insertionsort on list" << std::endl
+            << "(14) bubblesort - run bubblesort on list" << std::endl
+            << "(15) mergesort - run mergesort on list" << std::endl
+            << "(16) heapsort - run heapsort on list" << std::endl
+            << "(17) quickort - run quicksort on list" << std::endl
+            << "(18) quickort stable - run quicksort stable on list" << std::endl
+            << "(19) print - print full list" << std::endl
+            << "(20) print tree - print full list with tree view" << std::endl
+            << "(21) Quit programm" << std::endl << std::endl
             << "Please choose the operation you wish to execute: ";
 
         // User input
         int input = get_number();
-        while (input < 1 || 18 < input)
+        while (input < 1 || 21 < input)
         {
-            std::cout << "Please choose between the given options 1-9!" << std::endl;
+            std::cout << "Please choose between the given options 1-21!" << std::endl;
             input = get_number();
         }
 
@@ -89,7 +92,7 @@ int main()
                 std::cout << "Pointer advanced successfully" << std::endl;
             else
             {
-                std::cout << "Error in List<T>::adv(): Pointer can not advance - You reached the lists checkEnd." << std::endl;
+                std::cout << "Error in List<T>::adv(): Pointer can not advance - You reached the lists end." << std::endl;
                 system("pause");
             }
         }   break;
@@ -100,7 +103,7 @@ int main()
                 std::cout << "Pointer receded successfully" << std::endl;
             else
             {
-                std::cout << "Error in List<T>::rec(): Pointer can not recede - You reached the lists start." << std::endl;
+                std::cout << "Error in List<T>::rec(): Pointer can not recede - You reached the lists beginning." << std::endl;
                 system("pause");
             }
         }   break;
@@ -176,11 +179,66 @@ int main()
         } break;
 
         case 11:
-            a.clear();
-            std::cout << "List cleared successfully" << std::endl;
+            try
+            {
+                a.clear();
+                std::cout << "List cleared successfully" << std::endl;
+            }
+            catch (std::out_of_range& e)
+            {
+                std::cout << e.what() << std::endl;
+                system("pause");
+            }
             break;
 
         case 12:
+            try
+            {
+                t0 = std::chrono::system_clock::now();
+                std::cout << List<int>::selectionSort(a).str() << std::endl;
+                t1 = std::chrono::system_clock::now();
+                T = t1 - t0;
+                std::cout << "Selectionsort took " << T.count() << "s to complete." << std::endl;
+            }
+            catch (std::out_of_range& e)
+            {
+                std::cout << e.what() << std::endl;
+                system("pause");
+            }
+            break;
+
+        case 13:
+            try
+            {
+                t0 = std::chrono::system_clock::now();
+                std::cout << List<int>::insertionSort(a).str() << std::endl;
+                t1 = std::chrono::system_clock::now();
+                T = t1 - t0;
+                std::cout << "Insertionsort took " << T.count() << "s to complete." << std::endl;
+            }
+            catch (std::out_of_range& e)
+            {
+                std::cout << e.what() << std::endl;
+                system("pause");
+            }
+            break;
+
+        case 14:
+            try
+            {
+                t0 = std::chrono::system_clock::now();
+                std::cout << List<int>::bubbleSort(a).str() << std::endl;
+                t1 = std::chrono::system_clock::now();
+                T = t1 - t0;
+                std::cout << "Bubblesort took " << T.count() << "s to complete." << std::endl;
+            }
+            catch (std::out_of_range& e)
+            {
+                std::cout << e.what() << std::endl;
+                system("pause");
+            }
+            break;
+        case 15:
             try
             {
                 t0 = std::chrono::system_clock::now();
@@ -196,7 +254,7 @@ int main()
             }
             break;
 
-        case 13:
+        case 16:
             try
             {
                 t0 = std::chrono::system_clock::now();
@@ -212,7 +270,7 @@ int main()
             }
 			break;
 
-        case 14:
+        case 17:
             try
             {
                 t0 = std::chrono::system_clock::now();
@@ -228,7 +286,7 @@ int main()
             }
             break;
 
-        case 15:
+        case 18:
             try
             {
                 t0 = std::chrono::system_clock::now();
@@ -244,19 +302,35 @@ int main()
             }
             break;
         	
-        case 16:
-            std::cout << "========== Your linked list =============" << std::endl;
-            std::cout << a.print().str();
-            std::cout << "=========================================" << std::endl;
+        case 19:
+            try
+            {
+                std::cout << "========== Your linked list =============" << std::endl;
+                std::cout << a.print().str();
+                std::cout << "=========================================" << std::endl;
+            }
+            catch (std::out_of_range& e)
+            {
+                std::cout << e.what() << std::endl;
+                system("pause");
+            }
             break;
 
-        case 17:
-            std::cout << "========== Your linked list =============" << std::endl;
-            std::cout << a.print_tree().str();
-            std::cout << "=========================================" << std::endl;
+        case 20:
+            try
+            {
+                std::cout << "========== Your linked list =============" << std::endl;
+                std::cout << a.print_tree().str();
+                std::cout << "=========================================" << std::endl;
+            }
+            catch (std::out_of_range& e)
+            {
+                std::cout << e.what() << std::endl;
+                system("pause");
+            }
             break;
 
-        case 18:
+        case 21:
             endthis = true;
             break;
 
