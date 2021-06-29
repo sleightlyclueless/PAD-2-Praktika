@@ -832,7 +832,6 @@ std::stringstream List<T>::heapSort(List<T> &list)
 	}
 	str << "Post heapify:" << std::endl;
 	str << list.print_tree().str() << std::endl;
-	str << list.print().str() << std::endl;
 
 	for (int i = list.length; i >= 0; --i)					// continueously:
 	{
