@@ -5,7 +5,7 @@ class Node
 {
 	public:
 		T data;
-		double key;
+		long key;
 		Node<T>* childLeft;
 		Node<T>* childRight;
 		Node<T>* parent;
@@ -13,10 +13,10 @@ class Node
 		Node()
 		{
 			data = {};
-			key = -1;
+			key = 0;
+			parent = nullptr;
 			childLeft = nullptr;
 			childRight = nullptr;
-			parent = nullptr;
 		}
 
 		~Node() = default;
