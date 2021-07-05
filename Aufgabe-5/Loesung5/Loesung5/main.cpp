@@ -36,7 +36,7 @@ int main()
 		int input = get_number();
 		while (input < 1 || 15 < input)
 		{
-			std::cout << "Please choose between the given options 1-7!" << std::endl;
+			std::cout << "Please choose between the given options 1-15!" << std::endl;
 			input = get_number();
 		}
 
@@ -212,8 +212,41 @@ int main()
 				try
 				{
 					std::stringstream str;
-					a.print(a.getRoot(), str);
-					std::cout << str.str() << std::endl;
+					std::cout << "Choose print mode" << std::endl
+						<< "(1) - print tree" << std::endl
+						<< "(2) - print tree preorder" << std::endl
+						<< "(3) - print tree inorder" << std::endl
+						<< "(4) - print tree postorder" << std::endl;
+
+					int x = get_number();
+					while (x < 1 || 4 < x)
+					{
+						std::cout << "Please choose between the given options 1-4!" << std::endl;
+						x = get_number();
+					}
+
+					switch(x)
+					{
+						case 1:
+							a.print(a.getRoot(), str);
+							std::cout << str.str() << std::endl;
+							break;
+						case 2:
+							a.printPreOrder(a.getRoot(), str);
+							std::cout << str.str() << std::endl;
+							break;
+						case 3:
+							a.printInOrder(a.getRoot(), str);
+							std::cout << str.str() << std::endl;
+							break;
+						case 4:
+							a.printPostOrder(a.getRoot(), str);
+							std::cout << str.str() << std::endl;
+							break;
+						default:
+							std::cout << "Invalid print - mode! Please try again!" << std::endl;
+					}
+
 				}
 				catch (std::out_of_range& e)
 				{

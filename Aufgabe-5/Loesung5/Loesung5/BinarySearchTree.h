@@ -37,6 +37,9 @@ class BinarySearchTree
 
 		void clear(Node<T>* node);
 		void print(const Node<T>* node, std::stringstream& str);
+		void printPreOrder(const Node<T>* node, std::stringstream& str);
+		void printInOrder(const Node<T>* node, std::stringstream& str);
+		void printPostOrder(const Node<T>* node, std::stringstream& str);
 		
 };
 
@@ -188,6 +191,7 @@ void BinarySearchTree<T>::print(const Node<T>* node, std::stringstream& str)
 	if (checkEmpty())
 	{
 		str << "Tree empty!" << std::endl;
+		return;
 	}
 
 	for (int i = 1; i < std::to_string(node->key).length(); ++i)
@@ -200,5 +204,62 @@ void BinarySearchTree<T>::print(const Node<T>* node, std::stringstream& str)
 		print(node->childLeft, str);
 	if (node->childRight != nullptr)
 		print(node->childRight, str);
+
+}
+
+template<typename T>
+void BinarySearchTree<T>::printPreOrder(const Node<T>* node, std::stringstream& str)
+{
+
+	if (checkEmpty())
+	{
+		str << "Tree empty!" << std::endl;
+		return;
+	}
+
+	str << node->key << ": " << node->data << std::endl;
+	if (node->childLeft != nullptr)
+		printPreOrder(node->childLeft, str);
+	if (node->childRight != nullptr)
+		printPreOrder(node->childRight, str);
+
+}
+
+template<typename T>
+void BinarySearchTree<T>::printInOrder(const Node<T>* node, std::stringstream& str)
+{
+
+	if (checkEmpty())
+	{
+		str << "Tree empty!" << std::endl;
+		return;
+	}
+
+	if (node->childLeft != nullptr)
+		printInOrder(node->childLeft, str);
+	
+	str << node->key << ": " << node->data << std::endl;
+	
+	if (node->childRight != nullptr)
+		printInOrder(node->childRight, str);
+
+}
+
+template<typename T>
+void BinarySearchTree<T>::printPostOrder(const Node<T>* node, std::stringstream& str)
+{
+
+	if (checkEmpty())
+	{
+		str << "Tree empty!" << std::endl;
+		return;
+	}
+
+	if (node->childLeft != nullptr)
+		printPostOrder(node->childLeft, str);
+	if (node->childRight != nullptr)
+		printPostOrder(node->childRight, str);
+
+	str << node->key << ": " << node->data << std::endl;
 
 }
