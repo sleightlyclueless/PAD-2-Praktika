@@ -24,19 +24,17 @@ int main()
 			<< "(7) moveToChildLeft() - move current to left child" << std::endl
 			<< "(8) moveToChildRight() - move current to right child" << std::endl
 			<< "(9) checkEmpty() - check if tree is empty" << std::endl
-			<< "(10) insRoot() - add root element" << std::endl
-			<< "(11) insLeft() - add left child element" << std::endl
-			<< "(12) insRight() - add right child element" << std::endl
-			<< "(13) del() - delete current element" << std::endl
-			<< "(14) clear() - clear tree" << std::endl
-			<< "(15) ini() - ini basic tree" << std::endl
-			<< "(16) print() - print tree" << std::endl
-			<< "(17) Quit programm" << std::endl << std::endl
+			<< "(10) ins() - add node to tree" << std::endl
+			<< "(11) del() - delete current element" << std::endl
+			<< "(12) clear() - clear tree" << std::endl
+			<< "(13) ini() - ini basic tree" << std::endl
+			<< "(14) print() - print tree" << std::endl
+			<< "(15) Quit programm" << std::endl << std::endl
 			<< "Please choose the operation you wish to execute: ";
 		
 		// User input
 		int input = get_number();
-		while (input < 1 || 17 < input)
+		while (input < 1 || 15 < input)
 		{
 			std::cout << "Please choose between the given options 1-15!" << std::endl;
 			input = get_number();
@@ -164,7 +162,7 @@ int main()
 
 				try
 				{
-					a.insRoot(x);
+					a.ins(x);
 				}
 				catch (std::out_of_range& e)
 				{
@@ -175,38 +173,6 @@ int main()
 			} break;
 
 			case 11: {
-				std::cout << "Enter number to insert: ";
-				int x = get_number();
-
-				try
-				{
-					a.insLeft(x);
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-					
-			} break;
-
-			case 12: {
-				std::cout << "Enter key to insert: ";
-				int x = get_number();
-
-				try
-				{
-					a.insRight(x);
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-
-			} break;
-
-			case 13: {
 				std::cout << "Enter key to delete: ";
 				const int x = get_number();
 				try
@@ -227,7 +193,7 @@ int main()
 
 			} break;
 
-			case 14:
+			case 12:
 				try
 				{
 					a.clear(a.getRoot());
@@ -240,11 +206,11 @@ int main()
 				}
 				break;
 
-			case 15:
+			case 13:
 				a.ini();
 				break;
 
-			case 16:
+			case 14:
 				try
 				{
 					std::stringstream str;
@@ -291,7 +257,7 @@ int main()
 				}
 				break;
 
-			case 17:
+			case 15:
 				endthis = true;
 				break;
 

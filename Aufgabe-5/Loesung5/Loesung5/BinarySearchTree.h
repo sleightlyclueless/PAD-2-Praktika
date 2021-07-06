@@ -32,9 +32,10 @@ class BinarySearchTree
 		void moveToChildRight();
 	
 		bool checkEmpty();
-		bool insRoot(T &data);
-		bool insLeft(T& data);
-		bool insRight(T& data);
+		bool ins(T& data);
+		bool insNodeRoot(T& data);
+		bool insNodeLeft(T& data);
+		bool insNodeRight(T& data);
 		bool del(const long &key);
 		void correctKeys(const Node<T>* node);
 
@@ -158,11 +159,80 @@ bool BinarySearchTree<T>::checkEmpty()
 	return root == nullptr && current == nullptr && length == 0;
 }
 
+
 template<typename T>
-bool BinarySearchTree<T>::insRoot(T& data)
+bool BinarySearchTree<T>::ins(T& data)
+{
+	current = root;
+	
+	// Leer - in Root einfügen
+	if (checkEmpty())
+		return insNodeRoot(data);
+
+	// Links
+	if (data <= current->data)
+	{
+		if (current->childLeft == nullptr)
+			return insNodeLeft(data);
+		if (current->childRight == nullptr)
+			return insNodeRight(data);
+		while (data <= current->data || current->childLeft != nullptr && current->childRight != nullptr)
+		{
+			if (current->childLeft != nullptr && data <= current->childLeft->data || current->childLeft != nullptr && data <= current->data)
+				moveToChildLeft();
+			else if (current->childRight != nullptr && data <= current->childRight->data || current->childRight != nullptr && data <= current->data)
+				moveToChildRight();
+			else
+			{
+				if (current->childLeft == nullptr)
+					return insNodeLeft(data);
+				if (current->childRight == nullptr)
+					return insNodeRight(data);
+			}
+		}
+		if (current->childLeft == nullptr)
+			return insNodeLeft(data);
+		if (current->childRight == nullptr)
+			return insNodeRight(data);
+	}
+
+	// Rechts
+	if (data >= current->data)
+	{
+		if (current->childLeft == nullptr)
+			return insNodeLeft(data);
+		if (current->childRight == nullptr)
+			return insNodeRight(data);
+		
+		while (data >= current->data || current->childLeft != nullptr && current->childRight != nullptr)
+		{
+			if (current->childLeft == nullptr)
+				return insNodeLeft(data);
+			if (current->childRight == nullptr)
+				return insNodeRight(data);
+			
+			if (current->childRight != nullptr && data >= current->childRight->data || current->childRight != nullptr && data >= current->data)
+				moveToChildRight();
+			else if (current->childLeft != nullptr && data >= current->childLeft->data || current->childLeft != nullptr && data <= current->data)
+				moveToChildLeft();
+		}
+
+		if (current->childLeft == nullptr)
+			return insNodeLeft(data);
+		if (current->childRight == nullptr)
+			return insNodeRight(data);
+	}
+	
+	return false;
+}
+
+
+
+template<typename T>
+bool BinarySearchTree<T>::insNodeRoot(T& data)
 {
 	if (root != nullptr)
-		throw std::out_of_range("Error in insRoot(): Root already exists.");
+		throw std::out_of_range("Error in insNodeRoot(): Root already exists.");
 	
 	root = new Node<T>;
 	root->key = 1;
@@ -174,14 +244,14 @@ bool BinarySearchTree<T>::insRoot(T& data)
 }
 
 template<typename T>
-bool BinarySearchTree<T>::insLeft(T& data)
+bool BinarySearchTree<T>::insNodeLeft(T& data)
 {
 	if (root == nullptr)
-		throw std::out_of_range("Error in insLeft(): Root is still nullptr.");
+		throw std::out_of_range("Error in insNodeLeft(): Root is still nullptr.");
 	if (current == nullptr)
-		throw std::out_of_range("Error in insLeft(): Parent is nullptr.");
+		throw std::out_of_range("Error in insNodeLeft(): Parent is nullptr.");
 	if (current->childLeft != nullptr)
-		throw std::out_of_range("Error in insLeft(): ChildLeft already exists.");
+		throw std::out_of_range("Error in insNodeLeft(): ChildLeft already exists.");
 
 	Node<T>* child = new Node<T>;
 	child->key = current->key * 10;
@@ -195,14 +265,14 @@ bool BinarySearchTree<T>::insLeft(T& data)
 }
 
 template<typename T>
-bool BinarySearchTree<T>::insRight(T& data)
+bool BinarySearchTree<T>::insNodeRight(T& data)
 {
 	if (root == nullptr)
-		throw std::out_of_range("Error in insRight(): Root is still nullptr.");
+		throw std::out_of_range("Error in insNodeRight(): Root is still nullptr.");
 	if (current == nullptr)
-		throw std::out_of_range("Error in insRight(): Parent is nullptr.");
+		throw std::out_of_range("Error in insNodeRight(): Parent is nullptr.");
 	if (current->childRight != nullptr)
-		throw std::out_of_range("Error in insRight(): ChildRight already exists.");
+		throw std::out_of_range("Error in insNodeRight(): ChildRight already exists.");
 
 	Node<T>* child = new Node<T>;
 	child->key = current->key * 10 + 1;
@@ -360,26 +430,26 @@ void BinarySearchTree<T>::clear(Node<T>* node)
 template<typename T>
 void BinarySearchTree<T>::ini()
 {
-	T n1 = 1;
+	T n1 = 4;
 	T n2 = 2;
-	T n3 = 3;
-	T n4 = 4;
-	T n5 = 5;
-	T n6 = 6;
+	T n3 = 6;
+	T n4 = 1;
+	T n5 = 3;
+	T n6 = 5;
 	T n7 = 7;
-	T n8 = 8;
-	insRoot(n1);
-	insLeft(n2);
-	insLeft(n4);
-	moveToParent();
-	insRight(n5);
-	moveToRoot();
-	insRight(n3);
-	insRight(n7);
-	moveToParent();
-	insLeft(n6);
-	insRight(n8);
-	moveToRoot();
+	T n8 = 3;
+	T n9 = 1;
+	T n10 = 1;
+	ins(n1);
+	ins(n2);
+	ins(n3);
+	ins(n4);
+	ins(n5);
+	ins(n6);
+	ins(n7);
+	ins(n8);
+	ins(n9);
+	ins(n10);
 }
 
 template<typename T>
