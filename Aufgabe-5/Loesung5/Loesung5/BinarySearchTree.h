@@ -33,6 +33,7 @@ class BinarySearchTree
 	
 		bool checkEmpty();
 		bool ins(T& data);
+		bool insNode(T& data);
 		bool insNodeRoot(T& data);
 		bool insNodeLeft(T& data);
 		bool insNodeRight(T& data);
@@ -152,80 +153,56 @@ void BinarySearchTree<T>::moveToChildLeft()
 	current = current->childLeft;
 }
 
-
 template<typename T>
 bool BinarySearchTree<T>::checkEmpty()
 {
 	return root == nullptr && current == nullptr && length == 0;
 }
 
-
 template<typename T>
 bool BinarySearchTree<T>::ins(T& data)
 {
-	current = root;
-	
+	if (!checkEmpty())
+		moveToRoot();
+
+	return insNode(data);
+}
+
+template<typename T>
+bool BinarySearchTree<T>::insNode(T& data)
+{
 	// Leer - in Root einfügen
 	if (checkEmpty())
 		return insNodeRoot(data);
 
-	// Links
+	
 	if (data <= current->data)
 	{
-		if (current->childLeft == nullptr)
-			return insNodeLeft(data);
-		if (current->childRight == nullptr)
-			return insNodeRight(data);
-		while (data <= current->data || current->childLeft != nullptr && current->childRight != nullptr)
+		if (current->childLeft != nullptr)
 		{
-			if (current->childLeft != nullptr && data <= current->childLeft->data || current->childLeft != nullptr && data <= current->data)
-				moveToChildLeft();
-			else if (current->childRight != nullptr && data <= current->childRight->data || current->childRight != nullptr && data <= current->data)
-				moveToChildRight();
-			else
-			{
-				if (current->childLeft == nullptr)
-					return insNodeLeft(data);
-				if (current->childRight == nullptr)
-					return insNodeRight(data);
-			}
+			moveToChildLeft();
+			insNode(data);
 		}
-		if (current->childLeft == nullptr)
+		else
+		{
 			return insNodeLeft(data);
-		if (current->childRight == nullptr)
-			return insNodeRight(data);
+		}
 	}
-
-	// Rechts
-	if (data >= current->data)
+	else
 	{
-		if (current->childLeft == nullptr)
-			return insNodeLeft(data);
-		if (current->childRight == nullptr)
-			return insNodeRight(data);
-		
-		while (data >= current->data || current->childLeft != nullptr && current->childRight != nullptr)
+		if (current->childRight != nullptr)
 		{
-			if (current->childLeft == nullptr)
-				return insNodeLeft(data);
-			if (current->childRight == nullptr)
-				return insNodeRight(data);
-			
-			if (current->childRight != nullptr && data >= current->childRight->data || current->childRight != nullptr && data >= current->data)
-				moveToChildRight();
-			else if (current->childLeft != nullptr && data >= current->childLeft->data || current->childLeft != nullptr && data <= current->data)
-				moveToChildLeft();
+			moveToChildRight();
+			insNode(data);
 		}
-
-		if (current->childLeft == nullptr)
-			return insNodeLeft(data);
-		if (current->childRight == nullptr)
+		else
+		{
 			return insNodeRight(data);
+		}
 	}
-	
+		
 	return false;
 }
-
 
 
 template<typename T>
