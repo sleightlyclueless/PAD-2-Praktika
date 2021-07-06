@@ -18,23 +18,25 @@ int main()
 			<< "(1) getLength() - check length of tree" << std::endl
 			<< "(2) getRoot() - check root element" << std::endl
 			<< "(3) getCurrent() - check current element" << std::endl
-			<< "(4) moveToRoot() - move current up to root" << std::endl
-			<< "(5) moveToParent() - move current up a level" << std::endl
-			<< "(6) moveToChildLeft() - move current to left child" << std::endl
-			<< "(7) moveToChildRight() - move current to right child" << std::endl
-			<< "(8) checkEmpty() - check if tree is empty" << std::endl
-			<< "(9) insRoot() - add root element" << std::endl
-			<< "(10) insLeft() - add left child element" << std::endl
-			<< "(11) insRight() - add right child element" << std::endl
-			<< "(12) del() - delete current element" << std::endl
-			<< "(13) clear() - clear tree" << std::endl
-			<< "(14) print() - print tree" << std::endl
-			<< "(15) Quit programm" << std::endl << std::endl
+			<< "(4) searchNode() - search node with specific key" << std::endl
+			<< "(5) moveToRoot() - move current up to root" << std::endl
+			<< "(6) moveToParent() - move current up a level" << std::endl
+			<< "(7) moveToChildLeft() - move current to left child" << std::endl
+			<< "(8) moveToChildRight() - move current to right child" << std::endl
+			<< "(9) checkEmpty() - check if tree is empty" << std::endl
+			<< "(10) insRoot() - add root element" << std::endl
+			<< "(11) insLeft() - add left child element" << std::endl
+			<< "(12) insRight() - add right child element" << std::endl
+			<< "(13) del() - delete current element" << std::endl
+			<< "(14) clear() - clear tree" << std::endl
+			<< "(15) ini() - ini basic tree" << std::endl
+			<< "(16) print() - print tree" << std::endl
+			<< "(17) Quit programm" << std::endl << std::endl
 			<< "Please choose the operation you wish to execute: ";
 		
 		// User input
 		int input = get_number();
-		while (input < 1 || 15 < input)
+		while (input < 1 || 17 < input)
 		{
 			std::cout << "Please choose between the given options 1-15!" << std::endl;
 			input = get_number();
@@ -77,6 +79,29 @@ int main()
 			case 4:
 				try
 				{
+					std::cout << "Search node by following key (pay in mind keys consist of '0' and '1' marking level in keylength and path in left and right for '0' and '1': ";
+					long x = get_number();
+					while (x < 1)
+					{
+						std::cout << "Keys start at 1" << std::endl;
+						x = get_number();
+					}
+						
+					a.searchNode(x);
+					std::cout << "Found node: " << std::endl
+						<< "Key: " << a.getCurrent()->key << std::endl
+						<< "Value: " << std::to_string(a.getCurrent()->print()) << std::endl;
+				}
+				catch (std::out_of_range& e)
+				{
+					std::cout << e.what() << std::endl;
+					system("pause");
+				}
+				break;
+
+			case 5:
+				try
+				{
 					a.moveToRoot();
 					std::cout << "Moved to root successfully!" << std::endl;
 				}
@@ -87,7 +112,7 @@ int main()
 				}
 				break;
 			
-			case 5:
+			case 6:
 				try
 				{
 					a.moveToParent();
@@ -100,7 +125,7 @@ int main()
 				}
 				break;
 
-			case 6:
+			case 7:
 				try
 				{
 					a.moveToChildLeft();
@@ -113,7 +138,7 @@ int main()
 				}
 				break;
 
-			case 7:
+			case 8:
 				try
 				{
 					a.moveToChildRight();
@@ -126,14 +151,14 @@ int main()
 				}
 				break;
 			
-			case 8:
+			case 9:
 				std::cout << std::boolalpha;
 				std::cout << a.checkEmpty() << std::endl;
 				std::cout << std::noboolalpha;
 				break;
 
 			
-			case 9: {
+			case 10: {
 				std::cout << "Enter number to insert: ";
 				int x = get_number();
 
@@ -149,43 +174,29 @@ int main()
 
 			} break;
 
-			case 10: {
-				std::cout << "Enter number to insert: ";
-				int x = get_number();
-
-				try
-				{
-					a.insLeft(a.getCurrent(), x);
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-					
-			} break;
-
 			case 11: {
 				std::cout << "Enter number to insert: ";
 				int x = get_number();
 
 				try
 				{
-					a.insRight(a.getCurrent(), x);
+					a.insLeft(x);
 				}
 				catch (std::out_of_range& e)
 				{
 					std::cout << e.what() << std::endl;
 					system("pause");
 				}
-
+					
 			} break;
 
 			case 12: {
-					
+				std::cout << "Enter key to insert: ";
+				int x = get_number();
+
 				try
 				{
-					a.del();
+					a.insRight(x);
 				}
 				catch (std::out_of_range& e)
 				{
@@ -195,7 +206,28 @@ int main()
 
 			} break;
 
-			case 13:
+			case 13: {
+				std::cout << "Enter key to delete: ";
+				const int x = get_number();
+				try
+				{
+					a.del(x);
+				}
+				catch (std::out_of_range& e)
+				{
+					std::cout << e.what() << std::endl;
+					system("pause");
+				}
+				catch (std::invalid_argument& e)
+				{
+					std::cout << e.what() << std::endl;
+					system("pause");
+				}
+
+
+			} break;
+
+			case 14:
 				try
 				{
 					a.clear(a.getRoot());
@@ -208,7 +240,11 @@ int main()
 				}
 				break;
 
-			case 14:
+			case 15:
+				a.ini();
+				break;
+
+			case 16:
 				try
 				{
 					std::stringstream str;
@@ -255,7 +291,7 @@ int main()
 				}
 				break;
 
-			case 15:
+			case 17:
 				endthis = true;
 				break;
 
