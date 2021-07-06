@@ -29,12 +29,13 @@ int main()
 			<< "(12) clear() - clear tree" << std::endl
 			<< "(13) ini() - ini basic tree" << std::endl
 			<< "(14) print() - print tree" << std::endl
-			<< "(15) Quit programm" << std::endl << std::endl
+			<< "(15) roate_l() - sussy bakka" << std::endl
+			<< "(16) Quit programm" << std::endl << std::endl
 			<< "Please choose the operation you wish to execute: ";
 		
 		// User input
 		int input = get_number();
-		while (input < 1 || 15 < input)
+		while (input < 1 || 16 < input)
 		{
 			std::cout << "Please choose between the given options 1-15!" << std::endl;
 			input = get_number();
@@ -189,8 +190,6 @@ int main()
 					std::cout << e.what() << std::endl;
 					system("pause");
 				}
-
-
 			} break;
 
 			case 12:
@@ -257,7 +256,20 @@ int main()
 				}
 				break;
 
-			case 15:
+			case 15: {
+				try
+				{
+					long x = get_number();
+					a.rotateRight(x);
+				}
+				catch (std::out_of_range& e)
+				{
+					std::cout << e.what() << std::endl;
+					system("pause");
+				}
+			} break;
+			
+			case 16:
 				endthis = true;
 				break;
 

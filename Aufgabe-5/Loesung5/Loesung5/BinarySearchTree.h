@@ -39,9 +39,10 @@ class BinarySearchTree
 		bool insNodeRight(T& data);
 		bool del(const long &key);
 		void correctKeys(const Node<T>* node);
-
 		void clear(Node<T>* node);
 		void ini();
+		void rotateLeft(const long& key);
+		void rotateRight(const long& key);
 		void print(const Node<T>* node, std::stringstream& str);
 		void printPreOrder(const Node<T>* node, std::stringstream& str);
 		void printInOrder(const Node<T>* node, std::stringstream& str);
@@ -68,7 +69,7 @@ Node<T>* BinarySearchTree<T>::getCurrent() const
 template<typename T>
 Node<T>* BinarySearchTree<T>::searchNode(const long key)
 {
-	current = root;
+	moveToRoot();
 	std::string keystr = std::to_string(key);
 	if (keystr.length() == 1 && key != 1)
 		throw std::out_of_range("Error in searchNode(): Key does not exist.");
@@ -175,30 +176,28 @@ bool BinarySearchTree<T>::insNode(T& data)
 	if (checkEmpty())
 		return insNodeRoot(data);
 
-	
+	// Nur für Samuel noch einmal mit current
 	if (data <= current->data)
 	{
+		// Nur für Samuel noch einmal mit current
 		if (current->childLeft != nullptr)
 		{
 			moveToChildLeft();
 			insNode(data);
 		}
 		else
-		{
 			return insNodeLeft(data);
-		}
 	}
 	else
 	{
+		// Nur für Samuel noch einmal mit current
 		if (current->childRight != nullptr)
 		{
 			moveToChildRight();
 			insNode(data);
 		}
 		else
-		{
 			return insNodeRight(data);
-		}
 	}
 		
 	return false;
@@ -428,6 +427,92 @@ void BinarySearchTree<T>::ini()
 	ins(n9);
 	ins(n10);
 }
+
+template<typename T>
+void BinarySearchTree<T>::rotateLeft(const long& key)
+{
+	if (checkEmpty())
+		throw std::out_of_range("Error in rotateLeft(): Can not rotate on empty tree.");
+	
+	Node<T>* x = searchNode(key);						// Rotationswurzel (linke Seite)
+	if (x->childRight == nullptr)						// Wenn kein rechtes Element, kann nicht nach links rotiert werden
+		throw std::out_of_range("Error in rotateLeft(): Can not rotate if right subtree is empty.");
+
+	Node<T>* y;											// Parent der Rotation
+	if (x != root)
+		y = searchNode(x->parent->key);
+	else
+		y = nullptr;
+
+	Node<T>* z = x->childRight;							// Child der Rotation (rechte Seite)
+	Node<T>* beta = z->childLeft;						// Tmp child childLeft
+
+
+														//Rotieren
+	x->childRight = beta;
+	z->childLeft = x;
+
+
+	// Wurzelvaterzeiger nachbiegen
+	if (y == nullptr) {				// wenn über y kein Knoten:
+		root = z;					// y wird Wurzel
+		root->key = 1;
+	}
+	else if (x == y->childLeft)		// wenn x Kind links war:
+		y->childLeft = z;			// y neues Kind links
+	else if (x == y->childRight)	// wenn x Kind rechts war:
+		y->childRight = z;			// y neues Kind rechts
+	else
+		throw std::runtime_error("Error in rotateLeft(): Something went wrong.");
+
+	correctKeys(root);				//Schlüssel aktualiseren
+	// return y;                    //y ist neuer Wurzelknoten des Teilbaums
+	
+}
+
+
+template<typename T>
+void BinarySearchTree<T>::rotateRight(const long& key)
+{
+	if (checkEmpty())
+		throw std::out_of_range("Error in rotateRight(): Can not rotate on empty tree.");
+
+	Node<T>* x = searchNode(key);						// Rotationswurzel (rechte Seite)
+	if (x->childLeft == nullptr)						// Wenn kein rechtes Element, kann nicht nach links rotiert werden
+		throw std::out_of_range("Error in rotateRight(): Can not rotate if left subtree is empty.");
+
+	Node<T>* y;											// Parent der Rotation
+	if (x != root)
+		y = searchNode(x->parent->key);
+	else
+		y = nullptr;
+
+	Node<T>* z = x->childLeft;							// Child der Rotation (rechte Seite)
+	Node<T>* beta = z->childRight;						// Tmp child childLeft
+
+
+														//Rotieren
+	x->childLeft = beta;
+	z->childRight = x;
+
+
+	// Wurzelvaterzeiger nachbiegen
+	if (y == nullptr) {				// wenn über y kein Knoten:
+		root = z;					// y wird Wurzel
+		root->key = 1;
+	}
+	else if (x == y->childRight)	// wenn x Kind links war:
+		y->childRight = z;			// y neues Kind links
+	else if (x == y->childLeft)		// wenn x Kind rechts war:
+		y->childLeft = z;			// y neues Kind rechts
+	else
+		throw std::runtime_error("Error in rotateLeft(): Something went wrong.");
+
+	correctKeys(root);				//Schlüssel aktualiseren
+	// return y;                    //y ist neuer Wurzelknoten des Teilbaums
+
+}
+
 
 template<typename T>
 void BinarySearchTree<T>::print(const Node<T>* node, std::stringstream& str)
