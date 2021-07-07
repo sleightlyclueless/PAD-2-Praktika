@@ -25,6 +25,8 @@ class BinarySearchTree
 		Node<T>* getRoot() const;									// Get node at root
 		Node<T>* getCurrent() const;								// Get node at current
 		Node<T>* getNode(long key);									// Get node by its key
+		int getDepthLeft(Node<T>* node);
+		int getDepthRight(Node<T>* node);
 		void moveToRoot();											// Move current to root
 		void moveToParent();										// Move current to parent
 		void moveToChildLeft();										// Move current to child left
@@ -43,12 +45,10 @@ class BinarySearchTree
 		void rotateLeft(const long& key);							// Rotate left though node
 		void rotateRight(const long& key);							// Rotate right through node
 		void balance(Node<T>* node);
-		int height(Node<T>* node, int counter);
-		int height(Node<T>* node);
-		void print(const Node<T>* node, std::stringstream& str);
-		void printPreOrder(const Node<T>* node, std::stringstream& str);
-		void printInOrder(const Node<T>* node, std::stringstream& str);
-		void printPostOrder(const Node<T>* node, std::stringstream& str);
+	
+		void printPreOrder(const Node<T>* node, std::stringstream& str);	// Print pre order (middle - left - right)
+		void printInOrder(const Node<T>* node, std::stringstream& str);		// Print in order (left - middle - right)
+		void printPostOrder(const Node<T>* node, std::stringstream& str);	// Print post oder (left - right - middle)
 		
 };
 
@@ -98,6 +98,33 @@ Node<T>* BinarySearchTree<T>::getNode(const long key)
 
 	return current;
 }
+
+template<typename T>
+int BinarySearchTree<T>::getDepthLeft(Node<T>* node)
+{
+	if (!checkEmpty())										// Check if tree is not empty
+	{
+		while (node->childLeft != nullptr)
+			node = node->childLeft;
+		return std::to_string(node->key).length();
+	}
+
+	return 0;
+}
+
+template<typename T>
+int BinarySearchTree<T>::getDepthRight(Node<T>* node)
+{
+	if (!checkEmpty())										// Check if tree is not empty
+	{
+		while (node->childRight != nullptr)
+			node = node->childRight;
+		return std::to_string(node->key).length();
+	}
+
+	return 0;
+}
+
 
 template<typename T>
 void BinarySearchTree<T>::moveToRoot()
@@ -397,6 +424,7 @@ void BinarySearchTree<T>::clear(Node<T>* node)
 template<typename T>
 void BinarySearchTree<T>::ini()
 {
+	// Binary Tree
 	// T n1 = 4;
 	// T n2 = 2;
 	// T n3 = 6;
@@ -408,16 +436,17 @@ void BinarySearchTree<T>::ini()
 	// T n9 = 1;
 	// T n10 = 1;
 
-	T n1 = 4;
-	T n2 = 5;
-	T n3 = 6;
-	T n4 = 7;
-	T n5 = 8;
-	T n6 = 9;
-	T n7 = 2;
-	T n8 = 3;
-	T n9 = 3;
-	T n10 = 2;
+	// Weird tree
+	T n1 = 1;
+	T n2 = 2;
+	T n3 = 3;
+	T n4 = 4;
+	T n5 = 5;
+	T n6 = 6;
+	T n7 = 7;
+	T n8 = 8;
+	T n9 = 9;
+	T n10 = 1;
 	
 	ins(n1);
 	ins(n2);
@@ -436,173 +465,114 @@ void BinarySearchTree<T>::rotateLeft(const long& key)
 {
 	if (checkEmpty())
 		throw std::out_of_range("Error in rotateLeft(): Can not rotate on empty tree.");
+
 	
-	Node<T>* x = getNode(key);							// Rotationswurzel (linke Seite)
-	if (x->childRight == nullptr)						// Wenn kein rechtes Element, kann nicht nach links rotiert werden
+	Node<T>* center = getNode(key);					// center of rotation
+	if (center->childRight == nullptr)
 		throw std::out_of_range("Error in rotateLeft(): Can not rotate if right subtree is empty.");
 
-	Node<T>* y;											// Parent der Rotation
-	if (x != root)
-		y = getNode(x->parent->key);
+	Node<T>* top;									// top of rotation
+	if (center != root)
+		top = getNode(center->parent->key);
 	else
-		y = nullptr;
+		top = nullptr;
 
-	Node<T>* z = x->childRight;							// Child der Rotation (rechte Seite)
-	Node<T>* beta = z->childLeft;						// Tmp child childLeft
-
-
-														//Rotieren
-	x->childRight = beta;
-	z->childLeft = x;
+	Node<T>* bottom = center->childRight;			// bottom of rotation (right side)
+	Node<T>* sub = bottom->childLeft;				// sub of bottom left side (will be appended on left side)
 
 
-	// Wurzelvaterzeiger nachbiegen
-	if (y == nullptr) {				// wenn über y kein Knoten:
-		root = z;					// y wird Wurzel
+	// ========================================Rotieren=========================================
+	center->childRight = sub;						// append sub to childRight of center
+	if (sub != nullptr)
+		sub->parent = center;
+	bottom->childLeft = center;						// append center to left of bottom (will be rotated up) forming new cluster
+	center->parent = bottom;
+
+													// Change parent pointers
+	if (top == nullptr) {							// when center was root bottom rotated up to new root
+		root = bottom;
 		root->key = 1;
 	}
-	else if (x == y->childLeft)		// wenn x Kind links war:
-		y->childLeft = z;			// y neues Kind links
-	else if (x == y->childRight)	// wenn x Kind rechts war:
-		y->childRight = z;			// y neues Kind rechts
+	else if (center == top->childLeft)				// if center was on left side - bottom rotate up to left of top
+		top->childLeft = bottom;
+	else if (center == top->childRight)				// if center was on right side - bottom rotate up to right of top
+		top->childRight = bottom;			
 	else
 		throw std::runtime_error("Error in rotateLeft(): Something went wrong.");
 
 	correctKeys(root);				//Schlüssel aktualiseren
-	// return y;                    //y ist neuer Wurzelknoten des Teilbaums
-	
+
 }
 
 
 template<typename T>
 void BinarySearchTree<T>::rotateRight(const long& key)
 {
+	// Exceptions
 	if (checkEmpty())
 		throw std::out_of_range("Error in rotateRight(): Can not rotate on empty tree.");
 
-	Node<T>* x = getNode(key);						// Rotationswurzel (rechte Seite)
-	if (x->childLeft == nullptr)						// Wenn kein rechtes Element, kann nicht nach links rotiert werden
+	
+	Node<T>* center = getNode(key);				// right side of rotation
+	if (center->childLeft == nullptr)
 		throw std::out_of_range("Error in rotateRight(): Can not rotate if left subtree is empty.");
 
-	Node<T>* y;											// Parent der Rotation
-	if (x != root)
-		y = getNode(x->parent->key);
+	Node<T>* top;								// top of rotation
+	if (center != root)
+		top = getNode(center->parent->key);			
 	else
-		y = nullptr;
+		top = nullptr;
 
-	Node<T>* z = x->childLeft;							// Child der Rotation (rechte Seite)
-	Node<T>* beta = z->childRight;						// Tmp child childLeft
+	Node<T>* bottom = center->childLeft;		// bottom of rotation (left side)
+	Node<T>* sub = bottom->childRight;			// sub of left side (will be appended on right side)
 
-
-														//Rotieren
-	x->childLeft = beta;
-	z->childRight = x;
-
-
-	// Wurzelvaterzeiger nachbiegen
-	if (y == nullptr) {				// wenn über y kein Knoten:
-		root = z;					// y wird Wurzel
+	
+	// ========================================Rotieren=========================================
+	center->childLeft = sub;					// append sub to childLeft of center
+	if (sub!=nullptr)
+		sub->parent = center;
+	bottom->childRight = center;				// append center to right side of bottom (will be rotated up) forming new cluster
+	center->parent = bottom;
+												// Change parent pointers
+	if (top == nullptr) {						// when center was root bottom rotated up to new root
+		root = bottom;
 		root->key = 1;
 	}
-	else if (x == y->childRight)	// wenn x Kind links war:
-		y->childRight = z;			// y neues Kind links
-	else if (x == y->childLeft)		// wenn x Kind rechts war:
-		y->childLeft = z;			// y neues Kind rechts
+	else if (center == top->childRight)			// if center was on right side - bottom rotate up to right of top
+		top->childRight = bottom;
+	else if (center == top->childLeft)			// if center was on left side - bottom rotate up to left of top
+		top->childLeft = bottom;
 	else
 		throw std::runtime_error("Error in rotateLeft(): Something went wrong.");
 
-	correctKeys(root);				//Schlüssel aktualiseren
-	// return y;                    //y ist neuer Wurzelknoten des Teilbaums
-
+	correctKeys(root);							// refresh keys from root down
 }
-
 
 template<typename T>
 void BinarySearchTree<T>::balance(Node<T>* node)
 {
-	
-	int delta_height = -height(node->childLeft) + height(node->childRight);			//wenn Teilbaum nicht existiert: Teilbaumhöhe 0
+	const int heightdiff = getDepthLeft(node) - getDepthRight(node);
 
-	if (delta_height < -1)															//wenn Teilbaum links zu groß:
+	if (heightdiff != 0)
 	{
-		do
+		if (heightdiff < -1)
 		{
-			rotateRight(node->key);													//rotieren nach rechts
-			delta_height = -height(node->childLeft) + height(node->childRight);		//Teilbaumhöhendifferenz aktualisieren
-		} while (-delta_height < -1);												//bis Teilbäume ausgeglichen
-	}
-	else if (1 < delta_height)														//wenn Teilbaum rechts zu groß:
-	{
-		do
+			rotateLeft(node->key);
+			balance(node->parent);
+		}
+		else if (heightdiff > 1)
 		{
-			rotateLeft(node->key);													//rotieren nach links
-			delta_height = -height(node->childLeft) + height(node->childRight);		//Teilbaumhöhendifferenz aktualisieren
-		} while (1 < delta_height);													//bis Teilbäume ausgeglichen
+			rotateRight(node->key);
+			balance(node->parent);
+		}
 	}
 
-	if (node->childLeft != nullptr)													// wenn Kind links existiert:
-		balance(node->childLeft);													// Rekursionsaufruf
-	if (node->childRight != nullptr)												// wenn Kind rechts exisitert:
-		balance(node->childRight);													// Rekursionsaufruf
-
-}
-
-template<typename T>
-int BinarySearchTree<T>::height(Node<T>* node, int counter)
-{
-	int counterLeft = 0;
-	int counterRight = 0;
-
-	++counter;  //Zähler erhöhen
-
-	if (node->childLeft == nullptr && node->childRight == nullptr)    //wenn Kinder keine:
-		return counter;                                     //Zähler einfach zurückgeben
-
-	if (node->childLeft != nullptr)                      //wenn Kind links vorhanden
-		counterLeft = height(node->childLeft, counter);   //Rekursionsaufruf, Ergebnis merken
-	if (node->childRight != nullptr)                      //wenn Kind rechts vorhanden:
-		counterRight = height(node->childRight, counter);   //Rekursionsaufruf, Ergebnis merken
-
-	if (counterLeft >= counterRight)    //Ergebnisse vergleichen, Zähler größer zurückgeben
-		return counterLeft;
-	else
-		return counterRight;
-}
-
-
-template<typename T>
-int BinarySearchTree<T>::height(Node<T>* node)
-{
-	if (node == nullptr)	//wenn Teilbaum nicht vorhanden:
-		return 0;			//Höhe 0
-
-	return height(node, 0);
-}
-
-
-
-template<typename T>
-void BinarySearchTree<T>::print(const Node<T>* node, std::stringstream& str)
-{
-	
-	if (checkEmpty())
-	{
-		str << "Tree empty!" << std::endl;
-		return;
-	}
-
-	for (int i = 1; i < std::to_string(node->key).length(); ++i)
-	{
-		str << "| ";
-	}
-	str << "> " << node->data << std::endl;
-
-	if (node->childLeft != nullptr)
-		print(node->childLeft, str);
 	if (node->childRight != nullptr)
-		print(node->childRight, str);
-
+		balance(node->parent);
+	if (node->childLeft != nullptr)
+		balance(node->parent);
 }
+
 
 template<typename T>
 void BinarySearchTree<T>::printPreOrder(const Node<T>* node, std::stringstream& str)
@@ -614,7 +584,11 @@ void BinarySearchTree<T>::printPreOrder(const Node<T>* node, std::stringstream& 
 		return;
 	}
 
-	str << node->key << ": " << node->data << std::endl;
+	for (int i = 1; i < std::to_string(node->key).length(); ++i)
+	{
+		str << "| ";
+	}
+	str << "> " << node->key << ": " << node->data << std::endl;
 	if (node->childLeft != nullptr)
 		printPreOrder(node->childLeft, str);
 	if (node->childRight != nullptr)
@@ -635,7 +609,11 @@ void BinarySearchTree<T>::printInOrder(const Node<T>* node, std::stringstream& s
 	if (node->childLeft != nullptr)
 		printInOrder(node->childLeft, str);
 	
-	str << node->key << ": " << node->data << std::endl;
+	for (int i = 1; i < std::to_string(node->key).length(); ++i)
+	{
+		str << "| ";
+	}
+	str << "> " << node->key << ": " << node->data << std::endl;
 	
 	if (node->childRight != nullptr)
 		printInOrder(node->childRight, str);
@@ -657,6 +635,10 @@ void BinarySearchTree<T>::printPostOrder(const Node<T>* node, std::stringstream&
 	if (node->childRight != nullptr)
 		printPostOrder(node->childRight, str);
 
-	str << node->key << ": " << node->data << std::endl;
+	for (int i = 1; i < std::to_string(node->key).length(); ++i)
+	{
+		str << "| ";
+	}
+	str << "> " << node->key << ": " << node->data << std::endl;
 
 }

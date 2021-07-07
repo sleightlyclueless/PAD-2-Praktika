@@ -4,11 +4,10 @@
 
 int main()
 {
-	srand(time(nullptr));
 
 	BinarySearchTree<int> a;             // sorted linked List aus ints
 	
-	bool endthis = false;    // checkEnd flag
+	bool endthis = false;				// checkEnd flag
 
 	while (!endthis)
 	{
@@ -28,8 +27,8 @@ int main()
 			<< "(11) del() - delete current element" << std::endl
 			<< "(12) clear() - clear tree" << std::endl
 			<< "(13) ini() - ini basic tree" << std::endl
-			<< "(14) print() - print tree" << std::endl
-			<< "(15) balance() - sussy bakka" << std::endl
+			<< "(14) balance() - balance tree (same deepest level)" << std::endl
+			<< "(15) print() - print tree" << std::endl
 			<< "(16) Quit programm" << std::endl << std::endl
 			<< "Please choose the operation you wish to execute: ";
 		
@@ -141,7 +140,7 @@ int main()
 				try
 				{
 					a.moveToChildRight();
-					std::cout << "Moved to left child successfully!" << std::endl;
+					std::cout << "Moved to right child successfully!" << std::endl;
 				}
 				catch (std::out_of_range& e)
 				{
@@ -209,18 +208,29 @@ int main()
 				a.ini();
 				break;
 
-			case 14:
+			case 14: {
+				try
+				{
+					a.balance(a.getRoot());
+				}
+				catch (std::out_of_range& e)
+				{
+					std::cout << e.what() << std::endl;
+					system("pause");
+				}
+			} break;
+
+			case 15:
 				try
 				{
 					std::stringstream str;
 					std::cout << "Choose print mode" << std::endl
-						<< "(1) - print tree" << std::endl
-						<< "(2) - print tree preorder" << std::endl
-						<< "(3) - print tree inorder" << std::endl
-						<< "(4) - print tree postorder" << std::endl;
+						<< "(1) - print tree preorder" << std::endl
+						<< "(2) - print tree inorder" << std::endl
+						<< "(3) - print tree postorder" << std::endl;
 
 					int x = get_number();
-					while (x < 1 || 4 < x)
+					while (x < 1 || 3 < x)
 					{
 						std::cout << "Please choose between the given options 1-4!" << std::endl;
 						x = get_number();
@@ -229,18 +239,14 @@ int main()
 					switch(x)
 					{
 						case 1:
-							a.print(a.getRoot(), str);
-							std::cout << str.str() << std::endl;
-							break;
-						case 2:
 							a.printPreOrder(a.getRoot(), str);
 							std::cout << str.str() << std::endl;
 							break;
-						case 3:
+						case 2:
 							a.printInOrder(a.getRoot(), str);
 							std::cout << str.str() << std::endl;
 							break;
-						case 4:
+						case 3:
 							a.printPostOrder(a.getRoot(), str);
 							std::cout << str.str() << std::endl;
 							break;
@@ -255,18 +261,6 @@ int main()
 					system("pause");
 				}
 				break;
-
-			case 15: {
-				try
-				{
-					a.balance(a.getRoot());
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-			} break;
 			
 			case 16:
 				endthis = true;
