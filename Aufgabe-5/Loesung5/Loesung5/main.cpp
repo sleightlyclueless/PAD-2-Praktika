@@ -5,9 +5,8 @@
 int main()
 {
 
-	BinarySearchTree<int> a;             // sorted linked List aus ints
-	
-	bool endthis = false;				// checkEnd flag
+	BinarySearchTree<int> a;		// sorted linked List aus ints
+	bool endthis = false;			// checkEnd flag
 
 	while (!endthis)
 	{
@@ -40,189 +39,94 @@ int main()
 			input = get_number();
 		}
 
-		switch (input)
+		// Try and catch al cases
+		try
 		{
-			case 1:
-				std::cout << "Elements within tree: " << a.getLength() << std::endl;
-				break;
+			switch (input)
+			{			
+				case 1:
+					std::cout << "Amount of elements within tree: " << a.getLength() << std::endl;
+					break;
 
-			case 2:
-				try
-				{
+				case 2:
 					std::cout << "Root element: " << std::endl
 						<< "Key: " << a.getRoot()->key << std::endl
 						<< "Value: " << std::to_string(a.getRoot()->print()) << std::endl;
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-				break;
+					break;
 
-			case 3:
-				try
-				{
+				case 3:
 					std::cout << "Current element: " << std::endl
 						<< "Key: " << a.getCurrent()->key << std::endl
 						<< "Value: " << std::to_string(a.getCurrent()->print()) << std::endl;
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-				break;
+					break;
 
-			case 4:
-				try
-				{
-					std::cout << "Search node by following key (pay in mind keys consist of '0' and '1' marking level in keylength and path in left and right for '0' and '1': ";
+				case 4: {
+					std::cout
+						<< "Search node by following key (pay in mind keys consist of '0' and '1' marking level in keylength and path in left and right for '0' and '1': ";
 					long x = get_number();
 					while (x < 1)
 					{
 						std::cout << "Keys start at 1" << std::endl;
 						x = get_number();
 					}
-						
 					a.getNode(x);
 					std::cout << "Found node: " << std::endl
 						<< "Key: " << a.getCurrent()->key << std::endl
 						<< "Value: " << std::to_string(a.getCurrent()->print()) << std::endl;
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-				break;
+				} break;
 
-			case 5:
-				try
-				{
+				case 5:
 					a.moveToRoot();
 					std::cout << "Moved to root successfully!" << std::endl;
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-				break;
-			
-			case 6:
-				try
-				{
+					break;
+
+				case 6:
 					a.moveToParent();
 					std::cout << "Moved to parent successfully!" << std::endl;
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-				break;
+					break;
 
-			case 7:
-				try
-				{
+				case 7:
 					a.moveToChildLeft();
 					std::cout << "Moved to left child successfully!" << std::endl;
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-				break;
+					break;
 
-			case 8:
-				try
-				{
+				case 8:
 					a.moveToChildRight();
 					std::cout << "Moved to right child successfully!" << std::endl;
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-				break;
-			
-			case 9:
-				std::cout << std::boolalpha;
-				std::cout << a.checkEmpty() << std::endl;
-				std::cout << std::noboolalpha;
-				break;
+					break;
 
-			
-			case 10: {
-				std::cout << "Enter number to insert: ";
-				int x = get_number();
+				case 9:
+					std::cout << std::boolalpha;
+					std::cout << a.checkEmpty() << std::endl;
+					std::cout << std::noboolalpha;
+					break;
 
-				try
-				{
+				case 10: {
+					std::cout << "Enter number to insert: ";
+					const int x = get_number();
 					a.ins(x);
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
+				} break;
 
-			} break;
-
-			case 11: {
-				std::cout << "Enter key to delete: ";
-				const int x = get_number();
-				try
-				{
+				case 11: {
+					std::cout << "Enter key to delete: ";
+					const int x = get_number();
 					a.del(x);
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-				catch (std::invalid_argument& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-			} break;
+				} break;
 
-			case 12:
-				try
-				{
+				case 12:
 					a.clear(a.getRoot());
 					std::cout << "List cleared successfully" << std::endl;
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-				break;
+					break;
 
-			case 13:
-				a.ini();
-				break;
+				case 13:
+					a.ini();
+					break;
 
-			case 14: {
-				try
-				{
+				case 14: {
 					a.balance(a.getRoot());
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
-					system("pause");
-				}
-			} break;
+				} break;
 
-			case 15:
-				try
-				{
+				case 15: {
 					std::stringstream str;
 					std::cout << "Choose print mode" << std::endl
 						<< "(1) - print tree preorder" << std::endl
@@ -236,7 +140,7 @@ int main()
 						x = get_number();
 					}
 
-					switch(x)
+					switch (x)
 					{
 						case 1:
 							a.printPreOrder(a.getRoot(), str);
@@ -256,23 +160,28 @@ int main()
 						default:
 							std::cout << "Invalid print - mode! Please try again!" << std::endl;
 					}
+				} break;
 
-				}
-				catch (std::out_of_range& e)
-				{
-					std::cout << e.what() << std::endl;
+				case 16:
+					endthis = true;
+					break;
+
+				default:
+					std::cout << "Invalid command." << std::endl;
 					system("pause");
-				}
-				break;
+					break;
+			}
 			
-			case 16:
-				endthis = true;
-				break;
-
-			default:
-				std::cout << "Invalid command." << std::endl;
-				system("pause");
-				break;
+		}
+		catch (std::out_of_range& e)
+		{
+			std::cout << e.what() << std::endl;
+			system("pause");
+		}
+		catch (std::invalid_argument& e)
+		{
+			std::cout << e.what() << std::endl;
+			system("pause");
 		}
 
 		std::cout << std::endl << "==============================================" << std::endl;

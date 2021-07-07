@@ -11,21 +11,21 @@ class BinarySearchTree
 	int length;
 
 	public:
-		BinarySearchTree()
+		BinarySearchTree()											// Constructor
 		{
 			root = nullptr;
 			current = nullptr;
 			length = 0;
 		}
 	
-		~BinarySearchTree() { clear(root); }
+		~BinarySearchTree() { clear(root); }						// Destructor
 
-		int getLength() const { return length; }
+		int getLength() const { return length; }					// Get length of tree (amount of nodes)
 
 		Node<T>* getRoot() const;									// Get node at root
 		Node<T>* getCurrent() const;								// Get node at current
-		Node<T>* getNode(long key);									// Get node by its key
-		long getLowestNode(Node<T>* node, long &lowestkey);
+		Node<T>* getNode(const long& key);							// Get node by its key
+		long getLowestNode(Node<T>* node, long& lowestkey);			// Recustively find and return key of lowest childnode
 		void moveToRoot();											// Move current to root
 		void moveToParent();										// Move current to parent
 		void moveToChildLeft();										// Move current to child left
@@ -37,13 +37,13 @@ class BinarySearchTree
 		bool insNodeRoot(const T& data);							// Node in Root hinzufügen
 		bool insNodeLeft(const T& data);							// Node links hinzufügen
 		bool insNodeRight(const T& data);							// Node rechts hinzufügen
-		bool del(const long &key);									// Delete node from tree
+		bool del(const long& key);									// Delete node from tree
 		void correctKeys(const Node<T>* node);						// Move through all elements and set their keys recursively
 		void clear(Node<T>* node);									// Delete all elements from tree
 		void ini();													// Initialize Tree with values
 		void rotateLeft(const long& key);							// Rotate left though node
 		void rotateRight(const long& key);							// Rotate right through node
-		void balance(Node<T>* node);
+		void balance(Node<T>* node);								// Balance tree by recursively rotating through to same level
 	
 		void printPreOrder(const Node<T>* node, std::stringstream& str);	// Print pre order (middle - left - right)
 		void printInOrder(const Node<T>* node, std::stringstream& str);		// Print in order (left - middle - right)
@@ -68,15 +68,15 @@ Node<T>* BinarySearchTree<T>::getCurrent() const
 }
 
 template<typename T>
-Node<T>* BinarySearchTree<T>::getNode(const long key)
+Node<T>* BinarySearchTree<T>::getNode(const long& key)
 {
 	moveToRoot();
 	std::string keystr = std::to_string(key);
 	if (keystr.length() == 1 && key != 1)
 		throw std::out_of_range("Error in getNode(): Key does not exist.");
 	
-	keystr.erase(keystr.begin());
-	while (keystr.length() > 0)
+	keystr.erase(keystr.begin());								// keys are long ints with *10 or *10 + 1
+	while (keystr.length() > 0)										// -> we follow that path marking left (0) and right(1)
 	{
 		if (keystr.front() != '0' && keystr.front() != '1')
 			throw std::out_of_range("Error in getNode(): Valid key only consists of 1 and 0.");
@@ -98,16 +98,13 @@ Node<T>* BinarySearchTree<T>::getNode(const long key)
 	return current;
 }
 
-
 template<typename T>
 long BinarySearchTree<T>::getLowestNode(Node<T>* node, long& lowestkey)
 {
-	
-	if (!checkEmpty() && node != nullptr)									// Check if tree is not empty
+	if (!checkEmpty() && node != nullptr)							// check if tree is not empty
 	{
 		if (node->key > lowestkey)
 			lowestkey = node->key;
-
 		if (node->childRight != nullptr)
 			getLowestNode(node->childRight, lowestkey);
 		if (node->childLeft !=  nullptr)
@@ -119,13 +116,11 @@ long BinarySearchTree<T>::getLowestNode(Node<T>* node, long& lowestkey)
 	return 0;
 }
 
-
 template<typename T>
 void BinarySearchTree<T>::moveToRoot()
 {
 	if (root == nullptr)
 		throw std::out_of_range("Error in moveToRoot(): Root is nullptr.");
-
 	current = root;
 }
 
@@ -136,7 +131,6 @@ void BinarySearchTree<T>::moveToParent()
 		throw std::out_of_range("Error in moveToParent(): Already on root.");
 	if (current->parent == nullptr)
 		throw std::out_of_range("Error in moveToParent(): Parent is nullptr.");
-
 	current = current->parent;
 }
 
@@ -147,7 +141,6 @@ void BinarySearchTree<T>::moveToChildRight()
 		throw std::out_of_range("Error in moveToChildRight(): Current is nullptr");
 	if (current->childRight == nullptr)
 		throw std::out_of_range("Error in moveToChildRight(): Child is nullptr.");
-
 	current = current->childRight;
 }
 
@@ -158,7 +151,6 @@ void BinarySearchTree<T>::moveToChildLeft()
 		throw std::out_of_range("Error in moveToChildLeft(): Current is nullptr");
 	if (current->childLeft == nullptr)
 		throw std::out_of_range("Error in moveToChildLeft(): Child is nullptr.");
-
 	current = current->childLeft;
 }
 
@@ -172,22 +164,22 @@ bool BinarySearchTree<T>::checkEmpty()
 template<typename T>
 bool BinarySearchTree<T>::ins(const T& data)
 {
-	// Move current to root beforehand
+	// move current to root beforehand
 	if (!checkEmpty())
 		moveToRoot();
 
-	// Call recursive insNode function to find insert spot and insert
+	// call recursive insNode function to find insert spot and insert
 	return insNode(data);
 }
 
 template<typename T>
 bool BinarySearchTree<T>::insNode(const T& data)
 {
-	// Tree empty - add to root
+	// tree empty - add to root
 	if (checkEmpty())
 		return insNodeRoot(data);
 
-	// If data is smaller than current data move to left subtree recursively until nullptr
+	// if data is smaller than current data move to left subtree recursively until nullptr
 	if (data <= current->data)
 	{
 		if (current->childLeft != nullptr)
@@ -198,7 +190,7 @@ bool BinarySearchTree<T>::insNode(const T& data)
 		else
 			return insNodeLeft(data);
 	}
-	// If data is bigger than current data move to right subtree recursively until nullptr
+	// if data is bigger than current data move to right subtree recursively until nullptr
 	else
 	{
 		if (current->childRight != nullptr)
@@ -220,12 +212,12 @@ bool BinarySearchTree<T>::insNodeRoot(const T& data)
 	if (root != nullptr)
 		throw std::out_of_range("Error in insNodeRoot(): Root already exists.");
 
-	// Create new node
+	// create new node
 	root = new Node<T>;
 	root->key = 1;
 	root->data = data;
 
-	// Change tree specs
+	// change tree specs
 	current = root;
 	length++;
 	return true;
@@ -234,7 +226,7 @@ bool BinarySearchTree<T>::insNodeRoot(const T& data)
 template<typename T>
 bool BinarySearchTree<T>::insNodeLeft(const T& data)
 {
-	// Exceptions
+	// exceptions
 	if (root == nullptr)
 		throw std::out_of_range("Error in insNodeLeft(): Root is still nullptr.");
 	if (current == nullptr)
@@ -242,14 +234,14 @@ bool BinarySearchTree<T>::insNodeLeft(const T& data)
 	if (current->childLeft != nullptr)
 		throw std::out_of_range("Error in insNodeLeft(): ChildLeft already exists.");
 
-	// Create new node
+	// create new node
 	Node<T>* child = new Node<T>;
 	child->key = current->key * 10;
 	child->data = data;
 	child->parent = current;
 	current->childLeft = child;
 
-	// Change tree specs
+	// change tree specs
 	current = child;
 	length++;
 	return true;
@@ -258,7 +250,7 @@ bool BinarySearchTree<T>::insNodeLeft(const T& data)
 template<typename T>
 bool BinarySearchTree<T>::insNodeRight(const T& data)
 {
-	// Exceptions
+	// exceptions
 	if (root == nullptr)
 		throw std::out_of_range("Error in insNodeRight(): Root is still nullptr.");
 	if (current == nullptr)
@@ -266,23 +258,23 @@ bool BinarySearchTree<T>::insNodeRight(const T& data)
 	if (current->childRight != nullptr)
 		throw std::out_of_range("Error in insNodeRight(): ChildRight already exists.");
 
-	// Create new node
+	// create new node
 	Node<T>* child = new Node<T>;
 	child->key = current->key * 10 + 1;
 	child->data = data;
 	child->parent = current;
 	current->childRight = child;
 
-	// Change tree specs
+	// change tree specs
 	current = child;
 	length++;
 	return true;
 }
 
 template<typename T>
-bool BinarySearchTree<T>::del(const long &key)
+bool BinarySearchTree<T>::del(const long& key)
 {
-	// Try to find node user wants to delete by key
+	// try to find node user wants to delete by key
 	try
 	{
 		current = getNode(key);
@@ -292,89 +284,88 @@ bool BinarySearchTree<T>::del(const long &key)
 		throw std::invalid_argument("Error in del(): Invalid key - node does not exist.");
 	}
 
-	// Edge case only node
+	// case X : edge case only node
 	if (current->childLeft == nullptr && current->childRight == nullptr && length == 1)
 	{
-		// Delete node
+		// delete node
 		delete current;
 		current = nullptr;
 		length--;
 		return true;
 	}
 
+	// case 0 : 0 childs
+	if (current->childLeft == nullptr && current->childRight == nullptr)
+	{																											 /*	1		1		*/
+		// change parents pointers																				 /*	 \		 \		*/
+		// if node was left - left now nullptr																	 /*	   2	 [10]	*/
+		if (current->parent->childLeft != nullptr && current->parent->childLeft->key == current->key)			 /*	    \			*/
+			current->parent->childLeft = nullptr;																 /*	     [10]		*/
+		// if node was right - right now nullptr																 
+		else if (current->parent->childRight != nullptr && current->parent->childRight->key == current->key)	 /*   	 1		1	*/
+			current->parent->childRight = nullptr;																 /*	    / 	   /	*/
+		else																									 /*	   2	  2		*/
+			throw std::invalid_argument("Error in del(): Invalid key.");									 /*   /				*/
+	}																											 /* [10]			*/
 
-	// Case 0 : 0 Childs
-	if (current->childLeft == nullptr && current->childRight == nullptr)    
-	{
-		// Change parents pointers
-		// if node was left - left now nullptr
-		if (current->parent->childLeft != nullptr && current->parent->childLeft->key == current->key)
-			current->parent->childLeft = nullptr;
-		// if node was right - right now nullptr
-		else if (current->parent->childRight != nullptr && current->parent->childRight->key == current->key)
-			current->parent->childRight = nullptr;
-		else
-			throw std::invalid_argument("Error in del(): Invalid key.");
-	}
-
-	// Case 1 : 1 Child
+	// case 1 : 1 child
 	if (current->childLeft != nullptr && current->childRight == nullptr || current->childLeft == nullptr && current->childRight != nullptr)
 	{
-		// If child is right
+		// if child is right
 		if (current->childRight != nullptr)
-		{
-			// Change child pointers
-			current->childRight->parent = current->parent;
-			// Change parents pointers
-			current->parent->childRight = current->childRight;
+		{																										 /*   2	      2		*/
+			// change child pointers																			 /*  /  \	 / \	*/
+			current->childRight->parent = current->parent;														 /* 6   [8]	6	10	*/
+			// change parents pointers																			 /*		  \			*/
+			current->parent->childRight = current->childRight;													 /*		  10		*/
 		}
 		else if (current->childLeft != nullptr)
-		{
-			// Change child pointers
-			current->childLeft->parent = current->parent;
-			// Change parents pointers
-			current->parent->childLeft = current->childLeft;
+		{																										 /*     2	   2	*/
+			// change child pointers																			 /*    / \	  / \	*/
+			current->childLeft->parent = current->parent;														 /*  [8]  6	 10	 6	*/
+			// change parents pointers																			 /*	 /				*/
+			current->parent->childLeft = current->childLeft;													 /* 10				*/
 		}
 		else
 			throw std::invalid_argument("Error in del(): Invalid key.");
 	}
 
-	// Case 2 : 2 Childs
+	// case 2 : 2 childs
 	if (current->childLeft != nullptr && current->childRight != nullptr)
 	{
-		// Tmp save deleted node (will dangle after move)
+		// tmp save deleted node (will dangle after move)
 		Node<T>* deleteNode = current;
 		// Subtree right of deleted node
 		Node<T>* tmp = current->childRight;
-		
-		// 1. Move left child up
-		if (current == root)
-		{
-			current->childLeft->key = 1;
-			current->childLeft->parent = nullptr;
-			root = current->childLeft;
-		}
-		else
-		{
+
+		// 1. move left child up
+		if (current == root)																		  /*		If Root:			*/
+		{																							  /*     [3]		   1		*/
+			current->childLeft->key = 1;															  /*    /   \		  / \		*/
+			current->childLeft->parent = nullptr;													  /*   1     5		 0	 2		*/
+			root = current->childLeft;																  /*  / \   / \			  \		*/
+		}																							  /* 0	 2 4   6		   5	*/
+		else																						  /*					  / \	*/
+		{																							  /*					 4   6	*/
 			current->parent->childRight = current->childLeft;
 			current->childLeft->parent = current->parent;
 		}
-			
+																									  /*          No Root:			*/
+																									  /*       5			5		*/
+		// 2. move current to left child, laving old parent dangling								  /*      / \		   / \		*/
+		current = current->childLeft;																  /*     3  [8]		  3   6		*/
+																									  /*    /  /   \	 /	 / \	*/
+		// 3. get lowest childright to append right subtree onto									  /*   1  6		11	1	6	7	*/
+		while (current->childRight != nullptr)														  /*  / \		/\			 \	*/
+			current = current->childRight;															  /* 6   7	   9  12		 11	*/
+		current->childRight = tmp;																	  /*						 /\	*/
+		tmp->parent = current->childRight;															  /*						9 12*/
 
-		// 2. Move current to left child, laving old parent dangling
-		current = current->childLeft;
-
-		// 3. Get lowest childright to append right subtree onto
-		while (current->childRight != nullptr)
-			current = current->childRight;
-		current->childRight = tmp;
-		tmp->parent = current->childRight;
-
-		// 4. Move current to dangling parent to delete it
+		// 4. move current to dangling parent to delete it
 		current = deleteNode;
 	}
 
-	// Delete node
+	// delete node
 	delete current;
 	current = nullptr;
 	length--;
@@ -385,6 +376,9 @@ bool BinarySearchTree<T>::del(const long &key)
 template<typename T>
 void BinarySearchTree<T>::correctKeys(const Node<T>* node)
 {
+	if (checkEmpty())
+		return;
+	
 	if (node->childLeft != nullptr)
 	{
 		node->childLeft->key = node->key * 10;
@@ -396,7 +390,6 @@ void BinarySearchTree<T>::correctKeys(const Node<T>* node)
 		node->childRight->key = node->key * 10 + 1;
 		correctKeys(node->childRight);
 	}
-
 }
 
 template<typename T>
@@ -418,7 +411,7 @@ void BinarySearchTree<T>::clear(Node<T>* node)
 template<typename T>
 void BinarySearchTree<T>::ini()
 {
-	// Binary Tree
+	// binary Tree
 	// T n1 = 4;
 	// T n2 = 2;
 	// T n3 = 6;
@@ -430,7 +423,7 @@ void BinarySearchTree<T>::ini()
 	// T n9 = 1;
 	// T n10 = 1;
 
-	// Random tree
+	// random tree
 	for (int i = 1; i <= 15; i++)
 	{
 		T n = rand() % 30;
@@ -446,40 +439,48 @@ void BinarySearchTree<T>::rotateLeft(const long& key)
 		throw std::out_of_range("Error in rotateLeft(): Can not rotate on empty tree.");
 
 	
-	Node<T>* center = getNode(key);					// center of rotation
+	Node<T>* center = getNode(key);				// center of rotation
 	if (center->childRight == nullptr)
 		throw std::out_of_range("Error in rotateLeft(): Can not rotate if right subtree is empty.");
 
-	Node<T>* top;									// top of rotation
+	Node<T>* top;								// top of rotation
 	if (center != root)
-		top = getNode(center->parent->key);
+		top = center->parent;
 	else
 		top = nullptr;
 
-	Node<T>* bottom = center->childRight;			// bottom of rotation (right side)
-	Node<T>* sub = bottom->childLeft;				// sub of bottom left side (will be appended on left side)
+	Node<T>* bottom = center->childRight;		// bottom of rotation (right side)
+	Node<T>* sub = bottom->childLeft;			// sub of bottom left side (will be appended on left side)
 
 
 	// ========================================Rotieren=========================================
-	center->childRight = sub;						// append sub to childRight of center
+	// T1	T2					  T1   T2					
+	//	 \ /					    \ /					
+	// 	 [B]						[C]					
+	// 	 / \			====>	    / \
+	// 	1   C					   B   5					
+	// 	   / \					  / \
+	// 	  S   5					 1   S
+	
+	center->childRight = sub;					// append sub to childRight of center
 	if (sub != nullptr)
 		sub->parent = center;
-	bottom->childLeft = center;						// append center to left of bottom (will be rotated up) forming new cluster
+	bottom->childLeft = center;					// append center to left of bottom (will be rotated up) forming new cluster
 	center->parent = bottom;
 
-													// Change parent pointers
-	if (top == nullptr) {							// when center was root bottom rotated up to new root
+												// change parent pointers
+	if (top == nullptr) {						// when center was root bottom rotated up to new root
 		root = bottom;
 		root->key = 1;
 	}
-	else if (center == top->childLeft)				// if center was on left side - bottom rotate up to left of top
+	else if (center == top->childLeft)			// if center was on left side - bottom rotate up to left of top
 		top->childLeft = bottom;
-	else if (center == top->childRight)				// if center was on right side - bottom rotate up to right of top
+	else if (center == top->childRight)			// if center was on right side - bottom rotate up to right of top
 		top->childRight = bottom;			
 	else
 		throw std::runtime_error("Error in rotateLeft(): Something went wrong.");
 
-	correctKeys(root);				//Schlüssel aktualiseren
+	correctKeys(root);							// refresh keys
 
 }
 
@@ -498,7 +499,7 @@ void BinarySearchTree<T>::rotateRight(const long& key)
 
 	Node<T>* top;								// top of rotation
 	if (center != root)
-		top = getNode(center->parent->key);			
+		top = center->parent;			
 	else
 		top = nullptr;
 
@@ -507,12 +508,20 @@ void BinarySearchTree<T>::rotateRight(const long& key)
 
 	
 	// ========================================Rotieren=========================================
+	//	T1	 T2					   T1	T2	
+	//	  \ /					     \ /
+	//    [C]						 [B]
+	//    / \			===>		 / \
+	//   B   5						1   C
+	//  / \							   / \
+	// 1   S						  S   5
+	
 	center->childLeft = sub;					// append sub to childLeft of center
 	if (sub!=nullptr)
 		sub->parent = center;
 	bottom->childRight = center;				// append center to right side of bottom (will be rotated up) forming new cluster
 	center->parent = bottom;
-												// Change parent pointers
+												// change parent pointers
 	if (top == nullptr) {						// when center was root bottom rotated up to new root
 		root = bottom;
 		root->key = 1;
@@ -536,18 +545,15 @@ void BinarySearchTree<T>::balance(Node<T>* node)
 	lowestRight = getLowestNode(node->childRight, lowestRight);
 	const long heightdiff = std::to_string(lowestLeft).length() - std::to_string(lowestRight).length();
 
-	if (heightdiff >= 1 || -1 >= heightdiff)
+	if (heightdiff < -1)				// left bigger than right - recursively rotate left
 	{
-		if (heightdiff < -1)				// left bigger than right
-		{
-			rotateLeft(node->key);
-			balance(node->parent);
-		}
-		else if (heightdiff > 1)
-		{
-			rotateRight(node->key);
-			balance(node->parent);			// right bigger than left
-		}
+		rotateLeft(node->key);
+		balance(node->parent);
+	}
+	else if (heightdiff > 1)			// right bigger than left - recursively rotate right
+	{
+		rotateRight(node->key);
+		balance(node->parent);
 	}
 }
 
@@ -555,7 +561,6 @@ void BinarySearchTree<T>::balance(Node<T>* node)
 template<typename T>
 void BinarySearchTree<T>::printPreOrder(const Node<T>* node, std::stringstream& str)
 {
-
 	if (checkEmpty())
 	{
 		str << "Tree empty!" << std::endl;
@@ -571,13 +576,11 @@ void BinarySearchTree<T>::printPreOrder(const Node<T>* node, std::stringstream& 
 		printPreOrder(node->childLeft, str);
 	if (node->childRight != nullptr)
 		printPreOrder(node->childRight, str);
-
 }
 
 template<typename T>
 void BinarySearchTree<T>::printInOrder(const Node<T>* node, std::stringstream& str)
 {
-
 	if (checkEmpty())
 	{
 		str << "Tree empty!" << std::endl;
@@ -586,22 +589,18 @@ void BinarySearchTree<T>::printInOrder(const Node<T>* node, std::stringstream& s
 
 	if (node->childLeft != nullptr)
 		printInOrder(node->childLeft, str);
-	
 	for (int i = 1; i < std::to_string(node->key).length(); ++i)
 	{
 		str << "| ";
 	}
 	str << "> " << node->key << ": " << node->data << std::endl;
-	
 	if (node->childRight != nullptr)
 		printInOrder(node->childRight, str);
-
 }
 
 template<typename T>
 void BinarySearchTree<T>::printPostOrder(const Node<T>* node, std::stringstream& str)
 {
-
 	if (checkEmpty())
 	{
 		str << "Tree empty!" << std::endl;
@@ -612,11 +611,9 @@ void BinarySearchTree<T>::printPostOrder(const Node<T>* node, std::stringstream&
 		printPostOrder(node->childLeft, str);
 	if (node->childRight != nullptr)
 		printPostOrder(node->childRight, str);
-
 	for (int i = 1; i < std::to_string(node->key).length(); ++i)
 	{
 		str << "| ";
 	}
 	str << "> " << node->key << ": " << node->data << std::endl;
-
 }
