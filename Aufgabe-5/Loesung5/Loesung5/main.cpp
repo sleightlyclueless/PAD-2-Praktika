@@ -18,7 +18,7 @@ int main()
 			<< "(1) getLength() - check length of tree" << std::endl
 			<< "(2) getRoot() - check root element" << std::endl
 			<< "(3) getCurrent() - check current element" << std::endl
-			<< "(4) searchNode() - search node with specific key" << std::endl
+			<< "(4) getNode() - search node with specific key" << std::endl
 			<< "(5) moveToRoot() - move current up to root" << std::endl
 			<< "(6) moveToParent() - move current up a level" << std::endl
 			<< "(7) moveToChildLeft() - move current to left child" << std::endl
@@ -29,7 +29,7 @@ int main()
 			<< "(12) clear() - clear tree" << std::endl
 			<< "(13) ini() - ini basic tree" << std::endl
 			<< "(14) print() - print tree" << std::endl
-			<< "(15) roate_l() - sussy bakka" << std::endl
+			<< "(15) balance() - sussy bakka" << std::endl
 			<< "(16) Quit programm" << std::endl << std::endl
 			<< "Please choose the operation you wish to execute: ";
 		
@@ -86,7 +86,7 @@ int main()
 						x = get_number();
 					}
 						
-					a.searchNode(x);
+					a.getNode(x);
 					std::cout << "Found node: " << std::endl
 						<< "Key: " << a.getCurrent()->key << std::endl
 						<< "Value: " << std::to_string(a.getCurrent()->print()) << std::endl;
@@ -259,8 +259,7 @@ int main()
 			case 15: {
 				try
 				{
-					long x = get_number();
-					a.rotateRight(x);
+					a.balance(a.getRoot());
 				}
 				catch (std::out_of_range& e)
 				{

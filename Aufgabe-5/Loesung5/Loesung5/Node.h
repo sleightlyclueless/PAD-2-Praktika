@@ -4,13 +4,13 @@ template<typename T>
 class Node
 {
 	public:
-		T data;
-		long key;
-		Node<T>* childLeft;
-		Node<T>* childRight;
-		Node<T>* parent;
+		T data;					// Data of Node
+		long key;				// Key of Node
+		Node<T>* childLeft;		// ChildLeft pointer of Node
+		Node<T>* childRight;	// ChildRight pointer of Node
+		Node<T>* parent;		// Parent pointer of Node
 
-		Node()
+		Node()					// Constructor
 		{
 			data = {};
 			key = 0;
@@ -19,9 +19,9 @@ class Node
 			childRight = nullptr;
 		}
 
-		~Node() = default;
+		~Node() = default;		// Destructor
 
-		T print() const
+		T print() const			// Print to return data
 		{
 			return data;
 		}
