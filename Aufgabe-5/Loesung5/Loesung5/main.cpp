@@ -240,15 +240,18 @@ int main()
 					{
 						case 1:
 							a.printPreOrder(a.getRoot(), str);
-							std::cout << str.str() << std::endl;
+							std::cout << "Your tree consists of -" << a.getLength() << "- nodes:" << std::endl
+								<< str.str() << std::endl;
 							break;
 						case 2:
 							a.printInOrder(a.getRoot(), str);
-							std::cout << str.str() << std::endl;
+							std::cout << "Your tree consists of -" << a.getLength() << "- nodes:" << std::endl
+								<< str.str() << std::endl;
 							break;
 						case 3:
 							a.printPostOrder(a.getRoot(), str);
-							std::cout << str.str() << std::endl;
+							std::cout << "Your tree consists of -" << a.getLength() << "- nodes:" << std::endl
+								<< str.str() << std::endl;
 							break;
 						default:
 							std::cout << "Invalid print - mode! Please try again!" << std::endl;

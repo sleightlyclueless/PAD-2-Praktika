@@ -25,8 +25,7 @@ class BinarySearchTree
 		Node<T>* getRoot() const;									// Get node at root
 		Node<T>* getCurrent() const;								// Get node at current
 		Node<T>* getNode(long key);									// Get node by its key
-		int getDepthLeft(Node<T>* node);
-		int getDepthRight(Node<T>* node);
+		long getLowestNode(Node<T>* node, long &lowestkey);
 		void moveToRoot();											// Move current to root
 		void moveToParent();										// Move current to parent
 		void moveToChildLeft();										// Move current to child left
@@ -99,27 +98,22 @@ Node<T>* BinarySearchTree<T>::getNode(const long key)
 	return current;
 }
 
-template<typename T>
-int BinarySearchTree<T>::getDepthLeft(Node<T>* node)
-{
-	if (!checkEmpty())										// Check if tree is not empty
-	{
-		while (node->childLeft != nullptr)
-			node = node->childLeft;
-		return std::to_string(node->key).length();
-	}
-
-	return 0;
-}
 
 template<typename T>
-int BinarySearchTree<T>::getDepthRight(Node<T>* node)
+long BinarySearchTree<T>::getLowestNode(Node<T>* node, long& lowestkey)
 {
-	if (!checkEmpty())										// Check if tree is not empty
+	
+	if (!checkEmpty() && node != nullptr)									// Check if tree is not empty
 	{
-		while (node->childRight != nullptr)
-			node = node->childRight;
-		return std::to_string(node->key).length();
+		if (node->key > lowestkey)
+			lowestkey = node->key;
+
+		if (node->childRight != nullptr)
+			getLowestNode(node->childRight, lowestkey);
+		if (node->childLeft !=  nullptr)
+			getLowestNode(node->childLeft, lowestkey);
+
+		return lowestkey;
 	}
 
 	return 0;
@@ -295,7 +289,7 @@ bool BinarySearchTree<T>::del(const long &key)
 	}
 	catch (...)
 	{
-		throw std::invalid_argument("Error in del(): Invalid key.");
+		throw std::invalid_argument("Error in del(): Invalid key - node does not exist.");
 	}
 
 	// Edge case only node
@@ -436,28 +430,13 @@ void BinarySearchTree<T>::ini()
 	// T n9 = 1;
 	// T n10 = 1;
 
-	// Weird tree
-	T n1 = 1;
-	T n2 = 2;
-	T n3 = 3;
-	T n4 = 4;
-	T n5 = 5;
-	T n6 = 6;
-	T n7 = 7;
-	T n8 = 8;
-	T n9 = 9;
-	T n10 = 1;
+	// Random tree
+	for (int i = 1; i <= 15; i++)
+	{
+		T n = rand() % 30;
+		ins(n);
+	}
 	
-	ins(n1);
-	ins(n2);
-	ins(n3);
-	ins(n4);
-	ins(n5);
-	ins(n6);
-	ins(n7);
-	ins(n8);
-	ins(n9);
-	ins(n10);
 }
 
 template<typename T>
@@ -551,11 +530,15 @@ void BinarySearchTree<T>::rotateRight(const long& key)
 template<typename T>
 void BinarySearchTree<T>::balance(Node<T>* node)
 {
-	const int heightdiff = getDepthLeft(node) - getDepthRight(node);
+	long lowestLeft = 0;
+	lowestLeft = getLowestNode(node->childLeft, lowestLeft);
+	long lowestRight = 0;
+	lowestRight = getLowestNode(node->childRight, lowestRight);
+	const long heightdiff = std::to_string(lowestLeft).length() - std::to_string(lowestRight).length();
 
-	if (heightdiff != 0)
+	if (heightdiff >= 1 || -1 >= heightdiff)
 	{
-		if (heightdiff < -1)
+		if (heightdiff < -1)				// left bigger than right
 		{
 			rotateLeft(node->key);
 			balance(node->parent);
@@ -563,14 +546,9 @@ void BinarySearchTree<T>::balance(Node<T>* node)
 		else if (heightdiff > 1)
 		{
 			rotateRight(node->key);
-			balance(node->parent);
+			balance(node->parent);			// right bigger than left
 		}
 	}
-
-	if (node->childRight != nullptr)
-		balance(node->parent);
-	if (node->childLeft != nullptr)
-		balance(node->parent);
 }
 
 
