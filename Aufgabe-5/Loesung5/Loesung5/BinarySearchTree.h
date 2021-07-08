@@ -441,7 +441,7 @@ void BinarySearchTree<T>::rotateLeft(const long& key)
 	
 	Node<T>* center = getNode(key);				// center of rotation
 	if (center->childRight == nullptr)
-		throw std::out_of_range("Error in rotateLeft(): Can not rotate if right subtree is empty.");
+		throw std::out_of_range("Error in rotateLeft(): Can not rotate if left subtree is empty.");
 
 	Node<T>* top;								// top of rotation
 	if (center != root)
@@ -452,13 +452,12 @@ void BinarySearchTree<T>::rotateLeft(const long& key)
 	Node<T>* bottom = center->childRight;		// bottom of rotation (right side)
 	Node<T>* sub = bottom->childLeft;			// sub of bottom left side (will be appended on left side)
 
-
 	// ========================================Rotieren=========================================
-	// T1	T2					  T1   T2					
-	//	 \ /					    \ /					
-	// 	 [B]						[C]					
-	// 	 / \			====>	    / \
-	// 	1   C					   B   5					
+	//	  T							 T					
+	//	  |							 |					
+	// 	 [C]						[B]					
+	// 	 / \		====>			/ \
+	// 	1   B					   C   5					
 	// 	   / \					  / \
 	// 	  S   5					 1   S
 	
@@ -484,7 +483,6 @@ void BinarySearchTree<T>::rotateLeft(const long& key)
 
 }
 
-
 template<typename T>
 void BinarySearchTree<T>::rotateRight(const long& key)
 {
@@ -506,12 +504,11 @@ void BinarySearchTree<T>::rotateRight(const long& key)
 	Node<T>* bottom = center->childLeft;		// bottom of rotation (left side)
 	Node<T>* sub = bottom->childRight;			// sub of left side (will be appended on right side)
 
-	
 	// ========================================Rotieren=========================================
-	//	T1	 T2					   T1	T2	
-	//	  \ /					     \ /
+	//	   T						  T	
+	//	   |						  |
 	//    [C]						 [B]
-	//    / \			===>		 / \
+	//    / \			====>		 / \
 	//   B   5						1   C
 	//  / \							   / \
 	// 1   S						  S   5
@@ -568,9 +565,7 @@ void BinarySearchTree<T>::printPreOrder(const Node<T>* node, std::stringstream& 
 	}
 
 	for (int i = 1; i < std::to_string(node->key).length(); ++i)
-	{
 		str << "| ";
-	}
 	str << "> " << node->key << ": " << node->data << std::endl;
 	if (node->childLeft != nullptr)
 		printPreOrder(node->childLeft, str);
@@ -590,9 +585,7 @@ void BinarySearchTree<T>::printInOrder(const Node<T>* node, std::stringstream& s
 	if (node->childLeft != nullptr)
 		printInOrder(node->childLeft, str);
 	for (int i = 1; i < std::to_string(node->key).length(); ++i)
-	{
 		str << "| ";
-	}
 	str << "> " << node->key << ": " << node->data << std::endl;
 	if (node->childRight != nullptr)
 		printInOrder(node->childRight, str);
@@ -612,8 +605,6 @@ void BinarySearchTree<T>::printPostOrder(const Node<T>* node, std::stringstream&
 	if (node->childRight != nullptr)
 		printPostOrder(node->childRight, str);
 	for (int i = 1; i < std::to_string(node->key).length(); ++i)
-	{
 		str << "| ";
-	}
 	str << "> " << node->key << ": " << node->data << std::endl;
 }
