@@ -441,7 +441,7 @@ void BinarySearchTree<T>::rotateLeft(const long& key)
 	
 	Node<T>* center = getNode(key);				// center of rotation
 	if (center->childRight == nullptr)
-		throw std::out_of_range("Error in rotateLeft(): Can not rotate if left subtree is empty.");
+		throw std::out_of_range("Error in rotateLeft(): Can not rotate if right subtree is empty.");
 
 	Node<T>* top;								// top of rotation
 	if (center != root)
