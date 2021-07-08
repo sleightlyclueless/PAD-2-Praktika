@@ -34,9 +34,9 @@ class BinarySearchTree
 		bool checkEmpty();											// Check if tree is empty
 		bool ins(const T& data);									// Ins node with value
 		bool insNode(const T& data);								// Recursively find ins spot and ins node
-		bool insNodeRoot(const T& data);							// Node in Root hinzufügen
-		bool insNodeLeft(const T& data);							// Node links hinzufügen
-		bool insNodeRight(const T& data);							// Node rechts hinzufügen
+		bool insNodeRoot(const T& data);							// Add root node
+		bool insNodeLeft(const T& data);							// Add node to left child
+		bool insNodeRight(const T& data);							// Add node to right child
 		bool del(const long& key);									// Delete node from tree
 		void correctKeys(const Node<T>* node);						// Move through all elements and set their keys recursively
 		void clear(Node<T>* node);									// Delete all elements from tree
