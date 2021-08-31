@@ -279,7 +279,7 @@ bool BinarySearchTree<T>::del(const long& key)
 	{
 		current = getNode(key);
 	}
-	catch (...)
+	catch (std::out_of_range &e)
 	{
 		throw std::invalid_argument("Error in del(): Invalid key - node does not exist.");
 	}
