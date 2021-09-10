@@ -60,7 +60,7 @@ int main()
 	        case 1:
 	            try
 	            {
-	                std::cout << "Current element: " << a.get().print() << std::endl;
+	                std::cout << "Current element: " << a.getCurrent()->print() << std::endl;
 	            }
 	            catch (std::out_of_range& e)
 	            {
@@ -108,16 +108,15 @@ int main()
 	        }   break;
 
 	        case 7:
-	            try
-	            {
-	                a.reset();
-	                std::cout << "Pointer reset successfully" << std::endl;
-	            }
-	            catch (std::out_of_range& e)
-	            {
-	                std::cout << e.what() << std::endl;
-	                system("pause");
-	            }
+				if (!a.checkEmpty()) {
+					a.reset();
+					std::cout << "Pointer reset successfully" << std::endl;
+				}
+				else
+				{
+					std::cout << "Error in List<T>::reset(): Cannot reset on empty list!" << std::endl;
+					system("pause");
+				}
         		
 	            break;
 
@@ -125,18 +124,8 @@ int main()
 	            std::cout << "Enter number to insert: ";
 	            const int x = get_number();
 
-	            /*double x;
-	            std::cin >> x;*/
-
-	            /*char x;
-	            std::cin >> x;*/
-
-	            /*std::string x;
-	            std::getline(std::cin, x);*/
-
 	            try
 	            {
-	                //a.insNodeSorted(x);
 	                a.insNode(x);
 	                std::cout << "Node with value ";
 
@@ -161,18 +150,8 @@ int main()
 				std::cout << "Enter number to insert: ";
 				const int x = get_number();
 
-				/*double x;
-				std::cin >> x;*/
-
-				/*char x;
-				std::cin >> x;*/
-
-				/*std::string x;
-				std::getline(std::cin, x);*/
-
 				try
 				{
-					//a.insNodeSorted(x);
 					a.insNodeSorted(x);
 					std::cout << "Node with value ";
 
@@ -376,9 +355,19 @@ int main()
 	            break;
 	    }
 
-	        std::cout << std::endl << "==============================================" << std::endl;
+	    std::cout << std::endl << "==============================================" << std::endl;
 
     }
 
+	try
+	{
+		a.clear();
+	}
+	catch (std::out_of_range& e)
+	{
+		std::cout << e.what() << std::endl;
+		system("pause");
+	}
+	
     return 0;
 }
